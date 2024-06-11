@@ -25,7 +25,8 @@
         "singleQuote": true,
         "parser": "flow"
       }
-    ]
+    ],
+    "react/react-in-jsx-scope": "off"
   },
   "settings": {
     "react": {
