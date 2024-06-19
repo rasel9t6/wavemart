@@ -5,8 +5,9 @@
   },
   "extends": [
     "next/core-web-vitals",
+    "standard",
+    "plugin:tailwindcss/recommended",
     "eslint:recommended",
-    "plugin:react/recommended",
     "plugin:@next/next/recommended",
     "plugin:prettier/recommended"
   ],
@@ -17,20 +18,5 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react", "prettier"],
-  "rules": {
-    "prettier/prettier": [
-      "error",
-      {
-        "singleQuote": true,
-        "parser": "flow"
-      }
-    ],
-    "react/react-in-jsx-scope": "off"
-  },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  }
+  "plugins": ["react", "prettier"]
 }
