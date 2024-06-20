@@ -4,7 +4,11 @@ import { MinusCircle, PlusCircle } from "lucide-react";
 import { useState } from "react";
 import HeartFavorite from "./HeartFavorite";
 
-export default function ProductInfo({ productInfo }: { productInfo: ProductType }) {
+export default function ProductInfo({
+  productInfo,
+}: {
+  productInfo: ProductType;
+}) {
   const [selectedColor, setSelectedColor] = useState<string>(
     productInfo.colors[0],
   );
@@ -22,20 +26,20 @@ export default function ProductInfo({ productInfo }: { productInfo: ProductType 
       </div>
 
       <div className="flex gap-2">
-        <p className="text-grey-2 text-base-medium">Category:</p>
+        <p className="text-base-medium text-gray-2">Category:</p>
         <p className="text-base-bold">{productInfo.category}</p>
       </div>
 
       <p className="text-heading3-bold">$ {productInfo.price}</p>
 
       <div className="flex flex-col gap-2">
-        <p className="text-grey-2 text-base-medium">Description:</p>
+        <p className="text-base-medium text-gray-2">Description:</p>
         <p className="text-small-medium">{productInfo.description}</p>
       </div>
 
       {productInfo.colors.length > 0 && (
         <div className="flex flex-col gap-2">
-          <p className="text-grey-2 text-base-medium">Colors:</p>
+          <p className="text-base-medium text-gray-2">Colors:</p>
           <div className="flex gap-2">
             {productInfo.colors.map((color, index) => (
               <p
@@ -54,7 +58,7 @@ export default function ProductInfo({ productInfo }: { productInfo: ProductType 
 
       {productInfo.sizes.length > 0 && (
         <div className="flex flex-col gap-2">
-          <p className="text-grey-2 text-base-medium">Sizes:</p>
+          <p className="text-base-medium text-gray-2">Sizes:</p>
           <div className="flex gap-2">
             {productInfo.sizes.map((size, index) => (
               <p
@@ -72,7 +76,7 @@ export default function ProductInfo({ productInfo }: { productInfo: ProductType 
       )}
 
       <div className="flex flex-col gap-2">
-        <p className="text-grey-2 text-base-medium">Quantity:</p>
+        <p className="text-base-medium text-gray-2">Quantity:</p>
         <div className="flex items-center gap-4">
           <MinusCircle
             className="cursor-pointer hover:text-red-1"
