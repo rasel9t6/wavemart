@@ -19,6 +19,7 @@
   "rules": {
     // other rules
     "tailwindcss/no-custom-classname": "off",
-    "no-undef": "off"
+    "no-undef": "off",
+    "no-unused-vars": "off"
   }
 }

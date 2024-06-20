@@ -11,11 +11,11 @@ export default async function ProductList() {
         <p className="text-body-bold">No products found.</p>
       ) : (
         <div className="mx-auto flex flex-wrap gap-16">
-          {products.map((product: ProductType, index: number) => (
+          {products.map((product: ProductType) => (
             <Link
               href={`/products/${product._id}`}
               key={product._id}
-              className={`flex w-[220px] flex-col gap-2 duration-300 ease-in-out ${index % 2 === 0 ? "hover:skew-x-6" : "hover:-skew-x-6"} hover:scale-110`}
+              className={`flex w-[250px] flex-col gap-2 overflow-hidden rounded-lg p-2 duration-500 ease-in-out hover:scale-105 hover:border`}
             >
               <ProductCard product={product} />
             </Link>
