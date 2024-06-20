@@ -18,6 +18,7 @@
   },
   "rules": {
     // other rules
-    "tailwindcss/no-custom-classname": "off"
+    "tailwindcss/no-custom-classname": "off",
+    "no-undef": "off"
   }
 }

@@ -19,10 +19,10 @@ export default function Navbar() {
   return (
     <div className="sticky top-0 z-10 flex items-center justify-between gap-2 bg-white px-10 py-2 max-sm:px-2">
       <Link href="/">
-        <Image src="/logo.png" alt="logo" width={100} height={80} />
+        <Image src="/logo.png" alt="logo" width={80} height={70} />
       </Link>
 
-      <div className="text-base-bold flex gap-4 max-lg:hidden">
+      <div className="flex gap-4 text-base-bold max-lg:hidden">
         <Link
           href="/"
           className={`hover:text-red-1 ${pathname === "/" && "text-red-1"}`}
@@ -47,7 +47,7 @@ export default function Navbar() {
         </Link>
       </div>
 
-      <div className="border-gray-2 flex items-center gap-3 rounded-lg border px-3 py-1">
+      <div className="flex items-center gap-3 rounded-lg border border-gray-2 px-3 py-1">
         <input
           className="outline-none max-sm:max-w-[120px]"
           placeholder="Search..."
@@ -58,7 +58,7 @@ export default function Navbar() {
           disabled={query === ""}
           onClick={() => router.push(`/search/${query}`)}
         >
-          <Search className="hover:text-red-1 size-4 cursor-pointer" />
+          <Search className="size-4 cursor-pointer hover:text-red-1" />
         </button>
       </div>
 
@@ -77,7 +77,7 @@ export default function Navbar() {
         />
 
         {dropdownMenu && (
-          <div className="text-base-bold absolute right-5 top-12 flex flex-col gap-4 rounded-lg border bg-white p-3 lg:hidden">
+          <div className="absolute right-5 top-12 flex flex-col gap-4 rounded-lg border bg-white p-3 text-base-bold lg:hidden">
             <Link href="/" className="hover:text-red-1">
               Home
             </Link>
