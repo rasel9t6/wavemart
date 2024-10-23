@@ -11,7 +11,7 @@ export default function CartPage() {
   const cart = useCart();
 
   const total = cart.cartItems.reduce(
-    (acc, cartItem) => acc + cartItem.item.price * cartItem.quantity,
+    (acc:any, cartItem:any) => acc + cartItem.item.price * cartItem.quantity,
     0,
   );
   const totalRounded = parseFloat(total.toFixed(2));
@@ -49,10 +49,10 @@ export default function CartPage() {
           <p className="text-body-bold">No item in cart</p>
         ) : (
           <div>
-            {cart.cartItems.map((cartItem, index) => (
+            {cart.cartItems.map((cartItem:any, index:number) => (
               <div
                 key={index}
-                className="flex w-full items-center justify-between px-4 py-3 hover:bg-gray-1 max-sm:flex-col max-sm:items-start max-sm:gap-3"
+                className="hover:bg-gray-1 flex w-full items-center justify-between px-4 py-3 max-sm:flex-col max-sm:items-start max-sm:gap-3"
               >
                 <div className="flex items-center">
                   <Image
@@ -76,18 +76,18 @@ export default function CartPage() {
 
                 <div className="flex items-center gap-4">
                   <MinusCircle
-                    className="cursor-pointer hover:text-red-1"
+                    className="hover:text-red-1 cursor-pointer"
                     onClick={() => cart.decreaseQuantity(cartItem.item._id)}
                   />
                   <p className="text-body-bold">{cartItem.quantity}</p>
                   <PlusCircle
-                    className="cursor-pointer hover:text-red-1"
+                    className="hover:text-red-1 cursor-pointer"
                     onClick={() => cart.increaseQuantity(cartItem.item._id)}
                   />
                 </div>
 
                 <Trash
-                  className="cursor-pointer hover:text-red-1"
+                  className="hover:text-red-1 cursor-pointer"
                   onClick={() => cart.removeItem(cartItem.item._id)}
                 />
               </div>
@@ -96,19 +96,19 @@ export default function CartPage() {
         )}
       </div>
 
-      <div className="flex w-1/3 flex-col gap-8 rounded-lg bg-gray-1 px-4 py-5 max-lg:w-full">
-        <p className="pb-4 text-heading4-bold">
+      <div className="bg-gray-1 flex w-1/3 flex-col gap-8 rounded-lg px-4 py-5 max-lg:w-full">
+        <p className="text-heading4-bold pb-4">
           Summary{" "}
           <span>{`(${cart.cartItems.length} ${
             cart.cartItems.length > 1 ? "items" : "item"
           })`}</span>
         </p>
-        <div className="flex justify-between text-body-semibold">
+        <div className="text-body-semibold flex justify-between">
           <span>Total Amount</span>
           <span>$ {totalRounded}</span>
         </div>
         <button
-          className="w-full rounded-lg border bg-white py-3 text-body-bold hover:bg-black hover:text-white"
+          className="text-body-bold w-full rounded-lg border bg-white py-3 hover:bg-black hover:text-white"
           onClick={handleCheckout}
         >
           Proceed to Checkout
