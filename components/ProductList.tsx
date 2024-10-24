@@ -12,13 +12,7 @@ export default async function ProductList() {
       ) : (
         <div className="mx-auto flex flex-wrap gap-16">
           {products.map((product: ProductType) => (
-            <Link
-              href={`/products/${product._id}`}
-              key={product._id}
-              className={`flex w-[250px] flex-col gap-2 overflow-hidden rounded-lg p-2 duration-500 ease-in-out hover:scale-105 hover:border`}
-            >
-              <ProductCard product={product} />
-            </Link>
+            <ProductCard product={product} key={product._id} />
           ))}
         </div>
       )}
