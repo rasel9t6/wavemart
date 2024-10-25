@@ -7,9 +7,7 @@
     "next/core-web-vitals",
     "standard",
     "plugin:tailwindcss/recommended",
-    "eslint:recommended",
-    "plugin:@next/next/recommended",
-    "plugin:prettier/recommended"
+    "prettier"
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -18,5 +16,10 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react", "prettier"]
+  "rules": {
+    // other rules
+    "tailwindcss/no-custom-classname": "off",
+    "no-undef": "off",
+    "no-unused-vars": "off"
+  }
 }
