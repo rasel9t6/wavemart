@@ -29,3 +29,4 @@ export default async function ProductDetailsPage({
     </>
   );
 }
+export const dynamic = "force-dynamic";

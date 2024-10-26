@@ -13,8 +13,8 @@ export default async function CollectionDetailsPage({
     <div className="flex flex-col items-center gap-8 px-10 py-5">
       <Image
         src={collectionDetails.image}
-        width={1500}
-        height={1000}
+        width={851}
+        height={315}
         alt="collection"
         className="h-[400px] w-full rounded-xl object-cover"
       />
