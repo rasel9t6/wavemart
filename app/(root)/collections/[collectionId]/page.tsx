@@ -16,7 +16,7 @@ export default async function CollectionDetailsPage({
         width={851}
         height={315}
         alt="collection"
-        className="h-[400px] w-full rounded-xl object-cover"
+        className="h-[400px] w-full rounded-xl"
       />
       <p className="text-heading3-bold text-gray-2">
         {collectionDetails.title}
