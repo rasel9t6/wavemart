@@ -1,5 +1,4 @@
 import { getProducts } from "@/lib/actions";
-import Link from "next/link";
 import ProductCard from "./ProductCard";
 
 export default async function ProductList() {
