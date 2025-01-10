@@ -17,9 +17,9 @@ export default function Navbar() {
   const [dropdownMenu, setDropdownMenu] = useState(false);
   const [query, setQuery] = useState("");
   return (
-    <div className="sticky top-0 z-10 flex items-center justify-between gap-2 bg-white px-10 py-2 max-sm:px-2">
-      <Link href="/">
-        <Image src="/logo.png" alt="logo" width={80} height={70} />
+    <div className="bg-custom-radial sticky top-0 z-10 flex items-center justify-between gap-2 px-10 py-2 max-sm:px-2">
+      <Link href="/" className="">
+        <Image src="/bd-ship-mart-logo.svg" alt="logo" width={56} height={56} />
       </Link>
 
       <div className="flex gap-4 text-base-bold max-lg:hidden">
@@ -47,9 +47,9 @@ export default function Navbar() {
         </Link>
       </div>
 
-      <div className="flex items-center gap-3 rounded-lg border border-gray-2 px-3 py-1">
+      <div className="flex items-center gap-3 rounded-full bg-white px-3 py-1">
         <input
-          className="outline-none max-sm:max-w-[120px]"
+          className="px-3 py-1 outline-none max-sm:max-w-[120px]"
           placeholder="Search..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -58,21 +58,21 @@ export default function Navbar() {
           disabled={query === ""}
           onClick={() => router.push(`/search/${query}`)}
         >
-          <Search className="size-4 cursor-pointer hover:text-red-1" />
+          <Search className="text-custom-highlight size-6 cursor-pointer hover:text-red-1" />
         </button>
       </div>
 
       <div className="relative flex items-center gap-3">
         <Link
           href="/cart"
-          className="flex items-center gap-3 rounded-lg border px-2 py-1 hover:bg-black hover:text-white max-md:hidden"
+          className="flex items-center gap-3 rounded-lg border bg-white px-2 py-1 max-md:hidden"
         >
           <ShoppingCart />
           <p className="text-base-bold">Cart ({cart.cartItems.length})</p>
         </Link>
 
         <Menu
-          className="cursor-pointer lg:hidden"
+          className="cursor-pointer text-white lg:hidden"
           onClick={() => setDropdownMenu(!dropdownMenu)}
         />
 
@@ -106,7 +106,7 @@ export default function Navbar() {
         {user ? (
           <UserButton afterSignOutUrl="/sign-in" />
         ) : (
-          <Link href="/sign-in">
+          <Link href="/sign-in" className="text-white">
             <CircleUserRound />
           </Link>
         )}

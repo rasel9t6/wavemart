@@ -87,7 +87,29 @@ const config: Config = {
       ],
     },
     extend: {
+      backgroundImage: {
+        "custom-radial": "radial-gradient(circle, #351F6A, #18072C)",
+      },
       colors: {
+        // e-commerce: Colors
+        primary: "#1A73E8",
+        secondary: "#34A853",
+        accent: "#FBBC05",
+        neutral: {
+          light: "#F9F9F9",
+          dark: "#202124",
+        },
+        custom: {
+          dark: "#18072C",
+          medium: "#351F6A",
+          accentLight: "#5B3A91",
+          accentDark: "#12051F",
+          highlight: "#7A5CB6",
+          muted: "#2C194E",
+          complementary: "#6A4A35",
+          softGlow: "#9982C2",
+          // e-commerce: Themes
+        },
         "red-1": "#FF0000",
         "gray-1": "#F7F7F7",
         "gray-2": "#8A8A8A",

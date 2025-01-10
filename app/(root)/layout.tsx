@@ -8,9 +8,16 @@ export const metadata: Metadata = {
 };
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <main>
+    <main className="bg-neutral-light text-neutral-dark">
       <Navbar />
       {children}
+      <div className="">
+        <button className="bg-primary hover:bg-primary-light text-white">
+          Add to Cart
+        </button>
+        <p className="text-secondary">Order placed successfully!</p>
+        <span className="bg-accent text-neutral-dark">50% Off</span>
+      </div>
     </main>
   );
 }
