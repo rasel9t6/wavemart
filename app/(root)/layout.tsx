@@ -12,7 +12,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
       <Navbar />
       {children}
       <div className="">
-        <button className="bg-primary hover:bg-primary-light text-white">
+        <button className="hover:bg-primary-light bg-primary text-white">
           Add to Cart
         </button>
         <p className="text-secondary">Order placed successfully!</p>

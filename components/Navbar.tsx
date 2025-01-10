@@ -17,30 +17,30 @@ export default function Navbar() {
   const [dropdownMenu, setDropdownMenu] = useState(false);
   const [query, setQuery] = useState('');
   return (
-    <div className="sticky top-0 z-10 flex items-center justify-between gap-2 bg-custom-radial px-10 py-2 max-sm:px-2">
+    <div className="sticky top-0 z-10 flex items-center justify-between gap-2 bg-custom-radial px-12 py-4 max-sm:px-6">
       <Link href="/" className="">
-        <Image src="/bd-ship-mart-logo.svg" alt="logo" width={56} height={56} />
+        <Image src="/bd-ship-mart-logo.svg" alt="logo" width={80} height={80} />
       </Link>
 
-      <div className="flex gap-4 text-base-bold max-lg:hidden">
+      <div className="flex gap-4 text-base-bold text-custom-softGlow max-lg:hidden">
         <Link
           href="/"
-          className={`hover:text-red-1 ${pathname === '/' && 'text-red-1'}`}
+          className={`transition-all duration-300 hover:text-custom-highlight ${pathname === '/' && 'text-white'}`}
         >
           Home
         </Link>
         <Link
           href={user ? '/wishlist' : '/sign-in'}
-          className={`hover:text-red-1 ${
-            pathname === '/wishlist' && 'text-red-1'
+          className={`transition-all duration-300 hover:text-custom-highlight ${
+            pathname === '/wishlist' && 'text-white'
           }`}
         >
           Wishlist
         </Link>
         <Link
           href={user ? '/orders' : '/sign-in'}
-          className={`hover:text-red-1 ${
-            pathname === '/orders' && 'text-red-1'
+          className={`transition-all duration-300 hover:text-custom-highlight ${
+            pathname === '/orders' && 'text-white'
           }`}
         >
           Orders

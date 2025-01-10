@@ -14,7 +14,11 @@ export default async function Collections() {
       ) : (
         <div className="flex flex-wrap items-center justify-center gap-8">
           {collections.map((collection: CollectionType) => (
-            <Link href={`/collections/${collection._id}`} key={collection._id}>
+            <Link
+              href={`/collections/${collection._id}`}
+              key={collection._id}
+              className="space-y-2"
+            >
               <div className="relative h-[200px] w-[350px]">
                 <Image
                   src={collection.image}
@@ -24,6 +28,7 @@ export default async function Collections() {
                   className="cursor-pointer rounded-lg object-cover"
                 />
               </div>
+              <p className="text-body-bold">{collection.title}</p>
             </Link>
           ))}
         </div>
