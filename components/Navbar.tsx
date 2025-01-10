@@ -1,12 +1,12 @@
-"use client";
-import useCart from "@/lib/hooks/useCart";
-import { UserButton, useUser } from "@clerk/nextjs";
-import { Search, ShoppingCart, Menu, CircleUserRound } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+'use client';
+import useCart from '@/lib/hooks/useCart';
+import { UserButton, useUser } from '@clerk/nextjs';
+import { Search, ShoppingCart, Menu, CircleUserRound } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -15,9 +15,9 @@ export default function Navbar() {
   const cart = useCart();
 
   const [dropdownMenu, setDropdownMenu] = useState(false);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   return (
-    <div className="bg-custom-radial sticky top-0 z-10 flex items-center justify-between gap-2 px-10 py-2 max-sm:px-2">
+    <div className="sticky top-0 z-10 flex items-center justify-between gap-2 bg-custom-radial px-10 py-2 max-sm:px-2">
       <Link href="/" className="">
         <Image src="/bd-ship-mart-logo.svg" alt="logo" width={56} height={56} />
       </Link>
@@ -25,22 +25,22 @@ export default function Navbar() {
       <div className="flex gap-4 text-base-bold max-lg:hidden">
         <Link
           href="/"
-          className={`hover:text-red-1 ${pathname === "/" && "text-red-1"}`}
+          className={`hover:text-red-1 ${pathname === '/' && 'text-red-1'}`}
         >
           Home
         </Link>
         <Link
-          href={user ? "/wishlist" : "/sign-in"}
+          href={user ? '/wishlist' : '/sign-in'}
           className={`hover:text-red-1 ${
-            pathname === "/wishlist" && "text-red-1"
+            pathname === '/wishlist' && 'text-red-1'
           }`}
         >
           Wishlist
         </Link>
         <Link
-          href={user ? "/orders" : "/sign-in"}
+          href={user ? '/orders' : '/sign-in'}
           className={`hover:text-red-1 ${
-            pathname === "/orders" && "text-red-1"
+            pathname === '/orders' && 'text-red-1'
           }`}
         >
           Orders
@@ -55,10 +55,10 @@ export default function Navbar() {
           onChange={(e) => setQuery(e.target.value)}
         />
         <button
-          disabled={query === ""}
+          disabled={query === ''}
           onClick={() => router.push(`/search/${query}`)}
         >
-          <Search className="text-custom-highlight size-6 cursor-pointer hover:text-red-1" />
+          <Search className="size-6 text-custom-highlight hover:text-red-1" />
         </button>
       </div>
 
@@ -82,13 +82,13 @@ export default function Navbar() {
               Home
             </Link>
             <Link
-              href={user ? "/wishlist" : "/sign-in"}
+              href={user ? '/wishlist' : '/sign-in'}
               className="hover:text-red-1"
             >
               Wishlist
             </Link>
             <Link
-              href={user ? "/orders" : "/sign-in"}
+              href={user ? '/orders' : '/sign-in'}
               className="hover:text-red-1"
             >
               Orders

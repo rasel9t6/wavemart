@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 export const getCollections = async () => {
   const collections = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/collections`,
@@ -15,7 +15,7 @@ export const getCollectionDetails = async (collectionId: string) => {
 
 export const getProducts = async () => {
   const products = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
-    cache: "no-store",
+    cache: 'no-store',
   });
   const data = await products.json();
   return await data;

@@ -1,8 +1,8 @@
-"use client";
-import Image from "next/image";
+'use client';
+import Image from 'next/image';
 
-import HeartFavorite from "./HeartFavorite";
-import Link from "next/link";
+import HeartFavorite from './HeartFavorite';
+import Link from 'next/link';
 interface ProductCardProps {
   product: ProductType;
   updateSignedInUser?: (updatedUser: UserType) => void;

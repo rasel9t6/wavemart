@@ -1,5 +1,5 @@
-import { getProducts } from "@/lib/actions";
-import ProductCard from "./ProductCard";
+import { getProducts } from '@/lib/actions';
+import ProductCard from './ProductCard';
 
 export default async function ProductList() {
   const products = await getProducts();

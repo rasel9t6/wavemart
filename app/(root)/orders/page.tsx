@@ -1,6 +1,6 @@
-import { getOrders } from "@/lib/actions";
-import { auth } from "@clerk/nextjs/server";
-import Image from "next/image";
+import { getOrders } from '@/lib/actions';
+import { auth } from '@clerk/nextjs/server';
+import Image from 'next/image';
 
 export default async function OrdersPage() {
   const { userId } = auth();
@@ -38,14 +38,14 @@ export default async function OrdersPage() {
                   />
                   <div className="flex flex-col justify-between">
                     <p className="text-small-medium">
-                      Title:{" "}
+                      Title:{' '}
                       <span className="text-small-bold">
                         {orderItem.product.title}
                       </span>
                     </p>
                     {orderItem.color && (
                       <p className="text-small-medium">
-                        Color:{" "}
+                        Color:{' '}
                         <span className="text-small-bold">
                           {orderItem.color}
                         </span>
@@ -53,20 +53,20 @@ export default async function OrdersPage() {
                     )}
                     {orderItem.size && (
                       <p className="text-small-medium">
-                        Size:{" "}
+                        Size:{' '}
                         <span className="text-small-bold">
                           {orderItem.size}
                         </span>
                       </p>
                     )}
                     <p className="text-small-medium">
-                      Unit price:{" "}
+                      Unit price:{' '}
                       <span className="text-small-bold">
                         {orderItem.product.price}
                       </span>
                     </p>
                     <p className="text-small-medium">
-                      Quantity:{" "}
+                      Quantity:{' '}
                       <span className="text-small-bold">
                         {orderItem.quantity}
                       </span>
@@ -81,4 +81,4 @@ export default async function OrdersPage() {
     </div>
   );
 }
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';

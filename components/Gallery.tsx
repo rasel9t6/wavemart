@@ -1,6 +1,6 @@
-"use client";
-import Image from "next/image";
-import { useState } from "react";
+'use client';
+import Image from 'next/image';
+import { useState } from 'react';
 
 export default function Gallery({ productMedia }: { productMedia: string[] }) {
   const [mainImage, setMainImage] = useState(productMedia[0]);
@@ -21,7 +21,7 @@ export default function Gallery({ productMedia }: { productMedia: string[] }) {
             height={200}
             width={200}
             alt="product"
-            className={`size-20 cursor-pointer rounded-lg object-cover ${mainImage === image ? "border-2 border-black" : ""}`}
+            className={`size-20 cursor-pointer rounded-lg object-cover ${mainImage === image ? 'border-2 border-black' : ''}`}
             onClick={() => setMainImage(image)}
           />
         ))}

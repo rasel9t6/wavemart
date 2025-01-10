@@ -1,9 +1,9 @@
-import { Metadata } from "next";
-import React from "react";
+import { Metadata } from 'next';
+import React from 'react';
 
 export const metadata: Metadata = {
-  title: "Wavemart | Authentication",
-  description: "E-Commerce store",
+  title: 'Wavemart | Authentication',
+  description: 'E-Commerce store',
 };
 export default function layout({ children }: { children: React.ReactNode }) {
   return (

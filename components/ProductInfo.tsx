@@ -1,8 +1,8 @@
-"use client";
-import useCart from "@/lib/hooks/useCart";
-import { MinusCircle, PlusCircle } from "lucide-react";
-import { useState } from "react";
-import HeartFavorite from "./HeartFavorite";
+'use client';
+import useCart from '@/lib/hooks/useCart';
+import { MinusCircle, PlusCircle } from 'lucide-react';
+import { useState } from 'react';
+import HeartFavorite from './HeartFavorite';
 
 export default function ProductInfo({
   productInfo,
@@ -45,7 +45,7 @@ export default function ProductInfo({
               <p
                 key={index}
                 className={`cursor-pointer rounded-lg border border-black px-2 py-1 ${
-                  selectedColor === color && "bg-black text-white"
+                  selectedColor === color && 'bg-black text-white'
                 }`}
                 onClick={() => setSelectedColor(color)}
               >
@@ -64,7 +64,7 @@ export default function ProductInfo({
               <p
                 key={index}
                 className={`cursor-pointer rounded-lg border border-black px-2 py-1 ${
-                  selectedSize === size && "bg-black text-white"
+                  selectedSize === size && 'bg-black text-white'
                 }`}
                 onClick={() => setSelectedSize(size)}
               >

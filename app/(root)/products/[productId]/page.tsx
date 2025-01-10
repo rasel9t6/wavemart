@@ -1,7 +1,7 @@
-import Gallery from "@/components/Gallery";
-import ProductCard from "@/components/ProductCard";
-import ProductInfo from "@/components/ProductInfo";
-import { getProductDetails, getRelatedProducts } from "@/lib/actions";
+import Gallery from '@/components/Gallery';
+import ProductCard from '@/components/ProductCard';
+import ProductInfo from '@/components/ProductInfo';
+import { getProductDetails, getRelatedProducts } from '@/lib/actions';
 
 export default async function ProductDetailsPage({
   params,
@@ -29,4 +29,4 @@ export default async function ProductDetailsPage({
     </>
   );
 }
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';

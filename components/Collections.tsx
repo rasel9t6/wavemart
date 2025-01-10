@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
-import { getCollections } from "@/lib/actions";
+import { getCollections } from '@/lib/actions';
 
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default async function Collections() {
   const collections = await getCollections();

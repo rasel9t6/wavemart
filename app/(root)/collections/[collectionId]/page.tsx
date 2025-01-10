@@ -1,6 +1,6 @@
-import ProductCard from "@/components/ProductCard";
-import { getCollectionDetails } from "@/lib/actions";
-import Image from "next/image";
+import ProductCard from '@/components/ProductCard';
+import { getCollectionDetails } from '@/lib/actions';
+import Image from 'next/image';
 
 export default async function CollectionDetailsPage({
   params,
@@ -32,4 +32,4 @@ export default async function CollectionDetailsPage({
     </div>
   );
 }
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';

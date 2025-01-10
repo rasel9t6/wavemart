@@ -1,9 +1,9 @@
-"use client";
-import ProductCard from "@/components/ProductCard";
-import { getProductDetails } from "@/lib/actions";
-import { useUser } from "@clerk/nextjs";
-import { Loader } from "lucide-react";
-import { useState, useEffect } from "react";
+'use client';
+import ProductCard from '@/components/ProductCard';
+import { getProductDetails } from '@/lib/actions';
+import { useUser } from '@clerk/nextjs';
+import { Loader } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export default function WishListPage() {
   const { user } = useUser();
@@ -14,12 +14,12 @@ export default function WishListPage() {
 
   const getUser = async () => {
     try {
-      const res = await fetch("/api/users");
+      const res = await fetch('/api/users');
       const data = await res.json();
       setSignedInUser(data);
       setLoading(false);
     } catch (err) {
-      console.log("[users_GET", err);
+      console.log('[users_GET', err);
     }
   };
 
@@ -74,4 +74,4 @@ export default function WishListPage() {
     </div>
   );
 }
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';

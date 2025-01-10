@@ -1,4 +1,4 @@
-import ProductCard from "@/components/ProductCard";
+import ProductCard from '@/components/ProductCard';
 
 export default async function SearchPage({
   params,
@@ -27,4 +27,4 @@ export default async function SearchPage({
     </div>
   );
 }
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';

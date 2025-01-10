@@ -1,9 +1,9 @@
-"use client";
-import { useUser } from "@clerk/nextjs";
-import { Heart } from "lucide-react";
-import { useRouter } from "next/navigation";
+'use client';
+import { useUser } from '@clerk/nextjs';
+import { Heart } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 interface HeartFavoriteProps {
   product: ProductType;
@@ -21,12 +21,12 @@ export default function HeartFavorite({
   const getUser = async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/users");
+      const res = await fetch('/api/users');
       const data = await res.json();
       setIsLiked(data.wishlist.includes(product._id));
       setLoading(false);
     } catch (err) {
-      console.log("[users_GET]", err);
+      console.log('[users_GET]', err);
     }
   };
 
@@ -42,10 +42,10 @@ export default function HeartFavorite({
     e.preventDefault();
     try {
       if (!user) {
-        router.push("/sign-in");
+        router.push('/sign-in');
       } else {
-        const res = await fetch("/api/users/wishlist", {
-          method: "POST",
+        const res = await fetch('/api/users/wishlist', {
+          method: 'POST',
           body: JSON.stringify({ productId: product._id }),
         });
         const updatedUser = await res.json();
@@ -53,12 +53,12 @@ export default function HeartFavorite({
         updateSignedInUser && updateSignedInUser(updatedUser);
       }
     } catch (err) {
-      console.log("[wishlist_POST]", err);
+      console.log('[wishlist_POST]', err);
     }
   };
   return (
     <button onClick={handleLike}>
-      <Heart fill={`${isLiked ? "red" : "white"}`} />
+      <Heart fill={`${isLiked ? 'red' : 'white'}`} />
     </button>
   );
 }
