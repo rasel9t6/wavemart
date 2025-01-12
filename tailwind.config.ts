@@ -88,7 +88,8 @@ const config: Config = {
     },
     extend: {
       backgroundImage: {
-        'custom-radial': 'radial-gradient(circle, #351F6A, #18072C)',
+        // #003366
+        'custom-radial': 'radial-gradient(circle, #003366, #001e3c)',
       },
       colors: {
         // e-commerce: Colors
