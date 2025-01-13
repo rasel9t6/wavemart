@@ -92,28 +92,20 @@ const config: Config = {
         'custom-radial': 'radial-gradient(circle, #003366, #001e3c)',
       },
       colors: {
-        // e-commerce: Colors
-        primary: '#1A73E8',
-        secondary: '#34A853',
-        accent: '#FBBC05',
-        neutral: {
-          light: '#F9F9F9',
-          dark: '#202124',
+        midnight: {
+          DEFAULT: '#001E3C',
+          50: '#C6E2FF',
+          100: '#A2D0FF',
+          200: '#5BADFF',
+          300: '#1389FF',
+          400: '#0065CB',
+          500: '#004283',
+          600: '#001E3C', // Default color
+          700: '#001932',
+          800: '#001428',
+          900: '#000F1D',
+          950: '#000C18',
         },
-        custom: {
-          dark: '#18072C',
-          medium: '#351F6A',
-          accentLight: '#5B3A91',
-          accentDark: '#12051F',
-          highlight: '#7A5CB6',
-          muted: '#2C194E',
-          complementary: '#6A4A35',
-          softGlow: '#9982C2',
-          // e-commerce: Themes
-        },
-        'red-1': '#FF0000',
-        'gray-1': '#F7F7F7',
-        'gray-2': '#8A8A8A',
       },
     },
   },

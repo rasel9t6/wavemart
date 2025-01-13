@@ -22,16 +22,16 @@ export default function Navbar() {
         <Image src="/bd-ship-mart-logo.svg" alt="logo" width={80} height={80} />
       </Link>
 
-      <div className="flex gap-4 text-base-bold text-custom-softGlow max-lg:hidden">
+      <div className="flex gap-4 text-base-bold text-midnight-100 max-lg:hidden">
         <Link
           href="/"
-          className={`transition-all duration-300 hover:text-custom-highlight ${pathname === '/' && 'text-white'}`}
+          className={`transition-all duration-300 hover:text-midnight-200 ${pathname === '/' && 'text-white'}`}
         >
           Home
         </Link>
         <Link
           href={user ? '/wishlist' : '/sign-in'}
-          className={`transition-all duration-300 hover:text-custom-highlight ${
+          className={`transition-all duration-300 hover:text-midnight-200 ${
             pathname === '/wishlist' && 'text-white'
           }`}
         >
@@ -39,7 +39,7 @@ export default function Navbar() {
         </Link>
         <Link
           href={user ? '/orders' : '/sign-in'}
-          className={`transition-all duration-300 hover:text-custom-highlight ${
+          className={`transition-all duration-300 hover:text-midnight-200 ${
             pathname === '/orders' && 'text-white'
           }`}
         >
@@ -58,14 +58,14 @@ export default function Navbar() {
           disabled={query === ''}
           onClick={() => router.push(`/search/${query}`)}
         >
-          <Search className="size-6 text-custom-highlight hover:text-red-1" />
+          <Search className="hover:text-red-1 size-6 text-midnight-500" />
         </button>
       </div>
 
       <div className="relative flex items-center gap-3">
         <Link
           href="/cart"
-          className="flex items-center gap-3 rounded-lg border bg-white px-2 py-1 max-md:hidden"
+          className="flex items-center gap-3 rounded-lg border bg-white px-2 py-1 text-midnight-500 max-md:hidden"
         >
           <ShoppingCart />
           <p className="text-base-bold">Cart ({cart.cartItems.length})</p>
@@ -77,25 +77,25 @@ export default function Navbar() {
         />
 
         {dropdownMenu && (
-          <div className="absolute right-5 top-12 flex flex-col gap-4 rounded-lg border bg-white p-3 text-base-bold lg:hidden">
-            <Link href="/" className="hover:text-red-1">
+          <div className="absolute right-5 top-12 flex flex-col gap-4 rounded-lg border bg-white p-3 text-base-bold text-midnight-500 lg:hidden">
+            <Link href="/" className="hover:text-midnight">
               Home
             </Link>
             <Link
               href={user ? '/wishlist' : '/sign-in'}
-              className="hover:text-red-1"
+              className="hover:text-midnight"
             >
               Wishlist
             </Link>
             <Link
               href={user ? '/orders' : '/sign-in'}
-              className="hover:text-red-1"
+              className="hover:text-midnight"
             >
               Orders
             </Link>
             <Link
               href="/cart"
-              className="flex items-center gap-3 rounded-lg border px-2 py-1 hover:bg-black hover:text-white"
+              className="flex items-center gap-3 rounded-lg border px-2 py-1 text-midnight-500 transition-all duration-300 hover:bg-midnight hover:text-white"
             >
               <ShoppingCart />
               <p className="text-base-bold">Cart ({cart.cartItems.length})</p>

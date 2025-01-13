@@ -1,42 +1,31 @@
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-unused-vars */
-type CollectionType = {
-  _id: string;
-  title: string;
-  products: number;
-  image: string;
-};
-
 type ProductType = {
   _id: string;
   title: string;
   description: string;
-  media: [string];
+  media: Array<string>;
   category: string;
-  collections: [string];
-  tags: [string];
+  collections: Array<string>;
+  tags: Array<string>;
   price: number;
   cost: number;
-  sizes: [string];
-  colors: [string];
+  sizes: Array<string>;
+  colors: Array<string>;
   createdAt: string;
   updatedAt: string;
+};
+
+type CollectionType = {
+  _id: string;
+  title: string;
+  products: Array<string | ProductType>;
+  image: string;
 };
 
 type UserType = {
   clerkId: string;
-  wishlist: [string];
+  wishlist: Array<string>;
   createdAt: string;
   updatedAt: string;
-};
-
-type OrderType = {
-  shippingAddress: Object;
-  _id: string;
-  customerClerkId: string;
-  products: [OrderItemType];
-  shippingRate: string;
-  totalAmount: number;
 };
 
 type OrderItemType = {
@@ -46,3 +35,13 @@ type OrderItemType = {
   quantity: number;
   _id: string;
 };
+
+type OrderType = {
+  shippingAddress: Record<string, unknown>;
+  _id: string;
+  customerClerkId: string;
+  products: Array<OrderItemType>;
+  shippingRate: string;
+  totalAmount: number;
+};
+
