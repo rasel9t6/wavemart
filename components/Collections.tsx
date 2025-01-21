@@ -9,7 +9,7 @@ export default async function Collections() {
       <h1 className="text pb-10 pt-4 text-center text-heading1-bold font-bold text-midnight">
         Collections
       </h1>
-      <div className="grid grid-cols-4 gap-5">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-5">
         {!collections || collections.length === 0 ? (
           <div className="col-span-full text-center">
             <Image
@@ -32,7 +32,10 @@ export default async function Collections() {
               <Image
                 width={100}
                 height={100}
-                src="https://img.icons8.com/3d-fluency/750/jewelry.png"
+                src={
+                  `${collection.image}` ||
+                  'https://img.icons8.com/3d-fluency/750/jewelry.png'
+                }
                 alt={`Image of ${collection.title}`}
                 className="rounded-md"
               />

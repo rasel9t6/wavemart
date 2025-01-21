@@ -13,7 +13,6 @@ export default function Navbar() {
   const router = useRouter();
   const { user } = useUser();
   const cart = useCart();
-
   const [dropdownMenu, setDropdownMenu] = useState(false);
   const [query, setQuery] = useState('');
   return (

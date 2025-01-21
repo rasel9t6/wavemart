@@ -18,10 +18,10 @@ export default async function CollectionDetailsPage({
         alt="collection"
         className="h-[400px] w-full rounded-xl"
       />
-      <p className="text-heading3-bold text-gray-2">
+      <p className="text-gray-2 text-heading3-bold">
         {collectionDetails.title}
       </p>
-      <p className="text-body-normal max-w-[900px] text-center text-gray-2">
+      <p className="text-body-normal text-gray-2 max-w-[900px] text-center">
         {collectionDetails.description}
       </p>
       <div className="flex flex-wrap justify-center gap-16">
