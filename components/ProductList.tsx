@@ -9,7 +9,7 @@ export default async function ProductList() {
       {!products || products.length === 0 ? (
         <p className="text-body-bold">No products found.</p>
       ) : (
-        <div className="mx-auto flex flex-wrap gap-16">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-5">
           {products.map((product: ProductType) => (
             <ProductCard product={product} key={product._id} />
           ))}

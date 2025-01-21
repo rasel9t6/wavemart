@@ -11,13 +11,6 @@ export default function layout({ children }: { children: React.ReactNode }) {
     <main className="bg-neutral-light text-neutral-dark">
       <Navbar />
       {children}
-      <div className="">
-        <button className="hover:bg-primary-light bg-primary text-white">
-          Add to Cart
-        </button>
-        <p className="text-secondary">Order placed successfully!</p>
-        <span className="bg-accent text-neutral-dark">50% Off</span>
-      </div>
     </main>
   );
 }
