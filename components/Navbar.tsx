@@ -5,8 +5,55 @@ import { Search, ShoppingCart, Menu, CircleUserRound } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-
 import { useState } from 'react';
+
+// Navigation links data
+const NAV_LINKS = [
+  { path: '/', label: 'Home' },
+  { path: '/wishlist', label: 'Wishlist' },
+  { path: '/orders', label: 'Orders' },
+];
+
+// Separate components for better organization
+const SearchBar = ({ query, setQuery, onSearch }: any) => (
+  <div className="flex items-center gap-3 rounded-full bg-white px-3 py-1">
+    <input
+      className="px-3 py-1 outline-none max-sm:max-w-[120px]"
+      placeholder="Search..."
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+    />
+    <button disabled={query === ''} onClick={onSearch}>
+      <Search className="size-6 cursor-pointer text-bondi-blue-500 transition-colors duration-300 hover:text-bondi-blue-400" />
+    </button>
+  </div>
+);
+
+const NavLinks = ({ pathname, user }: any) => (
+  <div className="flex gap-4 text-base-bold text-bondi-blue-100 max-lg:hidden">
+    {NAV_LINKS.map(({ path, label }) => (
+      <Link
+        key={path}
+        href={user ? path : '/sign-in'}
+        className={`transition-all duration-300 hover:text-bondi-blue-200 ${
+          pathname === path && 'text-white'
+        }`}
+      >
+        {label}
+      </Link>
+    ))}
+  </div>
+);
+
+const CartButton = ({ cartItemsCount }: any) => (
+  <Link
+    href="/cart"
+    className="flex items-center gap-3 rounded-lg border bg-white px-2 py-1 text-bondi-blue-500 max-sm:hidden"
+  >
+    <ShoppingCart />
+    <p className="text-base-bold">Cart ({cartItemsCount})</p>
+  </Link>
+);
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -15,60 +62,20 @@ export default function Navbar() {
   const cart = useCart();
   const [dropdownMenu, setDropdownMenu] = useState(false);
   const [query, setQuery] = useState('');
+
+  const handleSearch = () => router.push(`/search/${query}`);
+
   return (
     <div className="sticky top-0 z-10 flex items-center justify-between gap-2 bg-custom-radial px-12 py-4 max-sm:px-6">
-      <Link href="/" className="">
+      <Link href="/">
         <Image src="/bd-ship-mart-logo.svg" alt="logo" width={80} height={80} />
       </Link>
 
-      <div className="flex gap-4 text-base-bold text-midnight-100 max-lg:hidden">
-        <Link
-          href="/"
-          className={`transition-all duration-300 hover:text-midnight-200 ${pathname === '/' && 'text-white'}`}
-        >
-          Home
-        </Link>
-        <Link
-          href={user ? '/wishlist' : '/sign-in'}
-          className={`transition-all duration-300 hover:text-midnight-200 ${
-            pathname === '/wishlist' && 'text-white'
-          }`}
-        >
-          Wishlist
-        </Link>
-        <Link
-          href={user ? '/orders' : '/sign-in'}
-          className={`transition-all duration-300 hover:text-midnight-200 ${
-            pathname === '/orders' && 'text-white'
-          }`}
-        >
-          Orders
-        </Link>
-      </div>
-
-      <div className="flex items-center gap-3 rounded-full bg-white px-3 py-1">
-        <input
-          className="px-3 py-1 outline-none max-sm:max-w-[120px]"
-          placeholder="Search..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <button
-          disabled={query === ''}
-          onClick={() => router.push(`/search/${query}`)}
-        >
-          <Search className="hover:text-red-1 size-6 text-midnight-500" />
-        </button>
-      </div>
+      <NavLinks pathname={pathname} user={user} />
+      <SearchBar query={query} setQuery={setQuery} onSearch={handleSearch} />
 
       <div className="relative flex items-center gap-3">
-        <Link
-          href="/cart"
-          className="flex items-center gap-3 rounded-lg border bg-white px-2 py-1 text-midnight-500 max-md:hidden"
-        >
-          <ShoppingCart />
-          <p className="text-base-bold">Cart ({cart.cartItems.length})</p>
-        </Link>
+        <CartButton cartItemsCount={cart.cartItems.length} />
 
         <Menu
           className="cursor-pointer text-white lg:hidden"
@@ -76,28 +83,22 @@ export default function Navbar() {
         />
 
         {dropdownMenu && (
-          <div className="absolute right-5 top-12 flex flex-col gap-4 rounded-lg border bg-white p-3 text-base-bold text-midnight-500 lg:hidden">
-            <Link href="/" className="hover:text-midnight">
-              Home
-            </Link>
-            <Link
-              href={user ? '/wishlist' : '/sign-in'}
-              className="hover:text-midnight"
-            >
-              Wishlist
-            </Link>
-            <Link
-              href={user ? '/orders' : '/sign-in'}
-              className="hover:text-midnight"
-            >
-              Orders
-            </Link>
+          <div className="absolute right-5 top-12 flex w-28 flex-col  gap-4 rounded-lg border bg-white p-3 text-base-bold text-bondi-blue-500 md:w-fit lg:hidden">
+            {NAV_LINKS.map(({ path, label }) => (
+              <Link
+                key={path}
+                href={user ? path : '/sign-in'}
+                className="hover:text-bondi-blue"
+              >
+                {label}
+              </Link>
+            ))}
             <Link
               href="/cart"
-              className="flex items-center gap-3 rounded-lg border px-2 py-1 text-midnight-500 transition-all duration-300 hover:bg-midnight hover:text-white"
+              className="flex w-full flex-col  items-center justify-center gap-3 rounded-lg border px-2 py-1 text-bondi-blue transition-all duration-300 hover:bg-bondi-blue hover:text-white sm:flex-row"
             >
               <ShoppingCart />
-              <p className="text-base-bold">Cart ({cart.cartItems.length})</p>
+              <p className="text-base-bold ">Cart ({cart.cartItems.length})</p>
             </Link>
           </div>
         )}

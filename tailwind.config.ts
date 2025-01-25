@@ -89,22 +89,22 @@ const config: Config = {
     extend: {
       backgroundImage: {
         // #003366
-        'custom-radial': 'radial-gradient(circle, #003366, #001e3c)',
+        'custom-radial': 'radial-gradient(circle, #00ADB5, #00888F)',
       },
       colors: {
-        midnight: {
-          DEFAULT: '#001E3C',
-          50: '#C6E2FF',
-          100: '#A2D0FF',
-          200: '#5BADFF',
-          300: '#1389FF',
-          400: '#0065CB',
-          500: '#004283',
-          600: '#001E3C', // Default color
-          700: '#001932',
-          800: '#001428',
-          900: '#000F1D',
-          950: '#000C18',
+        'bondi-blue': {
+          DEFAULT: '#00ABB3',
+          50: '#99FAFF',
+          100: '#80F9FF',
+          200: '#4DF7FF',
+          300: '#1AF5FF',
+          400: '#00DBE6',
+          500: '#00ABB3',
+          600: '#00888F',
+          700: '#00436B',
+          800: '#002147',
+          900: '#000A24',
+          950: '#000412',
         },
       },
     },
