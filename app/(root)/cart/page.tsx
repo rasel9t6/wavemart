@@ -40,13 +40,14 @@ export default function CartPage() {
     }
   };
   return (
-    <div className="flex gap-20 px-10 py-16 max-lg:flex-col max-sm:px-3">
+    <div className="flex gap-20 px-10 py-16 max-lg:flex-col max-sm:px-3 ">
       <div className="w-2/3 max-lg:w-full">
-        <p className="text-heading3-bold">Shopping Cart</p>
-        <hr className="my-6" />
+        <p className="border-gray-1 border-b pb-6 text-heading3-bold">
+          Shopping Cart
+        </p>
 
         {cart.cartItems.length === 0 ? (
-          <p className="text-body-bold">No item in cart</p>
+          <p className="py-3 text-body-bold">No item in cart</p>
         ) : (
           <div>
             {cart.cartItems.map((cartItem: any, index: number) => (
@@ -97,18 +98,18 @@ export default function CartPage() {
       </div>
 
       <div className="bg-gray-1 flex w-1/3 flex-col gap-8 rounded-lg px-4 py-5 max-lg:w-full">
-        <p className="text-heading4-bold pb-4">
+        <p className="pb-4 text-heading4-bold">
           Summary{' '}
           <span>{`(${cart.cartItems.length} ${
             cart.cartItems.length > 1 ? 'items' : 'item'
           })`}</span>
         </p>
-        <div className="text-body-semibold flex justify-between">
+        <div className="flex justify-between text-body-semibold">
           <span>Total Amount</span>
-          <span>$ {totalRounded}</span>
+          <span className="text-bondi-blue">৳ {totalRounded}</span>
         </div>
         <button
-          className="text-body-bold w-full rounded-lg border bg-white py-3 hover:bg-black hover:text-white"
+          className="w-full rounded-lg border bg-bondi-blue-500 py-3 text-body-bold text-white transition-colors duration-300 hover:bg-bondi-blue-400 hover:text-bondi-blue-900"
           onClick={handleCheckout}
         >
           Proceed to Checkout

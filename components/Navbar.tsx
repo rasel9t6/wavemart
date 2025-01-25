@@ -24,7 +24,7 @@ const SearchBar = ({ query, setQuery, onSearch }: any) => (
       onChange={(e) => setQuery(e.target.value)}
     />
     <button disabled={query === ''} onClick={onSearch}>
-      <Search className="size-6 cursor-pointer text-bondi-blue-500 transition-colors duration-300 hover:text-bondi-blue-400" />
+      <Search className="size-6 cursor-pointer text-bondi-blue-600 transition-colors duration-300 hover:text-bondi-blue-400" />
     </button>
   </div>
 );
@@ -48,7 +48,7 @@ const NavLinks = ({ pathname, user }: any) => (
 const CartButton = ({ cartItemsCount }: any) => (
   <Link
     href="/cart"
-    className="flex items-center gap-3 rounded-lg border bg-white px-2 py-1 text-bondi-blue-500 max-sm:hidden"
+    className="flex items-center gap-3 rounded-lg border bg-white px-2 py-1 text-bondi-blue-600 transition-colors duration-300 hover:text-bondi-blue-400 max-sm:hidden"
   >
     <ShoppingCart />
     <p className="text-base-bold">Cart ({cartItemsCount})</p>

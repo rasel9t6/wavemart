@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="bg-neutral-light text-neutral-dark">
+    <main className="bg-neutral-100 text-neutral-900">
       <Navbar />
       {children}
     </main>
