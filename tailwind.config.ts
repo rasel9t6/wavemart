@@ -106,6 +106,9 @@ const config: Config = {
           900: '#000A24',
           950: '#000412',
         },
+        'custom-gray': {
+          DEFAULT: '#616161',
+        },
       },
     },
   },

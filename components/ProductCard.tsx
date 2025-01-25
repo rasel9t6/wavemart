@@ -15,7 +15,7 @@ export default function ProductCard({
     <>
       <Link
         href={`/products/${product._id}`}
-        className="flex flex-col gap-2 rounded-xl border p-3 transition-all duration-300 "
+        className="flex flex-col gap-2 rounded-xl border border-custom-gray/20 p-3 transition-all duration-300 "
       >
         <Image
           src={product.media[0]}
@@ -26,10 +26,10 @@ export default function ProductCard({
         />
         <div>
           <p className="text-base-bold">{product.title}</p>
-          <p className="text-grey-2 text-small-medium">{product.category}</p>
+          <p className="text-grey-2 text-small-medium ">{product.category}</p>
         </div>
         <div className="flex items-center justify-between">
-          <p className="text-body-bold">৳{product.price}</p>
+          <p className="text-body-bold ">৳{product.price}</p>
           <HeartFavorite
             product={product}
             updateSignedInUser={updateSignedInUser}

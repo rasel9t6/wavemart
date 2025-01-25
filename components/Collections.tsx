@@ -6,7 +6,7 @@ export default async function Collections() {
   const collections = await getCollections();
   return (
     <div className="mx-auto px-5 py-8">
-      <h1 className=" pb-10 pt-4 text-center text-heading1-bold font-bold text-midnight">
+      <h1 className=" pb-10 pt-4 text-center text-heading1-bold font-bold text-bondi-blue">
         Collections
       </h1>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-5">
@@ -26,7 +26,7 @@ export default async function Collections() {
             <Link
               href={`/collections/${collection._id}`}
               key={collection._id}
-              className="group flex flex-col items-center gap-4 rounded-lg border border-gray-200 bg-white p-5 shadow-lg transition-transform hover:scale-105 hover:shadow-2xl lg:flex-row"
+              className="group flex flex-col items-center gap-4 rounded-lg border border-custom-gray/20 bg-white p-5 shadow-lg transition-transform hover:scale-105 hover:shadow-2xl lg:flex-row"
               aria-label={`View collection ${collection.title}`}
             >
               <Image

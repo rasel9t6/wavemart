@@ -2,7 +2,7 @@
 import { useUser } from '@clerk/nextjs';
 import { Heart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-
+import { FaHeart, FaRegHeart } from 'react-icons/fa6';
 import { useState, useEffect } from 'react';
 
 interface HeartFavoriteProps {
@@ -58,7 +58,11 @@ export default function HeartFavorite({
   };
   return (
     <button onClick={handleLike}>
-      <Heart fill={`${isLiked ? 'red' : 'white'}`} />
+      {isLiked ? (
+        <FaHeart fill="#00ABB3" size={20} />
+      ) : (
+        <FaRegHeart fill="#00ABB3" size={20} />
+      )}
     </button>
   );
 }
