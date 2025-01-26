@@ -44,4 +44,3 @@ type OrderType = {
   shippingRate: string;
   totalAmount: number;
 };
-

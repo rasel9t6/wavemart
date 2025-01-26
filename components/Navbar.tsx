@@ -18,7 +18,7 @@ const NAV_LINKS = [
 const SearchBar = ({ query, setQuery, onSearch }: any) => (
   <div className="flex items-center gap-3 rounded-full bg-white px-3 py-1">
     <input
-      className="px-3 py-1 outline-none max-sm:max-w-[120px]"
+      className=" px-3 py-1 outline-none max-sm:max-w-[120px]"
       placeholder="Search..."
       value={query}
       onChange={(e) => setQuery(e.target.value)}
@@ -66,9 +66,15 @@ export default function Navbar() {
   const handleSearch = () => router.push(`/search/${query}`);
 
   return (
-    <div className="sticky top-0 z-10 flex items-center justify-between gap-2 bg-custom-radial px-12 py-4 max-sm:px-6">
-      <Link href="/">
-        <Image src="/bd-ship-mart-logo.svg" alt="logo" width={80} height={80} />
+    <div className="fixed z-20 flex w-full items-center justify-between gap-5  bg-custom-radial px-12 py-2  sm:py-4">
+      <Link href="/" className="relative ">
+        <Image
+          src="/bd-ship-mart-logo.svg"
+          alt="BD shipmart logo"
+          width={80}
+          height={80}
+          sizes="(max-width: 640px) 50px, 80px "
+        />
       </Link>
 
       <NavLinks pathname={pathname} user={user} />
@@ -78,7 +84,7 @@ export default function Navbar() {
         <CartButton cartItemsCount={cart.cartItems.length} />
 
         <Menu
-          className="cursor-pointer text-white lg:hidden"
+          className="hidden cursor-pointer text-white sm:block lg:hidden"
           onClick={() => setDropdownMenu(!dropdownMenu)}
         />
 
