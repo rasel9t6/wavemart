@@ -57,3 +57,10 @@ export const getRelatedProducts = async (productId: string) => {
   revalidatePath(`/products/${productId}/related`);
   return await relatedProducts.json();
 };
+// https://EXCHANGE_RATE_API_URL/EXCHANGE_RATE_API_KEY/latest/CNY
+export const getCurrencyRate = async () => {
+  const currencyRate = await fetch(
+    `${process.env.EXCHANGE_RATE_API_URL}/${process.env.EXCHANGE_RATE_API_KEY}/latest/CNY`,
+  );
+  return await currencyRate.json();
+};

@@ -11,10 +11,7 @@
     "format": "prettier --write ."
   },
   "prettier": {
-    "singleQuote": true,
-    "plugins": [
-      "prettier-plugin-tailwindcss"
-    ]
+    "singleQuote": true
   },
   "dependencies": {
     "@clerk/nextjs": "^5.7.5",

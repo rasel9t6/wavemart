@@ -1,4 +1,3 @@
-'use client';
 import Image from 'next/image';
 
 import HeartFavorite from './HeartFavorite';
@@ -7,7 +6,13 @@ interface ProductCardProps {
   product: ProductType;
   updateSignedInUser?: (updatedUser: UserType) => void;
 }
-export default function ProductCard({
+async function getCurrencyRate() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_EXCHANGE_RATE_API_URL}`);
+  const currencyRate = await res.json();
+  return await currencyRate.conversion_rates.BDT.toFixed(2);
+}
+getCurrencyRate();
+export default async function ProductCard({
   product,
   updateSignedInUser,
 }: ProductCardProps) {
@@ -29,7 +34,9 @@ export default function ProductCard({
           <p className="text-grey-2 text-small-medium">{product.category}</p>
         </div>
         <div className="flex items-center justify-between">
-          <p className="text-body-bold">৳{product.price}</p>
+          <p className="text-body-bold">
+            ৳{product.price * (await getCurrencyRate())}
+          </p>
           <HeartFavorite
             product={product}
             updateSignedInUser={updateSignedInUser}
