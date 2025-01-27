@@ -1,4 +1,5 @@
 import { getOrders } from '@/lib/actions';
+import { OrderType, OrderItemType } from '@/lib/types';
 import { auth } from '@clerk/nextjs/server';
 import Image from 'next/image';
 
@@ -18,7 +19,7 @@ export default async function OrdersPage() {
         {orders?.map((order: OrderType) => (
           <div
             key={order._id}
-            className="hover:bg-gray-1 flex flex-col gap-8 p-4"
+            className="flex flex-col gap-8 p-4 hover:bg-custom-gray"
           >
             <div className="flex gap-20 max-md:flex-col max-md:gap-3">
               <p className="text-base-bold">Order ID: {order._id}</p>

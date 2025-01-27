@@ -2,8 +2,10 @@ import Image from 'next/image';
 
 import HeartFavorite from './HeartFavorite';
 import Link from 'next/link';
+import { ProductType, UserType } from '@/lib/types';
 interface ProductCardProps {
   product: ProductType;
+  // eslint-disable-next-line no-unused-vars
   updateSignedInUser?: (updatedUser: UserType) => void;
 }
 async function getCurrencyRate() {
@@ -31,7 +33,9 @@ export default async function ProductCard({
         />
         <div>
           <p className="text-base-bold">{product.title}</p>
-          <p className="text-grey-2 text-small-medium">{product.category}</p>
+          <p className="text-small-medium text-custom-gray">
+            {product.category}
+          </p>
         </div>
         <div className="flex items-center justify-between">
           <p className="text-body-bold">

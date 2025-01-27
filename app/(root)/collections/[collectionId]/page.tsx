@@ -1,5 +1,6 @@
 import ProductCard from '@/components/ProductCard';
 import { getCollectionDetails } from '@/lib/actions';
+import { ProductType } from '@/lib/types';
 import Image from 'next/image';
 
 export default async function CollectionDetailsPage({
@@ -18,10 +19,10 @@ export default async function CollectionDetailsPage({
         alt="collection"
         className="h-[400px] w-full rounded-xl"
       />
-      <p className="text-gray-2 text-heading3-bold">
+      <p className="text-heading3-bold text-custom-gray">
         {collectionDetails.title}
       </p>
-      <p className="text-body-normal text-gray-2 max-w-[900px] text-center">
+      <p className="max-w-[900px] text-center text-body-medium text-custom-gray">
         {collectionDetails.description}
       </p>
       <div className="flex flex-wrap justify-center gap-16">

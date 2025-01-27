@@ -2,6 +2,7 @@ import Gallery from '@/components/Gallery';
 import ProductCard from '@/components/ProductCard';
 import ProductInfo from '@/components/ProductInfo';
 import { getProductDetails, getRelatedProducts } from '@/lib/actions';
+import { ProductType } from '@/lib/types';
 
 export default async function ProductDetailsPage({
   params,

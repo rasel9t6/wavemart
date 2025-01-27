@@ -42,7 +42,7 @@ export default function CartPage() {
   return (
     <div className="flex gap-20 px-10 py-16 max-lg:flex-col max-sm:px-3">
       <div className="w-2/3 max-lg:w-full">
-        <p className="border-gray-1 border-b pb-6 text-heading3-bold">
+        <p className="border-b border-custom-gray/20 pb-6 text-heading3-bold">
           Shopping Cart
         </p>
 
@@ -53,7 +53,7 @@ export default function CartPage() {
             {cart.cartItems.map((cartItem: any, index: number) => (
               <div
                 key={index}
-                className="hover:bg-gray-1 flex w-full items-center justify-between px-4 py-3 max-sm:flex-col max-sm:items-start max-sm:gap-3"
+                className="flex w-full items-center justify-between px-4 py-3 hover:bg-custom-gray/20 max-sm:flex-col max-sm:items-start max-sm:gap-3"
               >
                 <div className="flex items-center">
                   <Image
@@ -77,18 +77,18 @@ export default function CartPage() {
 
                 <div className="flex items-center gap-4">
                   <MinusCircle
-                    className="hover:text-red-1 cursor-pointer"
+                    className="cursor-pointer hover:text-bondi-blue"
                     onClick={() => cart.decreaseQuantity(cartItem.item._id)}
                   />
                   <p className="text-body-bold">{cartItem.quantity}</p>
                   <PlusCircle
-                    className="hover:text-red-1 cursor-pointer"
+                    className="cursor-pointer hover:text-bondi-blue"
                     onClick={() => cart.increaseQuantity(cartItem.item._id)}
                   />
                 </div>
 
                 <Trash
-                  className="hover:text-red-1 cursor-pointer"
+                  className="cursor-pointer hover:text-bondi-blue"
                   onClick={() => cart.removeItem(cartItem.item._id)}
                 />
               </div>
@@ -97,7 +97,7 @@ export default function CartPage() {
         )}
       </div>
 
-      <div className="bg-gray-1 flex w-1/3 flex-col gap-8 rounded-lg px-4 py-5 max-lg:w-full">
+      <div className="flex w-1/3 flex-col gap-8 rounded-lg bg-custom-gray/20 px-4 py-5 max-lg:w-full">
         <p className="pb-4 text-heading4-bold">
           Summary{' '}
           <span>{`(${cart.cartItems.length} ${

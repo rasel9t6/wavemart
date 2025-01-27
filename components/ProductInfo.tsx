@@ -3,6 +3,7 @@ import useCart from '@/lib/hooks/useCart';
 import { MinusCircle, PlusCircle } from 'lucide-react';
 import { useState } from 'react';
 import HeartFavorite from './HeartFavorite';
+import { ProductType } from '@/lib/types';
 
 export default function ProductInfo({
   productInfo,
@@ -26,20 +27,20 @@ export default function ProductInfo({
       </div>
 
       <div className="flex gap-2">
-        <p className="text-gray-2 text-base-medium">Category:</p>
+        <p className="text-base-medium text-custom-gray">Category:</p>
         <p className="text-base-bold">{productInfo.category}</p>
       </div>
 
       <p className="text-heading3-bold">$ {productInfo.price}</p>
 
       <div className="flex flex-col gap-2">
-        <p className="text-gray-2 text-base-medium">Description:</p>
+        <p className="text-base-medium text-custom-gray">Description:</p>
         <p className="text-small-medium">{productInfo.description}</p>
       </div>
 
       {productInfo.colors.length > 0 && (
         <div className="flex flex-col gap-2">
-          <p className="text-gray-2 text-base-medium">Colors:</p>
+          <p className="text-base-medium text-custom-gray">Colors:</p>
           <div className="flex gap-2">
             {productInfo.colors.map((color, index) => (
               <p
@@ -58,7 +59,7 @@ export default function ProductInfo({
 
       {productInfo.sizes.length > 0 && (
         <div className="flex flex-col gap-2">
-          <p className="text-gray-2 text-base-medium">Sizes:</p>
+          <p className="text-base-medium text-custom-gray">Sizes:</p>
           <div className="flex gap-2">
             {productInfo.sizes.map((size, index) => (
               <p
@@ -76,15 +77,15 @@ export default function ProductInfo({
       )}
 
       <div className="flex flex-col gap-2">
-        <p className="text-gray-2 text-base-medium">Quantity:</p>
+        <p className="text-base-medium text-custom-gray">Quantity:</p>
         <div className="flex items-center gap-4">
           <MinusCircle
-            className="hover:text-red-1 cursor-pointer"
+            className="cursor-pointer hover:text-bondi-blue"
             onClick={() => quantity > 1 && setQuantity(quantity - 1)}
           />
           <p className="text-body-bold">{quantity}</p>
           <PlusCircle
-            className="hover:text-red-1 cursor-pointer"
+            className="cursor-pointer hover:text-bondi-blue"
             onClick={() => setQuantity(quantity + 1)}
           />
         </div>

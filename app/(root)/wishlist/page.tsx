@@ -1,9 +1,10 @@
 'use client';
 import ProductCard from '@/components/ProductCard';
 import { getProductDetails } from '@/lib/actions';
+import { ProductType, UserType } from '@/lib/types';
 import { useUser } from '@clerk/nextjs';
 import { Loader } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export default function WishListPage() {
   const { user } = useUser();
@@ -29,7 +30,7 @@ export default function WishListPage() {
     }
   }, [user]);
 
-  const getWishlistProducts = async () => {
+  const getWishlistProducts = useCallback(async () => {
     setLoading(true);
 
     if (!signedInUser) return;
@@ -43,13 +44,13 @@ export default function WishListPage() {
 
     setWishlist(wishlistProducts);
     setLoading(false);
-  };
+  }, [signedInUser]);
 
   useEffect(() => {
     if (signedInUser) {
       getWishlistProducts();
     }
-  }, [signedInUser]);
+  }, [signedInUser, getWishlistProducts]);
 
   const updateSignedInUser = (updatedUser: UserType) => {
     setSignedInUser(updatedUser);

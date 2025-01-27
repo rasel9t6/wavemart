@@ -14,21 +14,21 @@ type ProductType = {
   updatedAt: string;
 };
 
-type CollectionType = {
+export type CollectionType = {
   _id: string;
   title: string;
   products: Array<string | ProductType>;
   image: string;
 };
 
-type UserType = {
+export type UserType = {
   clerkId: string;
   wishlist: Array<string>;
   createdAt: string;
   updatedAt: string;
 };
 
-type OrderItemType = {
+export type OrderItemType = {
   product: ProductType;
   color: string;
   size: string;
@@ -36,7 +36,7 @@ type OrderItemType = {
   _id: string;
 };
 
-type OrderType = {
+export type OrderType = {
   shippingAddress: Record<string, unknown>;
   _id: string;
   customerClerkId: string;

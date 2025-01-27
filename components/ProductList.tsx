@@ -1,5 +1,6 @@
 import { getProducts } from '@/lib/actions';
 import ProductCard from './ProductCard';
+import { ProductType } from '@/lib/types';
 
 export default async function ProductList() {
   const products = await getProducts();

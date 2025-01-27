@@ -1,10 +1,13 @@
-/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 import { create } from 'zustand';
 import { toast } from 'react-hot-toast';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface CartItem {
-  item: ProductType;
+  item: {
+    _id: string;
+    [key: string]: any;
+  };
   quantity: number;
   color?: string;
   size?: string;
@@ -12,10 +15,10 @@ interface CartItem {
 
 interface CartStore {
   cartItems: CartItem[];
-  addItem: (item: CartItem) => void;
-  removeItem: (idToRemove: string) => void;
-  increaseQuantity: (idToIncrease: string) => void;
-  decreaseQuantity: (idToDecrease: string) => void;
+  addItem: (data: CartItem) => void;
+  removeItem: (id: String) => void;
+  increaseQuantity: (id: String) => void;
+  decreaseQuantity: (id: String) => void;
   clearCart: () => void;
 }
 
@@ -27,7 +30,7 @@ const useCart = create(
         const { item, quantity, color, size } = data;
         const currentItems = get().cartItems; // all the items already in cart
         const isExisting = currentItems.find(
-          (cartItem) => cartItem.item._id === item._id,
+          (cartItem: any) => cartItem.item._id === item._id,
         );
 
         if (isExisting) {

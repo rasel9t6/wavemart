@@ -1,4 +1,5 @@
 import { getCollections } from '@/lib/actions';
+import { CollectionType } from '@/lib/types';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -19,7 +20,7 @@ export default async function Collections() {
               height={200}
               className="mx-auto"
             />
-            <p className="text-lg mt-4 font-medium">No collections found</p>
+            <p className="mt-4 text-lg font-medium">No collections found</p>
           </div>
         ) : (
           collections.map((collection: CollectionType) => (

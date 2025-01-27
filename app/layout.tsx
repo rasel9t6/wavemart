@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Inter, Noto_Sans_Bengali } from 'next/font/google';
-import localFont from 'next/font/local';
 import './globals.css';
 import React from 'react';
 import { ClerkProvider } from '@clerk/nextjs';

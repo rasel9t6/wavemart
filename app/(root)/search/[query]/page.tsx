@@ -1,4 +1,5 @@
 import ProductCard from '@/components/ProductCard';
+import { ProductType } from '@/lib/types';
 
 export default async function SearchPage({
   params,
