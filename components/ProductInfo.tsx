@@ -26,20 +26,20 @@ export default function ProductInfo({
       </div>
 
       <div className="flex gap-2">
-        <p className="text-base-medium text-gray-2">Category:</p>
+        <p className="text-gray-2 text-base-medium">Category:</p>
         <p className="text-base-bold">{productInfo.category}</p>
       </div>
 
       <p className="text-heading3-bold">$ {productInfo.price}</p>
 
       <div className="flex flex-col gap-2">
-        <p className="text-base-medium text-gray-2">Description:</p>
+        <p className="text-gray-2 text-base-medium">Description:</p>
         <p className="text-small-medium">{productInfo.description}</p>
       </div>
 
       {productInfo.colors.length > 0 && (
         <div className="flex flex-col gap-2">
-          <p className="text-base-medium text-gray-2">Colors:</p>
+          <p className="text-gray-2 text-base-medium">Colors:</p>
           <div className="flex gap-2">
             {productInfo.colors.map((color, index) => (
               <p
@@ -58,7 +58,7 @@ export default function ProductInfo({
 
       {productInfo.sizes.length > 0 && (
         <div className="flex flex-col gap-2">
-          <p className="text-base-medium text-gray-2">Sizes:</p>
+          <p className="text-gray-2 text-base-medium">Sizes:</p>
           <div className="flex gap-2">
             {productInfo.sizes.map((size, index) => (
               <p
@@ -76,15 +76,15 @@ export default function ProductInfo({
       )}
 
       <div className="flex flex-col gap-2">
-        <p className="text-base-medium text-gray-2">Quantity:</p>
+        <p className="text-gray-2 text-base-medium">Quantity:</p>
         <div className="flex items-center gap-4">
           <MinusCircle
-            className="cursor-pointer hover:text-red-1"
+            className="hover:text-red-1 cursor-pointer"
             onClick={() => quantity > 1 && setQuantity(quantity - 1)}
           />
           <p className="text-body-bold">{quantity}</p>
           <PlusCircle
-            className="cursor-pointer hover:text-red-1"
+            className="hover:text-red-1 cursor-pointer"
             onClick={() => setQuantity(quantity + 1)}
           />
         </div>

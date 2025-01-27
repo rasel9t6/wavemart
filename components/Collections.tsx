@@ -6,7 +6,7 @@ export default async function Collections() {
   const collections = await getCollections();
   return (
     <div className="mx-auto px-5 py-8">
-      <h1 className=" pb-10 pt-4 text-center text-heading1-bold font-bold text-bondi-blue">
+      <h1 className="pb-10 pt-4 text-center text-heading1-bold font-bold text-bondi-blue">
         Collections
       </h1>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-5">

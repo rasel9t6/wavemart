@@ -40,7 +40,7 @@ export default function CartPage() {
     }
   };
   return (
-    <div className="flex gap-20 px-10 py-16 max-lg:flex-col max-sm:px-3 ">
+    <div className="flex gap-20 px-10 py-16 max-lg:flex-col max-sm:px-3">
       <div className="w-2/3 max-lg:w-full">
         <p className="border-gray-1 border-b pb-6 text-heading3-bold">
           Shopping Cart

@@ -1,9 +1,0 @@
-{
-  "plugins": ["tailwindcss", "prettier"],
-  "extends": [
-    "next/core-web-vitals",
-    "eslint:recommended",
-    "plugin:tailwindcss/recommended",
-    "prettier"
-  ]
-}

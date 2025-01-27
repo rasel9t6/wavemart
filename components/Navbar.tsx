@@ -18,7 +18,7 @@ const NAV_LINKS = [
 const SearchBar = ({ query, setQuery, onSearch }: any) => (
   <div className="flex items-center gap-3 rounded-full bg-white px-3 py-1">
     <input
-      className=" px-3 py-1 outline-none max-sm:max-w-[120px]"
+      className="px-3 py-1 outline-none max-sm:max-w-[120px]"
       placeholder="Search..."
       value={query}
       onChange={(e) => setQuery(e.target.value)}
@@ -66,8 +66,8 @@ export default function Navbar() {
   const handleSearch = () => router.push(`/search/${query}`);
 
   return (
-    <div className="fixed z-20 flex w-full items-center justify-between gap-5  bg-custom-radial px-12 py-2  sm:py-4">
-      <Link href="/" className="relative ">
+    <div className="fixed z-20 flex w-full items-center justify-between gap-5 bg-custom-radial px-12 py-2 sm:py-4">
+      <Link href="/" className="relative">
         <Image
           src="/bd-ship-mart-logo.svg"
           alt="BD shipmart logo"
@@ -89,7 +89,7 @@ export default function Navbar() {
         />
 
         {dropdownMenu && (
-          <div className="absolute right-5 top-12 flex w-28 flex-col  gap-4 rounded-lg border bg-white p-3 text-base-bold text-bondi-blue-500 md:w-fit lg:hidden">
+          <div className="absolute right-5 top-12 flex w-28 flex-col gap-4 rounded-lg border bg-white p-3 text-base-bold text-bondi-blue-500 md:w-fit lg:hidden">
             {NAV_LINKS.map(({ path, label }) => (
               <Link
                 key={path}
@@ -101,10 +101,10 @@ export default function Navbar() {
             ))}
             <Link
               href="/cart"
-              className="flex w-full flex-col  items-center justify-center gap-3 rounded-lg border px-2 py-1 text-bondi-blue transition-all duration-300 hover:bg-bondi-blue hover:text-white sm:flex-row"
+              className="flex w-full flex-col items-center justify-center gap-3 rounded-lg border px-2 py-1 text-bondi-blue transition-all duration-300 hover:bg-bondi-blue hover:text-white sm:flex-row"
             >
               <ShoppingCart />
-              <p className="text-base-bold ">Cart ({cart.cartItems.length})</p>
+              <p className="text-base-bold">Cart ({cart.cartItems.length})</p>
             </Link>
           </div>
         )}

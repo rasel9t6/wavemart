@@ -13,7 +13,7 @@ const SuccessfulPayment = () => {
 
   return (
     <div className="flex h-screen flex-col items-center justify-center gap-5">
-      <p className="text-heading4-bold text-red-1">Successful Payment</p>
+      <p className="text-red-1 text-heading4-bold">Successful Payment</p>
       <p>Thank you for your purchase</p>
       <Link
         href="/"
