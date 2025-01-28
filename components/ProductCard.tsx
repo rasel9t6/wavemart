@@ -11,9 +11,8 @@ interface ProductCardProps {
 async function getCurrencyRate() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_EXCHANGE_RATE_API_URL}`);
   const currencyRate = await res.json();
-  return await currencyRate.conversion_rates.BDT.toFixed(2);
+  return parseFloat(currencyRate.conversion_rates.BDT.toFixed(2));
 }
-getCurrencyRate();
 export default async function ProductCard({
   product,
   updateSignedInUser,
@@ -39,13 +38,18 @@ export default async function ProductCard({
         </div>
         <div className="flex items-center justify-between">
           <p className="text-body-bold">
-            ৳{product.price * (await getCurrencyRate())}
+            ৳
+            {(product.price * (await getCurrencyRate())).toFixed(2) ||
+              product.price * 17.5}
           </p>
           <HeartFavorite
             product={product}
             updateSignedInUser={updateSignedInUser}
           />
         </div>
+        <button className="rounded-md bg-[#FE6C08] px-2 py-1 text-white">
+          Buy Now
+        </button>
       </Link>
     </>
   );
