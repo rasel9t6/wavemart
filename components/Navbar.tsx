@@ -23,19 +23,19 @@ const SearchBar = ({ query, setQuery, onSearch }: any) => (
       value={query}
       onChange={(e) => setQuery(e.target.value)}
     />
-    <button disabled={query === ''} onClick={onSearch}>
+    <button disabled={query === ' '} onClick={onSearch}>
       <Search className="size-6 cursor-pointer text-bondi-blue-600 transition-colors duration-300 hover:text-bondi-blue-400" />
     </button>
   </div>
 );
 
 const NavLinks = ({ pathname, user }: any) => (
-  <div className="flex gap-4 text-base-bold text-bondi-blue-100 max-lg:hidden">
+  <div className="flex gap-4 text-base-bold text-bondi-blue-50 max-lg:hidden">
     {NAV_LINKS.map(({ path, label }) => (
       <Link
         key={path}
         href={user ? path : '/sign-in'}
-        className={`transition-all duration-300 hover:text-bondi-blue-200 ${
+        className={`transition-all duration-300 hover:text-bondi-blue-400 ${
           pathname === path && 'text-white'
         }`}
       >
@@ -66,23 +66,21 @@ export default function Navbar() {
   const handleSearch = () => router.push(`/search/${query}`);
 
   return (
-    <div className="fixed z-20 flex w-full items-center justify-between gap-5 bg-custom-radial px-12 py-2 sm:py-4">
+    <div className="fixed z-20 flex w-full items-center justify-between gap-5 bg-custom-radial px-12 py-2 sm:py-2.5">
       <Link href="/" className="relative">
         <Image
           src="/bd-ship-mart-logo.svg"
           alt="BD shipmart logo"
           width={80}
           height={80}
-          sizes="(max-width: 640px) 50px, 80px "
         />
       </Link>
 
-      <NavLinks pathname={pathname} user={user} />
       <SearchBar query={query} setQuery={setQuery} onSearch={handleSearch} />
 
       <div className="relative flex items-center gap-3">
         <CartButton cartItemsCount={cart.cartItems.length} />
-
+        <NavLinks pathname={pathname} user={user} />
         <Menu
           className="hidden cursor-pointer text-white sm:block lg:hidden"
           onClick={() => setDropdownMenu(!dropdownMenu)}
