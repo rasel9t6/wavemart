@@ -5,7 +5,7 @@ import ProductList from '@/components/ProductList';
 export default function Home() {
   return (
     <>
-      <div className="flex gap-5">
+      <div className="flex gap-5 ">
         <ImageSlider />
         <div className="flex flex-1 flex-col items-center justify-between gap-5 font-Noto_Sans_Bengali font-semibold max-sm:hidden lg:text-4xl lg:font-bold lg:leading-relaxed ">
           <div className="size-full rounded-lg bg-bondi-blue-50/30 p-3 ">

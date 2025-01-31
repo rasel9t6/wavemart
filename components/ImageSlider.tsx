@@ -1,36 +1,13 @@
 'use client';
+
 import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence, PanInfo } from 'motion/react';
+import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 
 interface ImageSliderProps {
   images?: string[];
   autoPlayInterval?: number;
   initialPlayState?: boolean;
-}
-
-interface SlideVariants {
-  [key: string]:
-    | any
-    | ((direction: number) => {
-        x: number;
-        opacity: number;
-        zIndex?: number;
-      });
-  enter: (direction: number) => {
-    x: number;
-    opacity: number;
-  };
-  center: {
-    zIndex: number;
-    x: number;
-    opacity: number;
-  };
-  exit: (direction: number) => {
-    zIndex: number;
-    x: number;
-    opacity: number;
-  };
 }
 
 const ImageSlider: React.FC<ImageSliderProps> = ({
@@ -60,16 +37,16 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   );
 
   useEffect(() => {
-    let interval: any;
+    let interval: any | null = null;
     if (isPlaying) {
-      interval = setInterval(() => {
-        paginate(1);
-      }, autoPlayInterval);
+      interval = setInterval(() => paginate(1), autoPlayInterval);
     }
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [isPlaying, autoPlayInterval, paginate]);
 
-  const slideVariants: SlideVariants = {
+  const slideVariants = {
     enter: (direction: number) => ({
       x: direction > 0 ? 1000 : -1000,
       opacity: 0,
@@ -87,33 +64,25 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   };
 
   const swipeConfidenceThreshold = 10000;
-  const swipePower = (offset: number, velocity: number): number => {
-    return Math.abs(offset) * velocity;
-  };
-
-  const togglePlayPause = (): void => {
-    setIsPlaying(!isPlaying);
-  };
+  const swipePower = (offset: number, velocity: number): number =>
+    Math.abs(offset) * velocity;
 
   const handleDragEnd = useCallback(
     (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo): void => {
       const swipe = swipePower(info.offset.x, info.velocity.x);
-
-      if (swipe < -swipeConfidenceThreshold) {
-        paginate(1);
-      } else if (swipe > swipeConfidenceThreshold) {
-        paginate(-1);
-      }
+      if (swipe < -swipeConfidenceThreshold) paginate(1);
+      else if (swipe > swipeConfidenceThreshold) paginate(-1);
     },
     [paginate],
   );
 
   return (
-    <div className="relative mx-auto  w-2/3 overflow-hidden rounded-lg bg-gray-100">
+    <div className="relative mx-auto w-2/3 overflow-hidden rounded-lg bg-gray-100">
       <AnimatePresence initial={false} custom={direction}>
         <motion.img
           key={currentIndex}
           src={images[currentIndex]}
+          alt={`Slide ${currentIndex + 1}`}
           custom={direction}
           variants={slideVariants}
           initial="enter"
@@ -128,14 +97,13 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
           dragElastic={1}
           onDragEnd={handleDragEnd}
           className="absolute size-full object-cover cursor-grab"
-          alt={`Slide ${currentIndex + 1}`}
         />
       </AnimatePresence>
 
       {/* Navigation Controls */}
-      <div className="absolute inset-x-0  bottom-4 z-10 flex items-center justify-center gap-4">
+      <div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center gap-4">
         <button
-          className="rounded-full transition-all duration-300 bg-bondi-blue/80 p-2 shadow-lg hover:bg-bondi-blue"
+          className="rounded-full bg-bondi-blue/80 p-2 shadow-lg transition-all duration-300 hover:bg-bondi-blue"
           onClick={() => paginate(-1)}
           aria-label="Previous slide"
         >
@@ -144,7 +112,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
 
         <button
           className="rounded-full bg-bondi-blue/80 p-2 shadow-lg hover:bg-bondi-blue"
-          onClick={togglePlayPause}
+          onClick={() => setIsPlaying((prev) => !prev)}
           aria-label={isPlaying ? 'Pause slideshow' : 'Play slideshow'}
         >
           {isPlaying ? (
@@ -163,7 +131,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
         </button>
       </div>
 
-      {/* Dots indicator */}
+      {/* Dots Indicator */}
       <div className="absolute bottom-16 left-1/2 z-10 flex -translate-x-1/2 space-x-2">
         {images.map((_, index) => (
           <button

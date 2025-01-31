@@ -1,7 +1,4 @@
 import { getCollections } from '@/lib/actions';
-import { CollectionType } from '@/lib/types';
-import Image from 'next/image';
-import Link from 'next/link';
 import CollectionsSlider from './CollectionSlider';
 
 export default async function Collections() {

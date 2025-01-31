@@ -7,7 +7,7 @@ import { ProductType } from '@/lib/types';
 
 interface HeartFavoriteProps {
   product: ProductType;
-
+  // eslint-disable-next-line no-unused-vars
   updateSignedInUser?: (user: any) => void;
 }
 export default function HeartFavorite({
