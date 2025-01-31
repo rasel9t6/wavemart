@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 
 import { CollectionType } from '@/lib/types';
+import Link from 'next/link';
 
 interface CollectionsSliderProps {
   collections: CollectionType[];
@@ -33,7 +34,8 @@ const CollectionsSlider: React.FC<CollectionsSliderProps> = ({
           style={{ transform: `translateX(-${startIndex * itemWidth}px)` }}
         >
           {collections.map((collection, index) => (
-            <div
+            <Link
+              href={`/collections/${collection._id}`}
               key={index}
               className="relative shrink-0 cursor-pointer rounded-2xl bg-white shadow-md transition-all hover:scale-[1.015] hover:shadow-xl"
               style={{
@@ -58,7 +60,7 @@ const CollectionsSlider: React.FC<CollectionsSliderProps> = ({
                       : `${collection.products.length} Products`}
                 </p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
