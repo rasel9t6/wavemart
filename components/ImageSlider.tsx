@@ -8,19 +8,20 @@ interface ImageSliderProps {
   images?: string[];
   autoPlayInterval?: number;
   initialPlayState?: boolean;
+  hideControls?: boolean; // New prop to hide Chevron buttons
 }
-
+const images = [
+  '/banner.png',
+  '/banner-1.png',
+  '/banner-2.png',
+  '/banner-3.png',
+  '/banner-4.png',
+  '/banner-5.png',
+];
 const ImageSlider: React.FC<ImageSliderProps> = ({
-  images = [
-    '/banner.png',
-    '/banner-1.png',
-    '/banner-2.png',
-    '/banner-3.png',
-    '/banner-4.png',
-    '/banner-5.png',
-  ],
   autoPlayInterval = 5000,
   initialPlayState = true,
+  hideControls = false,
 }) => {
   const [[currentIndex, direction], setPage] = useState<[number, number]>([
     0, 0,
@@ -33,7 +34,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
         (currentIndex + newDirection + images.length) % images.length;
       setPage([newIndex, newDirection]);
     },
-    [currentIndex, images.length],
+    [currentIndex],
   );
 
   useEffect(() => {
@@ -51,11 +52,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
       x: direction > 0 ? 1000 : -1000,
       opacity: 0,
     }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-    },
+    center: { zIndex: 1, x: 0, opacity: 1 },
     exit: (direction: number) => ({
       zIndex: 0,
       x: direction < 0 ? 1000 : -1000,
@@ -77,7 +74,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   );
 
   return (
-    <div className="relative mx-auto w-2/3 overflow-hidden rounded-lg bg-gray-100">
+    <div className="relative mx-auto aspect-[16/9] w-full overflow-hidden rounded-lg bg-gray-100">
       <AnimatePresence initial={false} custom={direction}>
         <motion.img
           key={currentIndex}
@@ -96,48 +93,48 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={1}
           onDragEnd={handleDragEnd}
-          className="absolute size-full object-cover cursor-grab"
+          className="absolute inset-0 size-full cursor-grab object-cover"
         />
       </AnimatePresence>
-
-      {/* Navigation Controls */}
-      <div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center gap-4">
-        <button
-          className="rounded-full bg-bondi-blue/80 p-2 shadow-lg transition-all duration-300 hover:bg-bondi-blue"
-          onClick={() => paginate(-1)}
-          aria-label="Previous slide"
-        >
-          <ChevronLeft className="size-4 lg:size-6 text-white" />
-        </button>
-
-        <button
-          className="rounded-full bg-bondi-blue/80 p-2 shadow-lg hover:bg-bondi-blue"
-          onClick={() => setIsPlaying((prev) => !prev)}
-          aria-label={isPlaying ? 'Pause slideshow' : 'Play slideshow'}
-        >
-          {isPlaying ? (
-            <Pause className="size-4 lg:size-6 text-white" />
-          ) : (
-            <Play className="size-4 lg:size-6 text-white" />
-          )}
-        </button>
-
-        <button
-          className="rounded-full bg-bondi-blue/80 p-2 shadow-lg hover:bg-bondi-blue"
-          onClick={() => paginate(1)}
-          aria-label="Next slide"
-        >
-          <ChevronRight className="size-4 lg:size-6 text-white" />
-        </button>
-      </div>
-
-      {/* Dots Indicator */}
-      <div className="absolute bottom-16 left-1/2 z-10 flex -translate-x-1/2 space-x-2">
+      {!hideControls && (
+        <div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center gap-4">
+          <button
+            className="rounded-full bg-bondi-blue/80 p-2 shadow-lg transition-all duration-300 hover:bg-bondi-blue"
+            onClick={() => paginate(-1)}
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="size-4 text-white lg:size-6" />
+          </button>
+          <button
+            className="rounded-full bg-bondi-blue/80 p-2 shadow-lg hover:bg-bondi-blue"
+            onClick={() => setIsPlaying((prev) => !prev)}
+            aria-label={isPlaying ? 'Pause slideshow' : 'Play slideshow'}
+          >
+            {isPlaying ? (
+              <Pause className="size-4 text-white lg:size-6" />
+            ) : (
+              <Play className="size-4 text-white lg:size-6" />
+            )}
+          </button>
+          <button
+            className="rounded-full bg-bondi-blue/80 p-2 shadow-lg hover:bg-bondi-blue"
+            onClick={() => paginate(1)}
+            aria-label="Next slide"
+          >
+            <ChevronRight className="size-4 text-white lg:size-6" />
+          </button>
+        </div>
+      )}
+      <div
+        className={`absolute left-1/2 z-10 flex -translate-x-1/2 space-x-2 ${
+          hideControls ? 'bottom-4' : 'bottom-16'
+        }`}
+      >
         {images.map((_, index) => (
           <button
             key={index}
             className={`size-2 rounded-full ${
-              currentIndex === index ? 'bg-bondi-blue-300' : 'bg-bondi-blue/50'
+              currentIndex === index ? 'bg-bondi-blue-400' : 'bg-bondi-blue/50'
             }`}
             onClick={() => setPage([index, index > currentIndex ? 1 : -1])}
             aria-label={`Go to slide ${index + 1}`}

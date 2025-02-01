@@ -1,6 +1,5 @@
 'use client';
-import React, { useState } from 'react';
-
+import React, { useState, useEffect, useRef } from 'react';
 import { CollectionType } from '@/lib/types';
 import Link from 'next/link';
 
@@ -12,10 +11,27 @@ const CollectionsSlider: React.FC<CollectionsSliderProps> = ({
   collections,
 }) => {
   const [startIndex, setStartIndex] = useState(0);
-  const itemWidth = 270;
+  const [itemsPerView, setItemsPerView] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const itemWidth = 170; // Increased width for better presentation
+  useEffect(() => {
+    const updateItemsPerView = () => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.offsetWidth;
+        const newItemsPerView = Math.floor(containerWidth / itemWidth);
+        setItemsPerView(newItemsPerView);
+      }
+    };
+
+    updateItemsPerView();
+    window.addEventListener('resize', updateItemsPerView);
+    return () => window.removeEventListener('resize', updateItemsPerView);
+  }, []);
+
+  const showNavigation = collections.length > itemsPerView;
 
   const nextSlide = () => {
-    if (startIndex + 3 < collections.length) {
+    if (startIndex + itemsPerView < collections.length) {
       setStartIndex((prev) => prev + 1);
     }
   };
@@ -28,46 +44,85 @@ const CollectionsSlider: React.FC<CollectionsSliderProps> = ({
 
   return (
     <div className="relative overflow-hidden p-4">
-      <div className="mx-auto max-w-6xl">
+      <div className="max-w-6xl" ref={containerRef}>
         <div
-          className="flex transition-transform duration-300"
-          style={{ transform: `translateX(-${startIndex * itemWidth}px)` }}
+          className={`flex ${showNavigation ? 'transition-transform duration-300' : ''}`}
+          style={
+            showNavigation
+              ? { transform: `translateX(-${startIndex * itemWidth}px)` }
+              : undefined
+          }
         >
           {collections.map((collection, index) => (
             <Link
               href={`/collections/${collection._id}`}
               key={index}
-              className="relative shrink-0 cursor-pointer rounded-2xl bg-white shadow-md transition-all hover:scale-[1.015] hover:shadow-xl"
+              className="group relative shrink-0 rounded-md px-3"
               style={{
-                width: '220px',
-                height: '220px',
-                marginRight: '20px',
-                backgroundImage: `url("${collection.image}")`,
-                backgroundPosition: 'center center',
-                backgroundSize: 'cover',
+                width: `${itemWidth}px`,
               }}
             >
-              <div className="absolute inset-0 z-20 rounded-2xl bg-gradient-to-b from-black/90 via-black/60 to-black/0 p-6 text-white transition-[backdrop-filter] hover:backdrop-blur-sm">
-                <span className="text-xs font-semibold uppercase text-bondi-blue-300">
-                  New
-                </span>
-                <p className="my-2 text-3xl font-bold">{collection.title}</p>
-                <p className="text-xs">
-                  {collection.products.length === 0
-                    ? 'No Products available'
-                    : collection.products.length === 1
-                      ? '1 Product'
-                      : `${collection.products.length} Products`}
-                </p>
+              <div className="overflow-hidden">
+                <div
+                  className="relative h-[170px] overflow-hidden rounded-md transition-all duration-300 group-hover:scale-105"
+                  style={{
+                    backgroundImage: `url("${collection.image}")`,
+                    backgroundPosition: 'center center',
+                    backgroundSize: 'cover',
+                  }}
+                >
+                  {/* Overlay gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-80 transition-opacity group-hover:opacity-90" />
+
+                  {/* New badge */}
+                  <div className="absolute left-4 top-4">
+                    <div className="inline-flex items-center rounded-full border border-transparent bg-bondi-blue-500 px-2.5 py-0.5 text-xs font-semibold uppercase text-white transition-colors hover:bg-bondi-blue/80 focus:outline-none focus:ring-2  focus:ring-bondi-blue  focus:ring-offset-2">
+                      New
+                    </div>
+                  </div>
+
+                  {/* Content container */}
+                  <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+                    <h3 className="mb-2 text-xl font-bold leading-tight tracking-tight transition-colors duration-200 group-hover:text-bondi-blue-300">
+                      {collection.title}
+                    </h3>
+
+                    <div className="flex items-center space-x-2 text-sm">
+                      <span className="inline-flex items-center space-x-1">
+                        <svg
+                          className="size-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                          />
+                        </svg>
+                        <span>
+                          {collection.products.length === 0
+                            ? 'No products'
+                            : collection.products.length === 1
+                              ? '1 Product'
+                              : `${collection.products.length} Products`}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </Link>
           ))}
         </div>
 
-        {startIndex > 0 && (
+        {/* Navigation buttons */}
+        {showNavigation && startIndex > 0 && (
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-[60%] z-30 rounded-r-xl bg-bondi-blue/30 p-3 pl-2 text-4xl text-white backdrop-blur-sm transition-[padding] hover:pl-3"
+            className="absolute left-0 top-1/2 z-30 -translate-y-1/2 rounded-r-xl bg-bondi-blue/30 p-2 pl-1 text-4xl text-white backdrop-blur-sm transition-[padding] hover:pl-3"
           >
             <svg
               stroke="currentColor"
@@ -85,10 +140,10 @@ const CollectionsSlider: React.FC<CollectionsSliderProps> = ({
           </button>
         )}
 
-        {startIndex + 3 < collections.length && (
+        {showNavigation && startIndex + itemsPerView < collections.length && (
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-[60%] z-30 rounded-l-xl bg-bondi-blue/30 p-3 pr-2 text-4xl text-white backdrop-blur-sm transition-[padding] hover:pr-3"
+            className="absolute right-0 top-1/2 z-30 -translate-y-1/2 rounded-l-xl bg-bondi-blue/30 p-2 pl-1 text-4xl text-white backdrop-blur-sm transition-[padding] hover:pr-3"
           >
             <svg
               stroke="currentColor"

@@ -1,9 +1,10 @@
 'use client';
 import useCart from '@/lib/hooks/useCart';
 import { MinusCircle, PlusCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import HeartFavorite from './HeartFavorite';
 import { ProductType } from '@/lib/types';
+import { getCurrencyRate } from '@/lib/actions';
 
 export default function ProductInfo({
   productInfo,
@@ -17,8 +18,17 @@ export default function ProductInfo({
     productInfo.sizes[0],
   );
   const [quantity, setQuantity] = useState<number>(1);
-
+  const [price, setPrice] = useState<number>(productInfo.price * 17.5);
   const cart = useCart();
+
+  useEffect(() => {
+    const fetchPrice = async () => {
+      const rate = (await getCurrencyRate()).toFixed(2);
+      setPrice(productInfo.price * parseFloat(rate));
+    };
+    fetchPrice();
+  }, [productInfo.price]);
+
   return (
     <div className="flex max-w-[400px] flex-col gap-4">
       <div className="flex items-center justify-between">
@@ -31,7 +41,7 @@ export default function ProductInfo({
         <p className="text-base-bold">{productInfo.category}</p>
       </div>
 
-      <p className="text-heading3-bold">$ {productInfo.price}</p>
+      <p className="text-heading3-bold"> ৳ {price.toFixed(2)}</p>
 
       <div className="flex flex-col gap-2">
         <p className="text-base-medium text-custom-gray">Description:</p>
@@ -92,7 +102,7 @@ export default function ProductInfo({
       </div>
 
       <button
-        className="rounded-lg py-3 text-base-bold outline hover:bg-black hover:text-white"
+        className="rounded-lg bg-bondi-blue py-3 text-base-bold transition-colors duration-300 hover:bg-bondi-blue-600 hover:text-white"
         onClick={() => {
           cart.addItem({
             item: productInfo,
@@ -103,6 +113,19 @@ export default function ProductInfo({
         }}
       >
         Add To Cart
+      </button>
+      <button
+        onClick={() => {
+          cart.addItem({
+            item: productInfo,
+            quantity,
+            color: selectedColor,
+            size: selectedSize,
+          });
+        }}
+        className="rounded-lg bg-[#FE6C08]  py-3 text-base-bold text-white"
+      >
+        Buy Now
       </button>
     </div>
   );

@@ -5,25 +5,23 @@ import ProductList from '@/components/ProductList';
 export default function Home() {
   return (
     <>
-      <div className="flex gap-5 ">
-        <ImageSlider />
-        <div className="flex flex-1 flex-col items-center justify-between gap-5 font-Noto_Sans_Bengali font-semibold max-sm:hidden lg:text-4xl lg:font-bold lg:leading-relaxed ">
-          <div className="size-full rounded-lg bg-bondi-blue-50/30 p-3 ">
-            <p className="flex flex-col items-center text-center">
-              <span className="">
-                গ্লোবাল লজিস্টিক্স, প্রোডাক্ট সোর্সিং এবং অনলাইন শপিং
-              </span>
-              <span className=" text-bondi-blue">সকল সেবা একসাথে</span>
-            </p>
+      <div className="container mx-auto p-4">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row">
+          {/* Main large slider - Takes ~70% width */}
+          <div className="w-full lg:w-[70%]">
+            <div className="relative w-full">
+              <ImageSlider />
+            </div>
           </div>
-          <div className="size-full rounded-lg bg-bondi-blue-50/30 p-3">
-            <p className="flex flex-col items-center text-center">
-              <span>
-                ঢাকা ওয়্যারহাউজ অথবা সরাসরি আপনার ঠিকানায় হোম ডেলিভারি সেবা,
-              </span>
 
-              <span className=" text-bondi-blue ">সারা দেশব্যাপি</span>
-            </p>
+          {/* Right column with two smaller sliders - Takes ~30% width */}
+          <div className="flex w-full flex-col justify-between gap-4 max-md:hidden lg:w-[30%]">
+            <div className="relative w-full">
+              <ImageSlider hideControls={true} />
+            </div>
+            <div className="relative w-full">
+              <ImageSlider hideControls={true} />
+            </div>
           </div>
         </div>
       </div>

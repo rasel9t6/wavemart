@@ -11,7 +11,6 @@ export default async function ProductDetailsPage({
 }) {
   const productDetails = await getProductDetails(params.productId);
   const relatedProducts = await getRelatedProducts(params.productId);
-  console.log(relatedProducts);
   return (
     <>
       <div className="flex items-start justify-center gap-16 px-5 py-10 max-md:flex-col max-md:items-center">
