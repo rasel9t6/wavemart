@@ -1,6 +1,7 @@
 import { getCollections } from '@/lib/actions';
 import CollectionsSlider from './CollectionSlider';
 
+
 export default async function Collections() {
   const collections = await getCollections();
   return (

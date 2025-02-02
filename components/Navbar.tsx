@@ -9,7 +9,6 @@ import { useState } from 'react';
 
 // Navigation links data
 const NAV_LINKS = [
-  { path: '/', label: 'Home' },
   { path: '/wishlist', label: 'Wishlist' },
   { path: '/orders', label: 'Orders' },
 ];
@@ -30,7 +29,7 @@ const SearchBar = ({ query, setQuery, onSearch }: any) => (
 );
 
 const NavLinks = ({ pathname, user }: any) => (
-  <div className="flex gap-4 text-base-bold text-bondi-blue-50 max-lg:hidden">
+  <nav className="flex gap-4 text-base-bold text-bondi-blue-50 max-lg:hidden">
     {NAV_LINKS.map(({ path, label }) => (
       <Link
         key={path}
@@ -42,7 +41,7 @@ const NavLinks = ({ pathname, user }: any) => (
         {label}
       </Link>
     ))}
-  </div>
+  </nav>
 );
 
 const CartButton = ({ cartItemsCount }: any) => (
@@ -66,7 +65,7 @@ export default function Navbar() {
   const handleSearch = () => router.push(`/search/${query}`);
 
   return (
-    <div className="fixed z-20 flex w-full items-center justify-between gap-5 bg-custom-radial px-12 py-2 sm:py-2.5">
+    <header className="fixed z-20 flex w-full items-center justify-between gap-5 bg-custom-radial px-12 py-2 sm:py-2.5">
       <Link href="/" className="relative">
         <Image
           src="/bd-ship-mart-logo.svg"
@@ -115,6 +114,6 @@ export default function Navbar() {
           </Link>
         )}
       </div>
-    </div>
+    </header>
   );
 }
