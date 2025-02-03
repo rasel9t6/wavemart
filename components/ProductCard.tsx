@@ -3,7 +3,6 @@ import Image from 'next/image';
 import HeartFavorite from './HeartFavorite';
 import Link from 'next/link';
 import { ProductType, UserType } from '@/lib/types';
-import { getCurrencyRate } from '@/lib/actions';
 interface ProductCardProps {
   product: ProductType;
   // eslint-disable-next-line no-unused-vars
@@ -34,17 +33,12 @@ export default async function ProductCard({
           </p>
         </div>
         <div className="flex items-center justify-between">
-          <p className="text-body-bold">
-            ৳
-            {(product.price * (await getCurrencyRate())).toFixed(2) ||
-              product.price * 17.5}
-          </p>
+          <p className="text-body-bold">৳{product.price}</p>
           <HeartFavorite
             product={product}
             updateSignedInUser={updateSignedInUser}
           />
         </div>
-        
       </Link>
     </>
   );

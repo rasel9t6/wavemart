@@ -58,8 +58,3 @@ export const getRelatedProducts = async (productId: string) => {
 };
 // https://EXCHANGE_RATE_API_URL/EXCHANGE_RATE_API_KEY/latest/CNY
 
-export async function getCurrencyRate() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_EXCHANGE_RATE_API_URL}`);
-  const currencyRate = await res.json();
-  return parseFloat(currencyRate?.conversion_rates?.BDT) || 17.5;
-}

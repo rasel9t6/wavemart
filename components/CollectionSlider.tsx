@@ -66,7 +66,7 @@ const CollectionsSlider: React.FC<CollectionsSliderProps> = ({
                 <div
                   className="relative h-[170px] overflow-hidden rounded-md transition-all duration-300 group-hover:scale-105 "
                   style={{
-                    backgroundImage: `url("${collection.image}")`,
+                    backgroundImage: `url("${collection.icon}")`,
                     backgroundPosition: 'center center',
                     backgroundSize: 'cover',
                   }}

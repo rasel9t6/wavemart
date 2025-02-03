@@ -1,10 +1,9 @@
 'use client';
 import useCart from '@/lib/hooks/useCart';
 import { MinusCircle, PlusCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import HeartFavorite from './HeartFavorite';
 import { ProductType } from '@/lib/types';
-import { getCurrencyRate } from '@/lib/actions';
 
 export default function ProductInfo({
   productInfo,
@@ -18,16 +17,8 @@ export default function ProductInfo({
     productInfo.sizes[0],
   );
   const [quantity, setQuantity] = useState<number>(1);
-  const [price, setPrice] = useState<number>(productInfo.price * 17.5);
-  const cart = useCart();
 
-  useEffect(() => {
-    const fetchPrice = async () => {
-      const rate = (await getCurrencyRate()).toFixed(2);
-      setPrice(productInfo.price * parseFloat(rate));
-    };
-    fetchPrice();
-  }, [productInfo.price]);
+  const cart = useCart();
 
   return (
     <div className="flex max-w-[400px] flex-col gap-4">
@@ -41,7 +32,7 @@ export default function ProductInfo({
         <p className="text-base-bold">{productInfo.category}</p>
       </div>
 
-      <p className="text-heading3-bold"> ৳ {price.toFixed(2)}</p>
+      <p className="text-heading3-bold"> ৳ {productInfo.price}</p>
 
       <div className="flex flex-col gap-2">
         <p className="text-base-medium text-custom-gray">Description:</p>

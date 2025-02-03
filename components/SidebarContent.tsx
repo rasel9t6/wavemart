@@ -26,7 +26,7 @@ export default function SidebarContent({
             }`}
           >
             <Image
-              src={collection.image}
+              src={collection.icon}
               alt={collection.title}
               width={20}
               height={20}

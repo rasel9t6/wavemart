@@ -18,6 +18,8 @@ export type CollectionType = {
   _id: string;
   title: string;
   products: Array<string | ProductType>;
+  icon: string;
+  thumbnail: string;
   image: string;
 };
 
