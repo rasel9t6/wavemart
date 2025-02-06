@@ -11,12 +11,12 @@ interface ImageSliderProps {
   hideControls?: boolean; // New prop to hide Chevron buttons
 }
 const images = [
-  '/banner.png',
-  '/banner-1.png',
-  '/banner-2.png',
-  '/banner-3.png',
-  '/banner-4.png',
-  '/banner-5.png',
+  '/banner.webp',
+  '/banner-1.webp',
+  '/banner-2.webp',
+  '/banner-3.webp',
+  '/banner-4.webp',
+  '/banner-5.webp',
 ];
 const ImageSlider: React.FC<ImageSliderProps> = ({
   autoPlayInterval = 5000,
