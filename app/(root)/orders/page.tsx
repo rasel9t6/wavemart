@@ -66,7 +66,7 @@ export default async function OrdersPage() {
                         <p className="text-small-medium">
                           Unit price:{' '}
                           <span className="text-small-bold">
-                            {orderItem.product.price}
+                            {orderItem.product.price.bdt}
                           </span>
                         </p>
                         <p className="text-small-medium">
