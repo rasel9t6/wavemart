@@ -6,8 +6,9 @@ type ProductType = {
   category: string;
   collections: Array<string>;
   tags: Array<string>;
-  price: number;
-  cost: number;
+  price: {
+    bdt: number;
+  };
   sizes: Array<string>;
   colors: Array<string>;
   createdAt: string;

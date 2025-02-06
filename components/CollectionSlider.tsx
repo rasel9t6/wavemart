@@ -13,7 +13,7 @@ const CollectionsSlider: React.FC<CollectionsSliderProps> = ({
   const [startIndex, setStartIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const itemWidth = 170; // Increased width for better presentation
+  const itemWidth = 180; // Increased width for better presentation
   useEffect(() => {
     const updateItemsPerView = () => {
       if (containerRef.current) {
@@ -76,14 +76,14 @@ const CollectionsSlider: React.FC<CollectionsSliderProps> = ({
 
                   {/* New badge */}
                   <div className="absolute left-4 top-4">
-                    <div className="inline-flex items-center rounded-full border border-transparent bg-bondi-blue-500/50 px-2.5 py-0.5 text-xs font-semibold uppercase text-white backdrop-blur-sm transition-colors focus:outline-none focus:ring-2  focus:ring-bondi-blue  focus:ring-offset-2 group-hover:bg-bondi-blue">
+                    <div className="inline-flex items-center rounded-full border border-transparent bg-blaze-orange/70 px-2.5 py-0.5 text-xs font-semibold uppercase text-white backdrop-blur-sm transition-colors focus:outline-none focus:ring-2  focus:ring-bondi-blue  focus:ring-offset-2 group-hover:bg-blaze-orange">
                       New
                     </div>
                   </div>
 
                   {/* Content container */}
                   <div className="absolute inset-x-0 bottom-0 p-4 text-white">
-                    <h3 className="mb-2 text-xl font-bold leading-tight tracking-tight transition-colors duration-200 group-hover:text-bondi-blue-50">
+                    <h3 className="mb-2 text-xl font-bold leading-tight tracking-tight transition-colors duration-200 group-hover:text-bondi-blue-400">
                       {collection.title}
                     </h3>
 

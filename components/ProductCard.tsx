@@ -17,15 +17,17 @@ export default async function ProductCard({
     <>
       <Link
         href={`/products/${product._id}`}
-        className="flex flex-col gap-2 rounded-xl border border-custom-gray/20 p-3 transition-all duration-300"
+        className="group flex flex-col gap-2 rounded-xl border border-custom-gray/20 p-3 transition-all duration-300"
       >
-        <Image
-          src={product.media[0]}
-          alt="product"
-          width={120}
-          height={100}
-          className="rounded-lg border object-cover"
-        />
+        <div className="relative h-32 w-full overflow-hidden rounded-md border">
+          <Image
+            src={product.media[0]}
+            alt="product"
+            width={128}
+            height={100}
+            className="rounded-lg  object-cover transition-transform duration-300 group-hover:scale-110"
+          />
+        </div>
         <div>
           <p className="text-base-bold">{product.title}</p>
           <p className="text-small-medium text-custom-gray">
@@ -33,7 +35,9 @@ export default async function ProductCard({
           </p>
         </div>
         <div className="flex items-center justify-between">
-          <p className="text-body-bold">৳{product.price}</p>
+          <p className="text-body-bold text-blaze-orange">
+            ৳{product.price.bdt}
+          </p>
           <HeartFavorite
             product={product}
             updateSignedInUser={updateSignedInUser}

@@ -21,7 +21,6 @@ export const getProducts = async () => {
   const products = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
     cache: 'no-store',
   });
-  revalidatePath('/products');
   const data = await products.json();
   return await data;
 };
@@ -57,4 +56,3 @@ export const getRelatedProducts = async (productId: string) => {
   return await relatedProducts.json();
 };
 // https://EXCHANGE_RATE_API_URL/EXCHANGE_RATE_API_KEY/latest/CNY
-

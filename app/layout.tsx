@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${notoSansBangla.variable} ${inter.className}`}>
-        <ClerkProvider>
+        <ClerkProvider afterSignOutUrl={'/sign-in'}>
           <ToasterProvider />
           {children}
         </ClerkProvider>

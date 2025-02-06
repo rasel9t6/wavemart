@@ -20,7 +20,7 @@ export default async function ProductDetailsPage({
 
       <div className="flex flex-col items-center px-10 py-5 max-md:px-3">
         <p className="text-heading3-bold">Related Products</p>
-        <div className="mx-auto mt-8 flex flex-wrap gap-16">
+        <div className="mx-auto mt-8 flex flex-wrap gap-5">
           {relatedProducts?.map((product: ProductType) => (
             <ProductCard key={product._id} product={product} />
           ))}

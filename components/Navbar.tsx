@@ -6,11 +6,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { FaHeart } from 'react-icons/fa6';
+import { HiShoppingBag } from 'react-icons/hi2';
 
 // Navigation links data
 const NAV_LINKS = [
-  { path: '/wishlist', label: 'Wishlist' },
-  { path: '/orders', label: 'Orders' },
+  { path: '/wishlist', label: <FaHeart size={24} /> },
+  { path: '/orders', label: <HiShoppingBag size={24} /> },
 ];
 
 // Separate components for better organization
@@ -22,14 +24,14 @@ const SearchBar = ({ query, setQuery, onSearch }: any) => (
       value={query}
       onChange={(e) => setQuery(e.target.value)}
     />
-    <button disabled={query === ' '} onClick={onSearch}>
+    <button disabled={query === ''} onClick={onSearch}>
       <Search className="size-6 cursor-pointer text-bondi-blue-600 transition-colors duration-300 hover:text-bondi-blue-400" />
     </button>
   </div>
 );
 
 const NavLinks = ({ pathname, user }: any) => (
-  <nav className="flex gap-4 text-base-bold text-bondi-blue-50 max-lg:hidden">
+  <nav className="flex items-center justify-center gap-4 text-base-bold text-white max-lg:hidden">
     {NAV_LINKS.map(({ path, label }) => (
       <Link
         key={path}
@@ -46,11 +48,16 @@ const NavLinks = ({ pathname, user }: any) => (
 
 const CartButton = ({ cartItemsCount }: any) => (
   <Link
+    title="Cart"
     href="/cart"
-    className="flex items-center gap-3 rounded-lg border bg-white px-2 py-1 text-bondi-blue-600 transition-colors duration-300 hover:text-bondi-blue-400 max-sm:hidden"
+    className="relative flex items-center  rounded-full  text-white  transition-all duration-300  max-sm:hidden"
   >
-    <ShoppingCart />
-    <p className="text-base-bold">Cart ({cartItemsCount})</p>
+    <ShoppingCart className="size-6" />
+    {cartItemsCount > 0 && (
+      <span className="absolute -right-2.5 -top-2.5 flex size-5 items-center justify-center rounded-full bg-blaze-orange-500 text-center text-xs font-bold">
+        {cartItemsCount}
+      </span>
+    )}
   </Link>
 );
 
@@ -65,8 +72,8 @@ export default function Navbar() {
   const handleSearch = () => router.push(`/search/${query}`);
 
   return (
-    <header className="fixed z-20 flex w-full items-center justify-between gap-5 bg-custom-radial px-12 py-2 sm:py-2.5">
-      <Link href="/" className="relative">
+    <header className="fixed z-50 flex w-full items-center justify-between gap-5 bg-custom-radial px-12 py-2 sm:py-2.5">
+      <Link href="/" className="relative" title="BD Shipmart">
         <Image
           src="/bd-ship-mart-logo.svg"
           alt="BD shipmart logo"
@@ -77,7 +84,7 @@ export default function Navbar() {
 
       <SearchBar query={query} setQuery={setQuery} onSearch={handleSearch} />
 
-      <div className="relative flex items-center gap-3">
+      <div className="relative flex items-center justify-center gap-3">
         <CartButton cartItemsCount={cart.cartItems.length} />
         <NavLinks pathname={pathname} user={user} />
         <Menu
@@ -97,6 +104,7 @@ export default function Navbar() {
               </Link>
             ))}
             <Link
+              title="Cart"
               href="/cart"
               className="flex w-full flex-col items-center justify-center gap-3 rounded-lg border px-2 py-1 text-bondi-blue transition-all duration-300 hover:bg-bondi-blue hover:text-white sm:flex-row"
             >
@@ -107,7 +115,7 @@ export default function Navbar() {
         )}
 
         {user ? (
-          <UserButton afterSignOutUrl="/sign-in" />
+          <UserButton />
         ) : (
           <Link href="/sign-in" className="text-white">
             <CircleUserRound />

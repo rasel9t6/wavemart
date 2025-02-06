@@ -45,8 +45,8 @@ export default async function CollectionDetailsPage({
           <div className="rounded-xl bg-white p-6 shadow-sm">
             <p className="text-sm text-gray-500">Price Range</p>
             <p className="text-3xl font-bold text-gray-900">
-              ৳{Math.min(...products.map((p: any) => p.price))} - ৳
-              {Math.max(...products.map((p: any) => p.price))}
+              ৳{Math.min(...products.map((p: any) => p.price.bdt))} - ৳
+              {Math.max(...products.map((p: any) => p.price.bdt))}
             </p>
           </div>
         </div>

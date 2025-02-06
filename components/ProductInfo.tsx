@@ -32,13 +32,12 @@ export default function ProductInfo({
         <p className="text-base-bold">{productInfo.category}</p>
       </div>
 
-      <p className="text-heading3-bold"> ৳ {productInfo.price}</p>
+      <p className="text-heading3-bold"> ৳ {productInfo.price.bdt}</p>
 
       <div className="flex flex-col gap-2">
         <p className="text-base-medium text-custom-gray">Description:</p>
         <p className="text-small-medium">{productInfo.description}</p>
       </div>
-
       {productInfo.colors.length > 0 && (
         <div className="flex flex-col gap-2">
           <p className="text-base-medium text-custom-gray">Colors:</p>
@@ -79,21 +78,21 @@ export default function ProductInfo({
 
       <div className="flex flex-col gap-2">
         <p className="text-base-medium text-custom-gray">Quantity:</p>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 ">
           <MinusCircle
-            className="cursor-pointer hover:text-bondi-blue"
+            className="cursor-pointer transition-colors duration-300 hover:text-bondi-blue"
             onClick={() => quantity > 1 && setQuantity(quantity - 1)}
           />
           <p className="text-body-bold">{quantity}</p>
           <PlusCircle
-            className="cursor-pointer hover:text-bondi-blue"
+            className="cursor-pointer transition-colors duration-300 hover:text-bondi-blue"
             onClick={() => setQuantity(quantity + 1)}
           />
         </div>
       </div>
 
       <button
-        className="rounded-lg bg-bondi-blue py-3 text-base-bold transition-colors duration-300 hover:bg-bondi-blue-600 hover:text-white"
+        className="rounded-lg bg-blaze-orange py-3 text-base-bold text-white transition-colors duration-300  hover:bg-blaze-orange-600"
         onClick={() => {
           cart.addItem({
             item: productInfo,
@@ -114,7 +113,7 @@ export default function ProductInfo({
             size: selectedSize,
           });
         }}
-        className="rounded-lg bg-[#FE6C08]  py-3 text-base-bold text-white"
+        className="rounded-lg bg-bondi-blue-600 py-3 text-base-bold text-white transition-colors duration-300 hover:bg-bondi-blue"
       >
         Buy Now
       </button>
