@@ -11,9 +11,8 @@ export default async function CollectionDetailsPage({
 }) {
   const collectionDetails = await getCollectionDetails(params.collectionId);
   const { title, description, thumbnail, products } = collectionDetails;
-  console.log(products);
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 px-5 pt-28">
       {/* Hero Section */}
       <div className="relative h-[60vh] w-full">
         <Image
@@ -51,11 +50,11 @@ export default async function CollectionDetailsPage({
           </div>
         </div>
 
-        <div className="mb-8">
+        <div className="mb-8 text-center">
           <h2 className="mb-6 text-2xl font-bold text-gray-900">
             Products in Collection
           </h2>
-          <div className="flex flex-wrap gap-5">
+          <div className="flex flex-wrap justify-center gap-5">
             {products.map((product: ProductType) => (
               <div
                 key={product._id}
