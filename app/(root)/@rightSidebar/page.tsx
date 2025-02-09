@@ -44,7 +44,7 @@ export default function RightSidebarPage() {
 
   const toggleCategory = (category: string): void => {
     setExpandedCategories((prev: ExpandedCategories) => ({
-      ...prev,
+     
       [category]: !prev[category],
     }));
   };
@@ -52,9 +52,9 @@ export default function RightSidebarPage() {
     <motion.aside
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="custom-scrollbar fixed right-0 top-0 flex h-full w-64 flex-col border-l border-custom-gray/20 bg-white pl-6 pt-28 max-md:hidden"
+      className="custom-scrollbar sticky right-0 top-0 flex h-full w-64 flex-col border-l border-custom-gray/20 bg-white px-6 pt-28 max-md:hidden"
     >
-      <div className="flex h-full flex-col gap-2 pb-8">
+      <div className="flex flex-1 flex-col gap-2 pb-8">
         <motion.h2
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -75,14 +75,24 @@ export default function RightSidebarPage() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => toggleCategory(categoryKey)}
-              className="flex w-full items-center justify-between py-2 text-sm font-medium hover:text-bondi-blue-400"
+              className={`flex w-full items-center justify-between py-2 text-sm font-medium transition-colors duration-200 ${
+                expandedCategories[categoryKey]
+                  ? 'text-bondi-blue-500'
+                  : 'text-gray-700 hover:text-bondi-blue-400'
+              }`}
             >
               <span>{category.name}</span>
               <motion.div
-                animate={{ rotate: expandedCategories[categoryKey] ? 180 : 0 }}
+                animate={{ rotate: expandedCategories[categoryKey] ? 90 : 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronRight className="size-4" />
+                <ChevronRight
+                  className={`size-4 ${
+                    expandedCategories[categoryKey]
+                      ? 'text-bondi-blue-500'
+                      : 'text-gray-700'
+                  }`}
+                />
               </motion.div>
             </motion.button>
 

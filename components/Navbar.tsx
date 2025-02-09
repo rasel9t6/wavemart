@@ -72,13 +72,15 @@ export default function Navbar() {
   const handleSearch = () => router.push(`/search/${query}`);
 
   return (
-    <header className="fixed z-50 flex w-full items-center justify-between gap-5 bg-custom-radial px-12 py-2 sm:py-2.5">
-      <Link href="/" className="relative" title="BD Shipmart">
+    <header className="fixed z-50 flex w-full items-center justify-between gap-5 bg-custom-radial px-4 py-2 sm:px-6 sm:py-2.5 md:px-8 lg:px-12">
+      <Link href="/" className="relative shrink-0" title="BD Shipmart">
         <Image
           src="/bd-ship-mart-logo.svg"
           alt="BD shipmart logo"
           width={80}
           height={80}
+          className="h-auto w-[50px] sm:w-[60px] md:w-[70px] lg:w-[80px]"
+          priority
         />
       </Link>
 

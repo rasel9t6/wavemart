@@ -115,7 +115,7 @@ export default function ProductInfo({
         }}
         className="rounded-lg bg-bondi-blue-600 py-3 text-base-bold text-white transition-colors duration-300 hover:bg-bondi-blue"
       >
-        Buy Now
+        Order Now
       </button>
     </div>
   );
