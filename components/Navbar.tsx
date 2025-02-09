@@ -11,8 +11,8 @@ import { HiShoppingBag } from 'react-icons/hi2';
 
 // Navigation links data
 const NAV_LINKS = [
-  { path: '/wishlist', label: <FaHeart size={24} /> },
-  { path: '/orders', label: <HiShoppingBag size={24} /> },
+  { path: '/wishlist', icon: <FaHeart size={24} />, label: 'Wishlist' },
+  { path: '/orders', icon: <HiShoppingBag size={24} />, label: 'Orders' },
 ];
 
 // Separate components for better organization
@@ -32,7 +32,7 @@ const SearchBar = ({ query, setQuery, onSearch }: any) => (
 
 const NavLinks = ({ pathname, user }: any) => (
   <nav className="flex items-center justify-center gap-4 text-base-bold text-white max-lg:hidden">
-    {NAV_LINKS.map(({ path, label }) => (
+    {NAV_LINKS.map(({ path, icon }) => (
       <Link
         key={path}
         href={user ? path : '/sign-in'}
@@ -40,7 +40,7 @@ const NavLinks = ({ pathname, user }: any) => (
           pathname === path && 'text-white'
         }`}
       >
-        {label}
+        {icon}
       </Link>
     ))}
   </nav>
@@ -96,22 +96,25 @@ export default function Navbar() {
 
         {dropdownMenu && (
           <div className="absolute right-5 top-12 flex w-28 flex-col gap-4 rounded-lg border bg-white p-3 text-base-bold text-bondi-blue-500 md:w-fit lg:hidden">
-            {NAV_LINKS.map(({ path, label }) => (
+            {NAV_LINKS.map(({ path, label, icon }) => (
               <Link
                 key={path}
                 href={user ? path : '/sign-in'}
-                className="hover:text-bondi-blue"
+                className="flex items-center  gap-1 hover:text-bondi-blue"
               >
+                {icon}
                 {label}
               </Link>
             ))}
             <Link
               title="Cart"
               href="/cart"
-              className="flex w-full flex-col items-center justify-center gap-3 rounded-lg border px-2 py-1 text-bondi-blue transition-all duration-300 hover:bg-bondi-blue hover:text-white sm:flex-row"
+              className="flex w-full flex-col items-center justify-center gap-1 rounded-lg border px-2 py-1 text-bondi-blue transition-all duration-300 hover:bg-bondi-blue hover:text-white sm:flex-row"
             >
               <ShoppingCart />
-              <p className="text-base-bold">Cart ({cart.cartItems.length})</p>
+              <p className="text-nowrap text-base-bold">
+                Cart ({cart.cartItems.length})
+              </p>
             </Link>
           </div>
         )}
