@@ -5,7 +5,7 @@ import ProductList from '@/components/ProductList';
 export default function Home() {
   return (
     <>
-      <div className="container mx-auto overflow-hidden p-4">
+      <div className="container mx-auto overflow-hidden px-5 pt-20 sm:pt-24 lg:pt-28">
         <div className="flex flex-col justify-between gap-4 sm:flex-row">
           {/* Main large slider - Takes ~70% width */}
           <div className="w-full lg:w-[70%]">
