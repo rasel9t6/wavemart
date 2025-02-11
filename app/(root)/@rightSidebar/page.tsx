@@ -44,7 +44,6 @@ export default function RightSidebarPage() {
 
   const toggleCategory = (category: string): void => {
     setExpandedCategories((prev: ExpandedCategories) => ({
-     
       [category]: !prev[category],
     }));
   };
@@ -54,7 +53,7 @@ export default function RightSidebarPage() {
       animate={{ opacity: 1, x: 0 }}
       className="custom-scrollbar sticky right-0 top-0 flex h-full w-64 flex-col border-l border-custom-gray/20 bg-white px-6 pt-28 max-md:hidden"
     >
-      <div className="flex flex-1 flex-col gap-2 pb-8">
+      <div className="flex flex-1 flex-col gap-2 py-4 pb-8">
         <motion.h2
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -69,7 +68,7 @@ export default function RightSidebarPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.2 }}
-            className="border-b border-gray-100 pb-2"
+            className="border-b border-custom-gray/20 pb-2"
           >
             <motion.button
               whileHover={{ scale: 1.02 }}
