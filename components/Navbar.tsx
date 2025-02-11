@@ -73,7 +73,7 @@ export default function Navbar() {
 
   return (
     <header className="fixed z-50 flex w-full items-center justify-between gap-5 bg-custom-radial px-4 py-2 sm:px-6 sm:py-2.5 md:px-8 lg:px-12">
-      <Link href="/" className="relative shrink-0" title="BD Shipmart">
+      <Link href="/" className="relative h-full shrink-0" title="BD Shipmart">
         <Image
           src="/bd-ship-mart-logo.svg"
           alt="BD shipmart logo"
