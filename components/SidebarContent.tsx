@@ -31,7 +31,7 @@ export default function SidebarContent({
               width={20}
               height={20}
             />
-            |<h1>{collection.title}</h1>
+            |<h1>{collection.name}</h1>
           </Link>
         );
       })}

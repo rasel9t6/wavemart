@@ -51,7 +51,7 @@ export default function RightSidebarPage() {
     <motion.aside
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="custom-scrollbar sticky right-0 top-0 flex h-full w-64 flex-col border-l border-custom-gray/20 bg-white px-6 pt-28 max-md:hidden"
+      className="custom-scrollbar sticky right-0 top-0 flex h-screen w-64 flex-col border-l border-custom-gray/20 bg-white px-6 pt-28 max-md:hidden"
     >
       <div className="flex flex-1 flex-col gap-2 py-4 pb-8">
         <motion.h2
