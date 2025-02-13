@@ -102,15 +102,17 @@ export default function ProductInfo({
       </div>
 
       {/* Minimum Order Quantity Notice */}
-      <div className="rounded-lg bg-gray-50 p-4">
+      <div className="rounded-lg bg-gray-50 py-4">
         <p className="text-sm font-medium text-gray-700">
-          Minimum total order: {MIN_TOTAL_QUANTITY} pieces (across all
+          Minimum quantity: {MIN_TOTAL_QUANTITY} pieces (across all
           combinations)
         </p>
         <p className="mt-1 text-sm text-gray-500">
           Current total: {totalQuantity} pieces
-          {totalQuantity < MIN_TOTAL_QUANTITY &&
-            ` (${MIN_TOTAL_QUANTITY - totalQuantity} more needed)`}
+          <span className="text-blaze-orange-400">
+            {totalQuantity < MIN_TOTAL_QUANTITY &&
+              `(${MIN_TOTAL_QUANTITY - totalQuantity} more pieces needed)`}
+          </span>
         </p>
       </div>
 
