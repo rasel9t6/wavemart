@@ -22,7 +22,7 @@ export default function Gallery({ productMedia }: { productMedia: string[] }) {
   };
 
   return (
-    <div className="flex size-full max-w-4xl flex-col gap-4">
+    <div className="flex size-full flex-1  flex-col gap-4">
       {/* Main Image Container */}
       <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-neutral-100 lg:size-[500px]">
         <AnimatePresence mode="wait">

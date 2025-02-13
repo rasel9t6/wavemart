@@ -3,7 +3,7 @@ import { revalidatePath } from 'next/cache';
 
 export const getCollections = async () => {
   const collections = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/collections`,
+    `${process.env.NEXT_PUBLIC_API_URL}/categories`,
   );
   revalidatePath('/collections');
   return await collections.json();
@@ -11,9 +11,9 @@ export const getCollections = async () => {
 
 export const getCollectionDetails = async (collectionId: string) => {
   const collection = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/collections/${collectionId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/categories/${collectionId}`,
   );
-  revalidatePath(`/collections/${collectionId}`);
+  revalidatePath(`/categories/${collectionId}`);
   return await collection.json();
 };
 

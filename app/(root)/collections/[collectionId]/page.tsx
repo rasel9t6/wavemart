@@ -38,14 +38,14 @@ export default async function CollectionDetailsPage({
           <div className="rounded-xl bg-white p-6 shadow-sm">
             <p className="text-sm text-gray-500">Total Products</p>
             <p className="text-3xl font-bold text-gray-900">
-              {products.length}
+              {products?.length}
             </p>
           </div>
           <div className="rounded-xl bg-white p-6 shadow-sm">
             <p className="text-sm text-gray-500">Price Range</p>
             <p className="text-3xl font-bold text-gray-900">
-              ৳{Math.min(...products.map((p: any) => p.price.bdt))} - ৳
-              {Math.max(...products.map((p: any) => p.price.bdt))}
+              {/* ৳{Math.min(...products.map((p: any) => p.price.bdt))} - ৳
+              {Math.max(...products.map((p: any) => p.price.bdt))} */}
             </p>
           </div>
         </div>
@@ -55,7 +55,7 @@ export default async function CollectionDetailsPage({
             Products in Collection
           </h2>
           <div className="flex flex-wrap justify-center gap-5">
-            {products.map((product: ProductType) => (
+            {products?.map((product: ProductType) => (
               <div
                 key={product._id}
                 className="transition duration-300 hover:scale-105"

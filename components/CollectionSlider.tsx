@@ -103,11 +103,11 @@ const CollectionsSlider: React.FC<CollectionsSliderProps> = ({
                           />
                         </svg>
                         <span>
-                          {collection.products.length === 0
+                          {collection?.products?.length === 0
                             ? 'No products'
-                            : collection.products.length === 1
+                            : collection?.products?.length === 1
                               ? '1 Product'
-                              : `${collection.products.length} Products`}
+                              : `${collection?.products?.length} Products`}
                         </span>
                       </span>
                     </div>
