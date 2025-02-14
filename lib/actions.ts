@@ -5,7 +5,7 @@ export const getCollections = async () => {
   const collections = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/categories`,
   );
-  revalidatePath('/collections');
+  revalidatePath('/categories');
   return await collections.json();
 };
 
