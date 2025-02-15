@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { CollectionType } from '@/lib/types';
 import Link from 'next/link';
+import Image from 'next/image';
+import { Package } from 'lucide-react';
 
 interface CollectionsSliderProps {
   collections: CollectionType[];
@@ -13,7 +15,8 @@ const CollectionsSlider: React.FC<CollectionsSliderProps> = ({
   const [startIndex, setStartIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const itemWidth = 180; // Increased width for better presentation
+  const itemWidth = 160; // Increased width to prevent overflow
+
   useEffect(() => {
     const updateItemsPerView = () => {
       if (containerRef.current) {
@@ -46,71 +49,55 @@ const CollectionsSlider: React.FC<CollectionsSliderProps> = ({
     <div className="relative overflow-hidden p-4">
       <div ref={containerRef}>
         <div
-          className={`flex ${showNavigation ? 'transition-transform duration-300' : ''}`}
+          className={`flex gap-3 ${showNavigation ? 'transition-transform duration-300' : ''}`}
           style={
             showNavigation
-              ? { transform: `translateX(-${startIndex * itemWidth}px)` }
+              ? { transform: `translateX(-${startIndex * (itemWidth + 12)}px)` }
               : undefined
           }
         >
           {collections.map((collection, index) => (
             <Link
-              href={`/collections/${collection._id}`}
+              href={`/collections/${collection.slug}`}
               key={index}
-              className="group relative shrink-0 rounded-md px-3"
-              style={{
-                width: `${itemWidth}px`,
-              }}
+              className="group shrink-0 rounded-xl border border-custom-gray/20 p-3 transition-all duration-300"
+              style={{ width: `${itemWidth}px` }}
             >
-              <div className="overflow-hidden">
-                <div
-                  className="relative h-[170px] overflow-hidden rounded-md transition-all duration-300 group-hover:scale-105 "
-                  style={{
-                    backgroundImage: `url("${collection.icon}")`,
-                    backgroundPosition: 'center center',
-                    backgroundSize: 'cover',
-                  }}
-                >
-                  {/* Overlay gradient */}
-                  <div className="absolute inset-0 rounded-md bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-80 transition-all duration-300 group-hover:opacity-90 group-hover:backdrop-blur group-hover:backdrop-brightness-50 group-hover:backdrop-contrast-200" />
-
-                  {/* New badge */}
-                  <div className="absolute left-4 top-4">
-                    <div className="inline-flex items-center rounded-full border border-transparent bg-blaze-orange/70 px-2.5 py-0.5 text-xs font-semibold uppercase text-white backdrop-blur-sm transition-colors focus:outline-none focus:ring-2  focus:ring-bondi-blue  focus:ring-offset-2 group-hover:bg-blaze-orange">
-                      New
+              <div className="flex items-start gap-2">
+                {/* Icon Section */}
+                <div className="relative size-10 shrink-0 overflow-hidden rounded-lg bg-gray-50">
+                  {collection.icon ? (
+                    <div className="relative size-full transition-transform duration-300 group-hover:scale-105">
+                      <Image
+                        src={collection.icon}
+                        alt={collection.name}
+                        fill
+                        className="object-cover"
+                      />
                     </div>
-                  </div>
-
-                  {/* Content container */}
-                  <div className="absolute inset-x-0 bottom-0 p-4 text-white">
-                    <h3 className="mb-2 text-xl font-bold leading-tight tracking-tight transition-colors duration-200 group-hover:text-bondi-blue-400">
-                      {collection.title}
-                    </h3>
-
-                    <div className="flex items-center space-x-2 text-sm">
-                      <span className="inline-flex items-center space-x-1">
-                        <svg
-                          className="size-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                          />
-                        </svg>
-                        <span>
-                          {collection?.products?.length === 0
-                            ? 'No products'
-                            : collection?.products?.length === 1
-                              ? '1 Product'
-                              : `${collection?.products?.length} Products`}
-                        </span>
-                      </span>
+                  ) : (
+                    <div className="flex h-full items-center justify-center">
+                      <Package className="size-5 text-gray-400" />
                     </div>
+                  )}
+                </div>
+
+                {/* Content Section */}
+                <div className="min-w-0 flex-1">
+                  <h3 className="line-clamp-2 text-sm font-medium leading-tight text-gray-900 transition-colors group-hover:text-bondi-blue">
+                    {collection.name}
+                  </h3>
+
+                  <div className="mt-0.5 flex items-center gap-1 text-xs text-gray-500">
+                    <Package className="size-3 shrink-0" />
+                    <span className="truncate">
+                      {collection?.products?.length === 0 ||
+                      !collection?.products
+                        ? 'No products'
+                        : collection?.products?.length === 1
+                          ? '1 Product'
+                          : `${collection?.products?.length} Products`}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -118,48 +105,45 @@ const CollectionsSlider: React.FC<CollectionsSliderProps> = ({
           ))}
         </div>
 
-        {/* Navigation buttons */}
-        <button
-          disabled={startIndex === 0}
-          onClick={prevSlide}
-          className="absolute left-0 top-1/2 z-30 -translate-y-1/2 rounded-r-xl bg-bondi-blue/30 p-2 pl-1 text-4xl text-white backdrop-blur-sm transition-[padding] hover:pl-3"
-        >
-          <svg
-            stroke="currentColor"
-            fill="none"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            height="1em"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        {/* {showNavigation && startIndex > 0 && (
-        )} */}
-
-        <button
-          onClick={nextSlide}
-          disabled={startIndex + itemsPerView >= collections.length}
-          className="absolute right-0 top-1/2 z-30 -translate-y-1/2 rounded-l-xl bg-bondi-blue/30 p-2 pl-1 text-4xl text-white backdrop-blur-sm transition-[padding] hover:pr-3"
-        >
-          <svg
-            stroke="currentColor"
-            fill="none"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            height="1em"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
+        {/* Navigation Buttons */}
+        {showNavigation && (
+          <>
+            <button
+              disabled={startIndex === 0}
+              onClick={prevSlide}
+              className="absolute left-2 top-1/2 z-30 -translate-y-1/2 rounded-lg bg-white/90 p-1.5 text-gray-700 shadow-lg backdrop-blur-sm transition-all hover:bg-white disabled:opacity-50"
+            >
+              <svg
+                className="size-4"
+                stroke="currentColor"
+                fill="none"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <button
+              onClick={nextSlide}
+              disabled={startIndex + itemsPerView >= collections.length}
+              className="absolute right-2 top-1/2 z-30 -translate-y-1/2 rounded-lg bg-white/90 p-1.5 text-gray-700 shadow-lg backdrop-blur-sm transition-all hover:bg-white disabled:opacity-50"
+            >
+              <svg
+                className="size-4"
+                stroke="currentColor"
+                fill="none"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
