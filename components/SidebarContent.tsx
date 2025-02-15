@@ -30,7 +30,7 @@ export default function SidebarContent({
     >
       {collections.map((collection) => {
         const isExpanded = expandedCategories.includes(collection._id);
-        const isActive = pathname.includes(`/collections/${collection._id}`);
+        const isActive = pathname.includes(`/collections/${collection.slug}`);
 
         return (
           <div key={collection._id} className="flex flex-col">
