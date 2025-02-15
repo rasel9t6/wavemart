@@ -18,10 +18,12 @@ type ProductType = {
 export type CollectionType = {
   _id: string;
   title: string;
+  name:string;
   products: Array<string | ProductType>;
   icon: string;
   thumbnail: string;
   image: string;
+  slug: string;
 };
 
 export type UserType = {
