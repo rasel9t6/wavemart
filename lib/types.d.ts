@@ -15,7 +15,7 @@ type ProductType = {
   updatedAt: string;
 };
 
-export type CollectionType = {
+export type CategoryType = {
   _id: string;
   title: string;
   name:string;

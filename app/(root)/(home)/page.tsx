@@ -1,4 +1,4 @@
-import Collections from '@/components/Collections';
+import Categories from '@/components/Categories';
 import ImageSlider from '@/components/ImageSlider';
 import ProductList from '@/components/ProductList';
 
@@ -26,7 +26,7 @@ export default function Home() {
         </div>
       </div>
 
-      <Collections />
+      <Categories />
       <ProductList />
     </>
   );

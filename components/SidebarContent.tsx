@@ -6,11 +6,7 @@ import { ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function SidebarContent({
-  collections,
-}: {
-  collections: any[];
-}) {
+export default function SidebarContent({ categories }: { categories: any[] }) {
   const pathname = usePathname();
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
 
@@ -28,43 +24,49 @@ export default function SidebarContent({
       animate={{ opacity: 1 }}
       className="flex size-full flex-col gap-1 p-2"
     >
-      {collections.map((collection) => {
-        const isExpanded = expandedCategories.includes(collection._id);
-        const isActive = pathname.includes(`/collections/${collection.slug}`);
+      {categories.map((category) => {
+        const isExpanded = expandedCategories.includes(category._id);
+        const isActive = pathname.includes(`/categories/${category.slug}`);
 
         return (
-          <div key={collection._id} className="flex flex-col">
-            <motion.button
-              whileTap={{ scale: 0.98 }}
-              onClick={() => toggleCategory(collection._id)}
-              className={`flex items-center gap-2 rounded-lg p-2 text-sm font-medium transition-colors duration-200 hover:bg-gray-100 ${
-                isActive ? 'bg-gray-50 text-bondi-blue' : 'text-gray-700'
-              }`}
-            >
-              <span className="flex flex-1 items-center gap-2">
-                {collection.icon && (
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-                  >
-                    <Image
-                      src={collection.icon}
-                      alt={collection.name}
-                      width={20}
-                      height={20}
-                      className="opacity-75"
-                    />
-                  </motion.div>
-                )}
-                <span>{collection.name}</span>
-              </span>
-              <motion.div
-                animate={{ rotate: isExpanded ? 180 : 0 }}
-                transition={{ duration: 0.2 }}
+          <div key={category._id} className="flex flex-col">
+            <Link href={`/categories/${category.slug}`} className="w-full">
+              <motion.button
+                whileTap={{ scale: 0.98 }}
+                onClick={() => toggleCategory(category._id)}
+                className={`flex w-full items-center gap-2 rounded-lg p-2 text-sm font-medium transition-colors duration-200 hover:bg-gray-100 ${
+                  isActive ? 'bg-gray-50 text-bondi-blue' : 'text-gray-700'
+                }`}
               >
-                <ChevronRight className="size-4 text-gray-400" />
-              </motion.div>
-            </motion.button>
+                <span className="flex flex-1 items-center gap-2">
+                  {category.icon && (
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 400,
+                        damping: 10,
+                      }}
+                    >
+                      <Image
+                        src={category.icon}
+                        alt={category.name}
+                        width={20}
+                        height={20}
+                        className=""
+                      />
+                    </motion.div>
+                  )}
+                  <span>{category.name}</span>
+                </span>
+                <motion.div
+                  animate={{ rotate: isExpanded ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ChevronRight className="size-4 text-gray-400" />
+                </motion.div>
+              </motion.button>
+            </Link>
 
             <AnimatePresence>
               {isExpanded && (
@@ -98,11 +100,11 @@ export default function SidebarContent({
                   }}
                   className="ml-4 mt-1 flex flex-col gap-1 overflow-hidden border-l border-gray-200 pl-2"
                 >
-                  {collection.subcategories.map(
+                  {category.subcategories.map(
                     (subcategory: any, index: number) => {
                       const isSubcategoryActive =
                         pathname ===
-                        `/collections/${collection._id}/${subcategory._id}`;
+                        `/categories/${category.slug}/${subcategory.slug}`;
 
                       return (
                         <motion.div
@@ -117,7 +119,7 @@ export default function SidebarContent({
                           key={subcategory._id}
                         >
                           <Link
-                            href={`/collections/${collection._id}/${subcategory._id}`}
+                            href={`/categories/${category.slug}/${subcategory.slug}`}
                             className={`group flex items-center gap-2 rounded-lg p-2 text-sm transition-all duration-200 hover:bg-gray-100 ${
                               isSubcategoryActive
                                 ? 'bg-gray-50 font-medium text-bondi-blue'
