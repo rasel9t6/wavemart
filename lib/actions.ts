@@ -1,22 +1,43 @@
 'use server';
 import { revalidatePath } from 'next/cache';
 
-export const getCollections = async () => {
-  const collections = await fetch(
+export const getCategories = async () => {
+  const categories = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/categories`,
   );
-  revalidatePath('/collections');
-  return await collections.json();
+  revalidatePath('/categories');
+  return await categories.json();
 };
 
-export const getCollectionDetails = async (collectionId: string) => {
-  const collection = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/categories/${collectionId}`,
+export const getCategoryDetails = async (categoryId: string) => {
+  const category = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/categories/${categoryId}`,
   );
-  revalidatePath(`/categories/${collectionId}`);
-  return await collection.json();
+  revalidatePath(`/categories/${categoryId}`);
+  return await category.json();
 };
+export async function getSubcategoryDetails(
+  categorySlug: string,
+  subcategorySlug: string,
+) {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/categories/${categorySlug}/${subcategorySlug}`,
+      {
+        cache: 'no-store',
+      },
+    );
 
+    if (!response.ok) {
+      throw new Error('Failed to fetch subcategory details');
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching subcategory details:', error);
+    throw error;
+  }
+}
 export const getProducts = async () => {
   const products = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
     cache: 'no-store',
