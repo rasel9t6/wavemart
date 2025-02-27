@@ -5,7 +5,6 @@ export const getCategories = async () => {
   const categories = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/categories`,
   );
-  revalidatePath('/categories');
   return await categories.json();
 };
 
@@ -39,11 +38,12 @@ export async function getSubcategoryDetails(
   }
 }
 export const getProducts = async () => {
-  const products = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
     cache: 'no-store',
   });
-  const data = await products.json();
-  return await data;
+  const data = await res.json();
+  const products = data.products;
+  return await products;
 };
 
 export const getProductDetails = async (productId: string) => {

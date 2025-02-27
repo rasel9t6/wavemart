@@ -11,84 +11,95 @@ export default function CartPage() {
   const cart = useCart();
 
   const total = cart.cartItems.reduce(
-    (acc: any, cartItem: any) => acc + cartItem.item.price * cartItem.quantity,
+    (acc: number, cartItem: any) =>
+      acc + cartItem.item.price * cartItem.quantity,
     0,
   );
   const totalRounded = parseFloat(total.toFixed(2));
 
   const customer = {
     clerkId: user?.id,
-    email: user?.emailAddresses[0].emailAddress,
+    email: user?.emailAddresses[0]?.emailAddress,
     name: user?.fullName,
   };
 
   const handleCheckout = async () => {
+    if (!user) {
+      return router.push('/sign-in');
+    }
     try {
-      if (!user) {
-        router.push('sign-in');
-      } else {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
-          method: 'POST',
-          body: JSON.stringify({ cartItems: cart.cartItems, customer }),
-        });
-        const data = await res.json();
-        window.location.href = data.url;
-        console.log(data);
-      }
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cartItems: cart.cartItems, customer }),
+      });
+      const data = await res.json();
+      window.location.href = data.url;
     } catch (err) {
-      console.log('[checkout_POST]', err);
+      console.error('Checkout Error:', err);
     }
   };
+
   return (
-    <div className="flex gap-20 px-10 py-16 max-lg:flex-col max-sm:px-3">
-      <div className="w-2/3 max-lg:w-full">
-        <p className="border-b border-custom-gray/20 pb-6 text-heading3-bold">
+    <div className="flex flex-col gap-10 p-6 lg:flex-row lg:px-10">
+      {/* 🛒 Cart Items Section */}
+      <div className="w-full lg:w-2/3">
+        <h2 className="border-b border-gray-200 pb-4 text-xl font-semibold">
           Shopping Cart
-        </p>
+        </h2>
 
         {cart.cartItems.length === 0 ? (
-          <p className="py-3 text-body-bold">No item in cart</p>
+          <p className="py-6 text-lg text-gray-600">Your cart is empty.</p>
         ) : (
-          <div>
+          <div className="mt-4 space-y-4">
             {cart.cartItems.map((cartItem: any, index: number) => (
               <div
                 key={index}
-                className="flex w-full items-center justify-between px-4 py-3 hover:bg-custom-gray/20 max-sm:flex-col max-sm:items-start max-sm:gap-3"
+                className="flex items-center justify-between rounded-lg bg-white p-4 shadow-md transition hover:shadow-lg"
               >
-                <div className="flex items-center">
+                {/* Product Info */}
+                <div className="flex items-center gap-4">
                   <Image
                     src={cartItem.item.media[0]}
-                    width={100}
-                    height={100}
-                    className="size-32 rounded-lg object-cover"
+                    width={80}
+                    height={80}
+                    className="rounded-lg object-cover"
                     alt="product"
                   />
-                  <div className="ml-4 flex flex-col gap-3">
-                    <p className="text-body-bold">{cartItem.item.title}</p>
+                  <div>
+                    <p className="text-lg font-medium">{cartItem.item.title}</p>
                     {cartItem.color && (
-                      <p className="text-small-medium">{cartItem.color}</p>
+                      <p className="text-sm text-gray-500">
+                        Color: {cartItem.color}
+                      </p>
                     )}
                     {cartItem.size && (
-                      <p className="text-small-medium">{cartItem.size}</p>
+                      <p className="text-sm text-gray-500">
+                        Size: {cartItem.size}
+                      </p>
                     )}
-                    <p className="text-small-medium">${cartItem.item.price}</p>
+                    <p className="text-lg font-semibold text-blue-600">
+                      ${cartItem.item.price}
+                    </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4">
+                {/* Quantity Controls */}
+                <div className="flex items-center gap-3">
                   <MinusCircle
-                    className="cursor-pointer hover:text-bondi-blue"
+                    className="cursor-pointer text-gray-500 transition hover:text-blue-500"
                     onClick={() => cart.decreaseQuantity(cartItem.item._id)}
                   />
-                  <p className="text-body-bold">{cartItem.quantity}</p>
+                  <p className="text-lg font-medium">{cartItem.quantity}</p>
                   <PlusCircle
-                    className="cursor-pointer hover:text-bondi-blue"
+                    className="cursor-pointer text-gray-500 transition hover:text-blue-500"
                     onClick={() => cart.increaseQuantity(cartItem.item._id)}
                   />
                 </div>
 
+                {/* Remove Button */}
                 <Trash
-                  className="cursor-pointer hover:text-bondi-blue"
+                  className="cursor-pointer text-red-500 transition hover:text-red-600"
                   onClick={() => cart.removeItem(cartItem.item._id)}
                 />
               </div>
@@ -97,19 +108,20 @@ export default function CartPage() {
         )}
       </div>
 
-      <div className="flex w-1/3 flex-col gap-8 rounded-lg bg-custom-gray/20 px-4 py-5 max-lg:w-full">
-        <p className="pb-4 text-heading4-bold">
+      {/* 📋 Summary Section */}
+      <div className="w-full rounded-lg bg-gray-100 p-6 shadow-md lg:w-1/3">
+        <h3 className="border-b border-gray-300 pb-3 text-lg font-semibold">
           Summary{' '}
-          <span>{`(${cart.cartItems.length} ${
-            cart.cartItems.length > 1 ? 'items' : 'item'
-          })`}</span>
-        </p>
-        <div className="flex justify-between text-body-semibold">
+          <span className="text-gray-600">
+            ({cart.cartItems.length} item{cart.cartItems.length !== 1 && 's'})
+          </span>
+        </h3>
+        <div className="flex justify-between py-4 text-lg font-medium">
           <span>Total Amount</span>
-          <span className="text-bondi-blue">৳ {totalRounded}</span>
+          <span className="text-blue-600">৳ {totalRounded}</span>
         </div>
         <button
-          className="w-full rounded-lg border bg-bondi-blue-500 py-3 text-body-bold text-white transition-colors duration-300 hover:bg-bondi-blue-400 hover:text-bondi-blue-900"
+          className="w-full rounded-lg bg-blue-500 py-3 font-semibold text-white transition hover:bg-blue-600"
           onClick={handleCheckout}
         >
           Proceed to Checkout

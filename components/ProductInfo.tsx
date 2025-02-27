@@ -1,9 +1,10 @@
 'use client';
 import useCart from '@/lib/hooks/useCart';
-import { MinusCircle, PlusCircle, Trash2 } from 'lucide-react';
+import { MinusCircle, PlusCircle } from 'lucide-react';
 import { useState } from 'react';
 import HeartFavorite from './HeartFavorite';
 import { ProductType } from '@/lib/types';
+import Image from 'next/image';
 
 type OrderItem = {
   color: string;
@@ -11,223 +12,189 @@ type OrderItem = {
   quantity: number;
 };
 
-export default function ProductInfo({
-  productInfo,
-}: {
-  productInfo: ProductType;
-}) {
-  const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
+export default function ProductInfo({ productInfo }: { productInfo: ProductType }) {
   const cart = useCart();
 
-  // Minimum total order quantity across all combinations
-  const MIN_TOTAL_QUANTITY = 5;
+  // ✅ Extract minimum order quantity
+  const minOrderQty = productInfo.minimumOrderQuantity || 1;
 
-  // Calculate total quantity across all combinations
-  const totalQuantity = orderItems.reduce(
-    (sum, item) => sum + item.quantity,
-    0,
+  // ✅ Initialize order items with color variants
+  const [orderItems, setOrderItems] = useState<OrderItem[]>(
+    productInfo.colors.map((color) => ({
+      color,
+      size: productInfo.sizes[0] || 'Default',
+      quantity: minOrderQty,
+    }))
   );
 
-  const addNewOrderItem = () => {
-    if (productInfo.colors.length === 0 || productInfo.sizes.length === 0)
-      return;
+  // ✅ Calculate total quantity
+  const totalQuantity = orderItems.reduce((sum, item) => sum + item.quantity, 0);
 
-    setOrderItems([
-      ...orderItems,
-      {
-        color: productInfo.colors[0],
-        size: productInfo.sizes[0],
-        quantity: 1,
-      },
-    ]);
+  // ✅ First range price (default product price)
+  const firstRangePrice = productInfo.price.bdt; 
+
+  // ✅ Get price based on total quantity
+  const getPriceForQuantity = (quantity: number) => {
+    const ranges = productInfo.quantityPricing?.ranges || [];
+    let selectedPrice = firstRangePrice;
+
+    for (const range of ranges) {
+      if (quantity >= range.minQuantity && (!range.maxQuantity || quantity <= range.maxQuantity)) {
+        selectedPrice = range.price.bdt;
+      }
+    }
+
+    return selectedPrice;
   };
 
-  const updateOrderItem = (
-    index: number,
-    field: keyof OrderItem,
-    value: string | number,
-  ) => {
-    const updatedItems = [...orderItems];
-    updatedItems[index] = { ...updatedItems[index], [field]: value };
-    setOrderItems(updatedItems);
+  // ✅ Get the updated price per unit based on quantity
+  const selectedPrice = getPriceForQuantity(totalQuantity);
+
+  // ✅ Discount Calculation (Simple & Exact)
+  const discount = firstRangePrice - selectedPrice;
+
+  // ✅ Show discount only when applicable
+  const isDiscountApplied = discount > 0;
+
+  // ✅ Update quantity safely
+  const updateQuantity = (index: number, change: number) => {
+    setOrderItems((prevItems) => {
+      const updatedItems = [...prevItems];
+      updatedItems[index] = {
+        ...updatedItems[index],
+        quantity: Math.max(updatedItems[index].quantity + change, minOrderQty),
+      };
+      return updatedItems;
+    });
   };
 
-  const removeOrderItem = (index: number) => {
-    setOrderItems(orderItems.filter((_, i) => i !== index));
-  };
-
+  // ✅ Add all selected items to the cart
   const addToCart = () => {
     orderItems.forEach((item) => {
-      cart.addItem({
-        item: productInfo,
-        quantity: item.quantity,
-        color: item.color,
-        size: item.size,
-      });
+      if (item.quantity > 0) {
+        cart.addItem({
+          item: productInfo,
+          quantity: item.quantity,
+          color: item.color,
+          size: item.size,
+        });
+      }
     });
 
-    // Clear order items after adding to cart
-    setOrderItems([]);
+    setOrderItems(orderItems.map((item) => ({ ...item, quantity: minOrderQty })));
   };
 
   return (
-    <div className="flex max-w-full flex-1 flex-col gap-6 p-6">
-      {/* Title & Wishlist */}
+    <div className="flex flex-col gap-6 rounded-lg bg-white p-6 shadow-md">
+      {/* Product Title & Wishlist */}
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900 transition-colors hover:text-gray-700">
-          {productInfo.title}
-        </h1>
+        <h1 className="text-2xl font-bold text-gray-900">{productInfo.title}</h1>
         <HeartFavorite product={productInfo} />
       </div>
 
       {/* Category */}
-      <div className="flex items-center gap-3">
-        <p className="text-base font-medium text-gray-500">Category:</p>
-        <p className="text-lg font-semibold text-gray-900">
-          {productInfo.category}
-        </p>
+      <div className="text-gray-600">
+        <strong>Category:</strong> {productInfo.category}
       </div>
 
-      {/* Price */}
-      <p className="animate-fade-in text-2xl font-extrabold text-blaze-orange">
-        ৳ {productInfo.price.bdt}
+      {/* Price Updates Based on Quantity Range */}
+      <p className="text-2xl font-extrabold text-blaze-orange">
+        ৳ {selectedPrice} <span className="text-sm text-gray-500">per unit</span>
       </p>
 
+      {/* ✅ Show Discount Info */}
+      {isDiscountApplied && (
+        <p className="text-green-600 text-lg font-semibold">
+          You are saving ৳ {discount} per unit!
+        </p>
+      )}
+
+      {/* Quantity Pricing Table */}
+      <div className="bg-gray-100 p-4 rounded-lg">
+        <p className="text-lg font-semibold text-gray-800">Quantity Pricing (BDT):</p>
+        <ul className="mt-2 text-gray-700">
+          {productInfo.quantityPricing?.ranges?.map((range, index) => (
+            <li key={index} className="flex justify-between text-sm border-b py-2">
+              <span>
+                {range.minQuantity} - {range.maxQuantity || '∞'} units
+              </span>
+              <span className="font-bold text-blue-600">৳ {range.price.bdt} per unit</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {/* Description */}
-      <div className="flex flex-col gap-2">
-        <p className="text-base font-medium text-gray-500">Description:</p>
-        <p className="text-sm leading-relaxed text-gray-700">
-          {productInfo.description}
-        </p>
-      </div>
+      <p className="text-gray-700">{productInfo.description}</p>
 
-      {/* Minimum Order Quantity Notice */}
-      <div className="rounded-lg bg-gray-50 py-4">
-        <p className="text-sm font-medium text-gray-700">
-          Minimum quantity: {MIN_TOTAL_QUANTITY} pieces (across all
-          combinations)
-        </p>
-        <p className="mt-1 text-sm text-gray-500">
-          Current total: {totalQuantity} pieces
-          <span className="text-blaze-orange-400">
-            {totalQuantity < MIN_TOTAL_QUANTITY &&
-              `(${MIN_TOTAL_QUANTITY - totalQuantity} more pieces needed)`}
-          </span>
-        </p>
-      </div>
+      {/* Product Variants Table */}
+      <div className="overflow-x-auto">
+        <table className="w-full rounded-lg border">
+          <thead className="bg-gray-100 text-sm uppercase text-gray-700">
+            <tr>
+              <th className="p-3 text-left">Color</th>
+              <th className="p-3 text-left">Price</th>
+              <th className="p-3 text-left">Stock</th>
+              <th className="p-3 text-center">Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orderItems.map((item, index) => (
+              <tr key={item.color} className="border-t">
+                {/* Color Image */}
+                <td className="flex items-center gap-2 p-3">
+                  <Image
+                    src={item.color}
+                    alt="Color Variant"
+                    width={50}
+                    height={50}
+                    className="rounded-lg"
+                  />
+                </td>
 
-      {/* Order Items */}
-      <div className="flex flex-col gap-4">
-        {orderItems.map((item, index) => (
-          <div
-            key={index}
-            className="rounded-lg border border-gray-200 p-4 shadow-sm"
-          >
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="font-medium">Item #{index + 1}</h3>
-              <button
-                onClick={() => removeOrderItem(index)}
-                className="text-red-500 hover:text-red-700"
-              >
-                <Trash2 className="size-5" />
-              </button>
-            </div>
+                {/* Price Updates with Quantity */}
+                <td className="p-3 text-gray-800">৳ {selectedPrice}</td>
 
-            {/* Color Selection */}
-            <div className="mb-4 flex flex-col gap-2">
-              <p className="text-sm font-medium text-gray-500">Color:</p>
-              <div className="flex flex-wrap gap-2">
-                {productInfo.colors.map((color) => (
+                {/* Stock - (Assumed stock is dynamically managed) */}
+                <td className="p-3 text-gray-600">Available</td>
+
+                {/* Quantity Selector */}
+                <td className="flex items-center justify-center gap-4 p-3">
                   <button
-                    key={color}
-                    className={`flex items-center gap-2 rounded-full border-2 px-3 py-1.5 transition-all duration-200 ${
-                      item.color === color
-                        ? 'border-black shadow-lg'
-                        : 'border-gray-300 hover:border-gray-500'
-                    }`}
-                    onClick={() => updateOrderItem(index, 'color', color)}
+                    onClick={() => updateQuantity(index, -1)}
+                    className="rounded-full bg-gray-200 p-2 hover:bg-gray-300"
                   >
-                    <div
-                      className="size-4 rounded-full"
-                      style={{ backgroundColor: color }}
-                    />
-                    <span className="text-sm capitalize">{color}</span>
+                    <MinusCircle size={20} className="text-gray-700" />
                   </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Size Selection */}
-            <div className="mb-4 flex flex-col gap-2">
-              <p className="text-sm font-medium text-gray-500">Size:</p>
-              <div className="flex flex-wrap gap-2">
-                {productInfo.sizes.map((size) => (
+                  <span className="w-8 text-center text-lg font-semibold">
+                    {item.quantity}
+                  </span>
                   <button
-                    key={size}
-                    className={`rounded-lg border px-3 py-1.5 transition-all duration-200 ${
-                      item.size === size
-                        ? 'bg-black text-white shadow-md'
-                        : 'border-gray-300 hover:bg-gray-100'
-                    }`}
-                    onClick={() => updateOrderItem(index, 'size', size)}
+                    onClick={() => updateQuantity(index, 1)}
+                    className="rounded-full bg-gray-200 p-2 hover:bg-gray-300"
                   >
-                    {size}
+                    <PlusCircle size={20} className="text-gray-700" />
                   </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Quantity Selector */}
-            <div className="flex items-center gap-4">
-              <p className="text-sm font-medium text-gray-500">Quantity:</p>
-              <div className="flex items-center gap-4">
-                <MinusCircle
-                  className="size-5 cursor-pointer transition-all duration-200 hover:scale-110 hover:text-bondi-blue"
-                  onClick={() =>
-                    item.quantity > 1 &&
-                    updateOrderItem(index, 'quantity', item.quantity - 1)
-                  }
-                />
-                <p className="w-10 text-center text-base font-bold text-gray-900">
-                  {item.quantity}
-                </p>
-                <PlusCircle
-                  className="size-5 cursor-pointer transition-all duration-200 hover:scale-110 hover:text-bondi-blue"
-                  onClick={() =>
-                    updateOrderItem(index, 'quantity', item.quantity + 1)
-                  }
-                />
-              </div>
-            </div>
-          </div>
-        ))}
-
-        {/* Add New Item Button */}
-        <button
-          onClick={addNewOrderItem}
-          className="w-full rounded-lg border-2 border-dashed border-gray-300 py-3 text-gray-500 hover:border-gray-400 hover:text-gray-600"
-        >
-          + Add Another Color/Size Combination
-        </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-col gap-4 pt-4">
+      <div className="flex flex-col gap-4 pt-4 md:flex-row">
         <button
-          className="w-full rounded-lg bg-blaze-orange py-4 text-lg font-bold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-blaze-orange-600 hover:shadow-md active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
-          onClick={() => addToCart()}
-          disabled={
-            orderItems.length === 0 || totalQuantity < MIN_TOTAL_QUANTITY
-          }
+          className="w-full rounded-lg bg-blaze-orange py-3 text-lg font-bold text-white transition hover:bg-blaze-orange-600 md:w-1/2"
+          onClick={addToCart}
+          disabled={totalQuantity < minOrderQty}
         >
           Add To Cart
         </button>
         <button
-          className="w-full rounded-lg bg-bondi-blue-600 py-4 text-lg font-bold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-bondi-blue hover:shadow-md active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
-          onClick={() => addToCart()}
-          disabled={
-            orderItems.length === 0 || totalQuantity < MIN_TOTAL_QUANTITY
-          }
+          className="w-full rounded-lg bg-bondi-blue-600 py-3 text-lg font-bold text-white transition hover:bg-bondi-blue-700 md:w-1/2"
+          onClick={addToCart}
+          disabled={totalQuantity < minOrderQty}
         >
           Order Now
         </button>
