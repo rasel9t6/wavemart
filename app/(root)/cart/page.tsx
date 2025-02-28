@@ -12,7 +12,7 @@ export default function CartPage() {
 
   const total = cart.cartItems.reduce(
     (acc: number, cartItem: any) =>
-      acc + cartItem.item.price * cartItem.quantity,
+      acc + cartItem.item.price.bdt * cartItem.quantity,
     0,
   );
   const totalRounded = parseFloat(total.toFixed(2));
@@ -58,30 +58,27 @@ export default function CartPage() {
                 className="flex items-center justify-between rounded-lg bg-white p-4 shadow-md transition hover:shadow-lg"
               >
                 {/* Product Info */}
-                <div className="flex items-center gap-4">
-                  <Image
-                    src={cartItem.item.media[0]}
-                    width={80}
-                    height={80}
-                    className="rounded-lg object-cover"
-                    alt="product"
-                  />
-                  <div>
-                    <p className="text-lg font-medium">{cartItem.item.title}</p>
-                    {cartItem.color && (
-                      <p className="text-sm text-gray-500">
-                        Color: {cartItem.color}
-                      </p>
-                    )}
-                    {cartItem.size && (
-                      <p className="text-sm text-gray-500">
-                        Size: {cartItem.size}
-                      </p>
-                    )}
-                    <p className="text-lg font-semibold text-blue-600">
-                      ${cartItem.item.price}
+                <div className="flex items-center  gap-4">
+                  <p className="text-lg font-medium">{cartItem.item.title}</p>
+                  {cartItem.color && (
+                    <span className="flex items-center gap-2 p-3">
+                      <Image
+                        src={cartItem.color}
+                        alt="Color Variant"
+                        width={50}
+                        height={50}
+                        className="rounded-lg"
+                      />
+                    </span>
+                  )}
+                  {cartItem.size && (
+                    <p className="text-sm text-gray-500">
+                      Size: {cartItem.size}
                     </p>
-                  </div>
+                  )}
+                  <p className="text-lg font-semibold text-blue-600">
+                    ${cartItem.item.price.bdt}
+                  </p>
                 </div>
 
                 {/* Quantity Controls */}

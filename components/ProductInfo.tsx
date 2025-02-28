@@ -3,9 +3,10 @@ import useCart from '@/lib/hooks/useCart';
 import { MinusCircle, PlusCircle } from 'lucide-react';
 import { useState } from 'react';
 import HeartFavorite from './HeartFavorite';
-import { ProductType } from '@/lib/types';
+import { OrderItemType, ProductType } from '@/lib/types';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import OrderModal from './OrderModal';
 
 type OrderItem = {
   color: string;
@@ -19,7 +20,7 @@ export default function ProductInfo({
   productInfo: ProductType;
 }) {
   const cart = useCart();
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   // ✅ Extract minimum order quantity
   const minOrderQty = productInfo.minimumOrderQuantity || 1;
 
@@ -72,15 +73,6 @@ export default function ProductInfo({
   const totalDiscount = discount * totalQuantity;
   // ✅ Show discount only when there's an actual price difference
   const isDiscountApplied = discount > 0;
-
-  // For debugging
-  console.log({
-    totalQuantity,
-    firstRangePrice,
-    selectedPrice,
-    discount,
-    isDiscountApplied,
-  });
 
   // ✅ Update quantity safely
   const updateQuantity = (index: number, change: number) => {
@@ -141,7 +133,21 @@ export default function ProductInfo({
       orderItems.map((item) => ({ ...item, quantity: minOrderQty })),
     );
   };
-
+  const handleOrderNow = () => {
+    addToCart(); // ✅ Adds to cart
+    setTimeout(() => setIsModalOpen(true), 300); // ✅ Open modal with slight delay
+  };
+  const formattedOrderItems: OrderItemType[] = orderItems.map(
+    (item, index) => ({
+      _id: `${productInfo._id}-${index}`, // Generating a unique ID
+      product: productInfo,
+      color: item.color,
+      size: item.size,
+      quantity: item.quantity,
+      price: selectedPrice,
+      totalPrice: item.quantity * selectedPrice,
+    }),
+  );
   return (
     <motion.div
       className="flex flex-col gap-6 rounded-lg bg-white p-6 shadow-md"
@@ -304,7 +310,7 @@ export default function ProductInfo({
                       className="w-16 appearance-none rounded-md border border-gray-300 p-1 text-center text-lg 
              font-semibold [-moz-appearance:textfield] 
              [&::-webkit-inner-spin-button]:appearance-none 
-             [&::-webkit-outer-spin-button]:appearance-none" // Hide arrows in Chrome, Edge, Safari, and Firefox
+             [&::-webkit-outer-spin-button]:appearance-none"
                       min={minOrderQty}
                       initial={{ scale: 1 }}
                       animate={{ scale: 1 }}
@@ -345,7 +351,7 @@ export default function ProductInfo({
         </motion.button>
         <motion.button
           className="w-full rounded-lg bg-bondi-blue-600 py-3 text-lg font-bold text-white transition hover:bg-bondi-blue-700 md:w-1/2"
-          onClick={addToCart}
+          onClick={handleOrderNow} // ✅ Calls function to add & open modal
           disabled={totalQuantity < minOrderQty}
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
@@ -353,6 +359,18 @@ export default function ProductInfo({
           Order Now
         </motion.button>
       </motion.div>
+      {/* ✅ Order Modal */}
+      {isModalOpen && (
+        <OrderModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          orderItems={formattedOrderItems}
+          totalQuantity={totalQuantity}
+          selectedPrice={selectedPrice}
+          totalDiscount={totalDiscount}
+          productInfo={productInfo}
+        />
+      )}
     </motion.div>
   );
 }

@@ -46,18 +46,33 @@ export type UserType = {
 };
 
 export type OrderItemType = {
+  _id: string;
   product: ProductType;
   color: string;
   size: string;
   quantity: number;
-  _id: string;
+  price: number; // Added price to track unit price at order time
+  totalPrice: number; // Helps calculate order total per product
 };
 
 export type OrderType = {
-  shippingAddress: Record<string, unknown>;
   _id: string;
   customerClerkId: string;
-  products: Array<OrderItemType>;
-  shippingRate: string;
-  totalAmount: number;
+  products: OrderItemType[]; // Array<OrderItemType> is fine, but this is cleaner
+  shippingAddress: {
+    name: string;
+    phone: string;
+    address: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    postalCode?: string;
+  };
+  shippingRate: {
+    method: 'air' | 'sea';
+    deliveryType: 'door-to-door' | 'warehouse';
+    cost: number;
+    estimatedDelivery: string; // Example: '3-5 days'
+  };
+  totalAmount: number; // Sum of all product prices + shipping cost
 };
