@@ -5,7 +5,7 @@ import { useState } from 'react';
 import HeartFavorite from './HeartFavorite';
 import { ProductType } from '@/lib/types';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type OrderItem = {
   color: string;
@@ -90,6 +90,36 @@ export default function ProductInfo({
         ...updatedItems[index],
         quantity: Math.max(updatedItems[index].quantity + change, minOrderQty),
       };
+      return updatedItems;
+    });
+  };
+
+  // ✅ Handle manual quantity input
+  const handleQuantityInput = (index: number, value: string) => {
+    const numValue = parseInt(value, 10);
+
+    if (!isNaN(numValue) && numValue >= minOrderQty) {
+      setOrderItems((prevItems) => {
+        const updatedItems = [...prevItems];
+        updatedItems[index] = {
+          ...updatedItems[index],
+          quantity: numValue,
+        };
+        return updatedItems;
+      });
+    }
+  };
+
+  // ✅ Handle input blur to validate minimum quantity
+  const handleInputBlur = (index: number) => {
+    setOrderItems((prevItems) => {
+      const updatedItems = [...prevItems];
+      if (updatedItems[index].quantity < minOrderQty) {
+        updatedItems[index] = {
+          ...updatedItems[index],
+          quantity: minOrderQty,
+        };
+      }
       return updatedItems;
     });
   };
@@ -252,9 +282,9 @@ export default function ProductInfo({
                 {/* Stock - (Assumed stock is dynamically managed) */}
                 <td className="p-3 text-gray-600">Available</td>
 
-                {/* Quantity Selector */}
+                {/* Quantity Selector with Manual Input */}
                 <td className="p-3 text-center">
-                  <div className="flex items-center justify-center gap-4">
+                  <div className="flex items-center justify-center gap-2">
                     <motion.button
                       onClick={() => updateQuantity(index, -1)}
                       className="rounded-full bg-gray-200 p-2 hover:bg-gray-300"
@@ -262,15 +292,26 @@ export default function ProductInfo({
                     >
                       <MinusCircle size={20} className="text-gray-700" />
                     </motion.button>
-                    <motion.span
-                      className="w-8 text-center text-lg font-semibold"
-                      key={item.quantity}
-                      initial={{ scale: 1.2 }}
+
+                    {/* Manual input field */}
+                    <motion.input
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) =>
+                        handleQuantityInput(index, e.target.value)
+                      }
+                      onBlur={() => handleInputBlur(index)}
+                      className="w-16 appearance-none rounded-md border border-gray-300 p-1 text-center text-lg 
+             font-semibold [-moz-appearance:textfield] 
+             [&::-webkit-inner-spin-button]:appearance-none 
+             [&::-webkit-outer-spin-button]:appearance-none" // Hide arrows in Chrome, Edge, Safari, and Firefox
+                      min={minOrderQty}
+                      initial={{ scale: 1 }}
                       animate={{ scale: 1 }}
+                      whileFocus={{ scale: 1.05 }}
                       transition={{ type: 'spring', stiffness: 300 }}
-                    >
-                      {item.quantity}
-                    </motion.span>
+                    />
+
                     <motion.button
                       onClick={() => updateQuantity(index, 1)}
                       className="rounded-full bg-gray-200 p-2 hover:bg-gray-300"
