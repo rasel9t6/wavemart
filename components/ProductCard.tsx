@@ -11,6 +11,7 @@ export default function ProductCard({
   product,
   updateSignedInUser,
 }: ProductCardProps) {
+  console.log(product);
   return (
     <Link
       href={`/products/${product._id}`}
@@ -19,7 +20,7 @@ export default function ProductCard({
       {/* 🖼 Product Image */}
       <div className="relative h-48 w-full overflow-hidden rounded-lg">
         <Image
-          src={product.media[0]}
+          src={product?.media[0] ?? '/not-found.gif'}
           alt={product.title}
           fill
           objectFit="cover"
@@ -37,7 +38,9 @@ export default function ProductCard({
 
       {/* 💰 Price & Wishlist */}
       <div className="flex items-center justify-between">
-        <p className="text-lg font-bold text-blaze-orange">৳{product.price.bdt}</p>
+        <p className="text-lg font-bold text-blaze-orange">
+          ৳{product.price.bdt}
+        </p>
         {updateSignedInUser && (
           <HeartFavorite
             product={product}

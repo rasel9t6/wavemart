@@ -11,7 +11,7 @@ export default async function CategoryDetailsPage({
   params: { categoryId: string };
 }) {
   const categoryDetails = await getCategoryDetails(params.categoryId);
-  console.log(categoryDetails);
+
   const { title, description, thumbnail, products, name, subcategories } =
     categoryDetails;
 

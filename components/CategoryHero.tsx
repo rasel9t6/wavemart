@@ -14,6 +14,7 @@ export default function CategoryHero({
   thumbnail,
   products,
 }: CategoryHeroProps) {
+  console.log(products)
   return (
     <>
       {/* Hero Section */}
@@ -49,10 +50,21 @@ export default function CategoryHero({
         <div className="rounded-xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md sm:p-6">
           <p className="text-sm text-gray-500">Price Range</p>
           {products && products.length > 0 ? (
-            <p className="text-nowrap text-xl font-bold text-gray-900 sm:text-2xl md:text-3xl">
-              ৳{Math.min(...products.map((p: any) => p.price.bdt))} - ৳
-              {Math.max(...products.map((p: any) => p.price.bdt))}
-            </p>
+            (() => {
+              const validPrices = products
+                .map((p: any) => p?.price?.bdt) // ✅ Check if price & price.bdt exist
+                .filter((price) => typeof price === 'number'); // ✅ Remove undefined/null values
+
+              return validPrices.length > 0 ? (
+                <p className="text-nowrap text-xl font-bold text-gray-900 sm:text-2xl md:text-3xl">
+                  ৳{Math.min(...validPrices)} - ৳{Math.max(...validPrices)}
+                </p>
+              ) : (
+                <p className="text-nowrap text-xl font-bold text-gray-900 sm:text-2xl md:text-3xl">
+                  No price available
+                </p>
+              );
+            })()
           ) : (
             <p className="text-nowrap text-xl font-bold text-gray-900 sm:text-2xl md:text-3xl">
               No price available
