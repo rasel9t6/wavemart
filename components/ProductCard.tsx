@@ -21,7 +21,7 @@ export default function ProductCard({
         <Image
           src={product.media[0]}
           alt={product.title}
-          layout="fill"
+          fill
           objectFit="cover"
           className="rounded-lg transition-transform duration-300 group-hover:scale-105"
         />
@@ -37,7 +37,7 @@ export default function ProductCard({
 
       {/* 💰 Price & Wishlist */}
       <div className="flex items-center justify-between">
-        <p className="text-lg font-bold text-blue-600">৳{product.price.bdt}</p>
+        <p className="text-lg font-bold text-blaze-orange">৳{product.price.bdt}</p>
         {updateSignedInUser && (
           <HeartFavorite
             product={product}
