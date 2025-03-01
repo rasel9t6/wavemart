@@ -5,7 +5,7 @@ import { ProductType } from '@/lib/types';
 
 interface ProductCardProps {
   product: ProductType;
-  updateSignedInUser?: () => void;
+  updateSignedInUser?: any;
 }
 export default function ProductCard({
   product,

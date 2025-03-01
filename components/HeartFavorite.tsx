@@ -8,7 +8,7 @@ import { ProductType, UserType } from '@/lib/types';
 
 interface HeartFavoriteProps {
   product: ProductType;
-  updateSignedInUser?: (updatedUser: UserType) => void;
+  updateSignedInUser?: any;
 }
 
 export default function HeartFavorite({
@@ -72,10 +72,8 @@ export default function HeartFavorite({
       const updatedUser: UserType = await res.json();
       setIsLiked(updatedUser.wishlist.includes(product._id));
 
-      // Call the parent component's update function if provided
-      if (updateSignedInUser) {
-        updateSignedInUser(updatedUser);
-      }
+      // Call `updateSignedInUser` only if it's provided
+      updateSignedInUser?.(updatedUser);
     } catch (err) {
       console.error('[wishlist_POST]', err);
     } finally {
