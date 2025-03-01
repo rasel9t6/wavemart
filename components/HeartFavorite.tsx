@@ -1,15 +1,16 @@
 'use client';
+
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { FaHeart, FaRegHeart } from 'react-icons/fa6';
 import React, { useState, useEffect, useCallback } from 'react';
-import { ProductType } from '@/lib/types';
+import { ProductType, UserType } from '@/lib/types';
 
 interface HeartFavoriteProps {
   product: ProductType;
-  // eslint-disable-next-line no-unused-vars
-  updateSignedInUser?: (user: any) => void;
+  updateSignedInUser?: (updatedUser: UserType) => void;
 }
+
 export default function HeartFavorite({
   product,
   updateSignedInUser,
@@ -23,10 +24,16 @@ export default function HeartFavorite({
     try {
       setLoading(true);
       const res = await fetch('/api/users');
-      const data = await res.json();
-      setIsLiked(data.wishlist.includes(product._id));
+      if (!res.ok) {
+        throw new Error('Failed to fetch user data');
+      }
+      const data: UserType = await res.json();
+
+      if (data?.wishlist && Array.isArray(data.wishlist)) {
+        setIsLiked(data.wishlist.includes(product._id));
+      }
     } catch (err) {
-      console.log('[users_GET]', err);
+      console.error('[users_GET]', err);
     } finally {
       setLoading(false);
     }
@@ -42,31 +49,47 @@ export default function HeartFavorite({
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
+
+    if (!user) {
+      router.push('/sign-in');
+      return;
+    }
+
     try {
-      if (!user) {
-        router.push('/sign-in');
-      } else {
-        const res = await fetch('/api/users/wishlist', {
-          method: 'POST',
-          body: JSON.stringify({ productId: product._id }),
-        });
-        const updatedUser = await res.json();
-        setIsLiked(updatedUser.wishlist.includes(product._id));
-        if (updateSignedInUser) {
-          updateSignedInUser(updatedUser);
-        }
+      setLoading(true);
+      const res = await fetch('/api/users/wishlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId: product._id }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to update wishlist');
+      }
+
+      const updatedUser: UserType = await res.json();
+      setIsLiked(updatedUser.wishlist.includes(product._id));
+
+      // Call the parent component's update function if provided
+      if (updateSignedInUser) {
+        updateSignedInUser(updatedUser);
       }
     } catch (err) {
-      console.log('[wishlist_POST]', err);
+      console.error('[wishlist_POST]', err);
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
-    <button onClick={handleLike}>
+    <button onClick={handleLike} disabled={loading}>
       {isLiked ? (
         <FaHeart
           fill="#00ABB3"
           size={20}
-          className={`${loading && 'animate-pulse'}`}
+          className={loading ? 'animate-pulse' : ''}
         />
       ) : (
         <FaRegHeart fill="#00ABB3" size={20} />

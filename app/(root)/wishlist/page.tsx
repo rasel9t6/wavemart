@@ -1,4 +1,5 @@
 'use client';
+
 import ProductCard from '@/components/ProductCard';
 import { getProductDetails } from '@/lib/actions';
 import { ProductType, UserType } from '@/lib/types';
@@ -20,7 +21,7 @@ export default function WishListPage() {
       setSignedInUser(data);
       setLoading(false);
     } catch (err) {
-      console.log('[users_GET', err);
+      console.log('[users_GET]', err);
     }
   };
 
@@ -68,11 +69,14 @@ export default function WishListPage() {
           <ProductCard
             key={product._id}
             product={product}
-            updateSignedInUser={updateSignedInUser}
+            updateSignedInUser={(updatedUser) =>
+              updateSignedInUser(updatedUser)
+            } // Fixed issue
           />
         ))}
       </div>
     </div>
   );
 }
+
 export const dynamic = 'force-dynamic';
