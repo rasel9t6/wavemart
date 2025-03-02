@@ -207,34 +207,25 @@ export default function ProductInfo({
       </div>
 
       {/* Quantity Pricing Table */}
-      <motion.div
-        className="rounded-lg bg-gray-100 p-4"
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.4 }}
-      >
-        <p className="text-lg font-semibold text-gray-800">
-          Quantity Pricing (BDT):
-        </p>
-        <ul className="mt-2 text-gray-700">
-          {productInfo.quantityPricing?.ranges?.map((range, index) => (
-            <motion.li
-              key={index}
-              className="flex justify-between border-b py-2 text-sm"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 + index * 0.1 }}
-            >
-              <span>
-                {range.minQuantity} - {range.maxQuantity || '∞'} units
-              </span>
-              <span className="font-bold text-blue-600">
-                ৳ {range.price.bdt} per unit
-              </span>
-            </motion.li>
-          ))}
-        </ul>
-      </motion.div>
+      <div className="flex space-x-4">
+        {productInfo.quantityPricing?.ranges?.map((range, index) => (
+          <motion.div
+            key={index}
+            className="rounded-lg border p-4 text-center shadow-sm"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4 + index * 0.1 }}
+          >
+            <p className="text-xl font-bold text-gray-900">
+              ৳{range.price.bdt}
+            </p>
+            <p className="text-sm text-gray-600">
+              {range.minQuantity}
+              {range.maxQuantity ? `-${range.maxQuantity}` : '+'} Pcs
+            </p>
+          </motion.div>
+        ))}
+      </div>
 
       {/* Description */}
       <motion.p
