@@ -7,6 +7,7 @@ import { OrderItemType, ProductType } from '@/lib/types';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import OrderModal from './OrderModal';
+import toast from 'react-hot-toast'; // Import toast
 
 type OrderItem = {
   color: string;
@@ -23,13 +24,13 @@ export default function ProductInfo({
   const [isModalOpen, setIsModalOpen] = useState(false);
   // ✅ Extract minimum order quantity
   const minOrderQty = productInfo.minimumOrderQuantity || 1;
-  console.log('product info', productInfo);
-  // ✅ Initialize order items with color variants
+
+  // ✅ Initialize order items with color variants and ZERO quantity
   const [orderItems, setOrderItems] = useState<OrderItem[]>(
     productInfo.colors.map((color) => ({
       color,
       size: productInfo.sizes[0] || 'Default',
-      quantity: minOrderQty,
+      quantity: 0,
     })),
   );
 
@@ -74,23 +75,23 @@ export default function ProductInfo({
   // ✅ Show discount only when there's an actual price difference
   const isDiscountApplied = discount > 0;
 
-  // ✅ Update quantity safely
+  // ✅ Update quantity safely - allow going down to zero
   const updateQuantity = (index: number, change: number) => {
     setOrderItems((prevItems) => {
       const updatedItems = [...prevItems];
       updatedItems[index] = {
         ...updatedItems[index],
-        quantity: Math.max(updatedItems[index].quantity + change, minOrderQty),
+        quantity: Math.max(updatedItems[index].quantity + change, 0),
       };
       return updatedItems;
     });
   };
 
-  // ✅ Handle manual quantity input
+  // ✅ Handle manual quantity input - allow any positive number
   const handleQuantityInput = (index: number, value: string) => {
     const numValue = parseInt(value, 10);
 
-    if (!isNaN(numValue) && numValue >= minOrderQty) {
+    if (!isNaN(numValue) && numValue >= 0) {
       setOrderItems((prevItems) => {
         const updatedItems = [...prevItems];
         updatedItems[index] = {
@@ -102,22 +103,13 @@ export default function ProductInfo({
     }
   };
 
-  // ✅ Handle input blur to validate minimum quantity
-  const handleInputBlur = (index: number) => {
-    setOrderItems((prevItems) => {
-      const updatedItems = [...prevItems];
-      if (updatedItems[index].quantity < minOrderQty) {
-        updatedItems[index] = {
-          ...updatedItems[index],
-          quantity: minOrderQty,
-        };
-      }
-      return updatedItems;
-    });
-  };
-
-  // ✅ Add all selected items to the cart
+  // ✅ Add all selected items to the cart with minimum quantity validation
   const addToCart = () => {
+    if (totalQuantity < minOrderQty) {
+      toast.error(`Minimum order quantity is ${minOrderQty} units.`);
+      return;
+    }
+
     orderItems.forEach((item) => {
       if (item.quantity > 0) {
         cart.addItem({
@@ -129,14 +121,24 @@ export default function ProductInfo({
       }
     });
 
-    setOrderItems(
-      orderItems.map((item) => ({ ...item, quantity: minOrderQty })),
-    );
+    toast.success('Added to cart!');
+    setOrderItems(orderItems.map((item) => ({ ...item, quantity: 0 })));
   };
+
+  // ✅ Handle Order Now with minimum quantity validation
   const handleOrderNow = () => {
+    if (totalQuantity < minOrderQty) {
+      toast.error(`Minimum order quantity is ${minOrderQty} units.`);
+      return;
+    }
+
     addToCart(); // ✅ Adds to cart
     setTimeout(() => setIsModalOpen(true), 300); // ✅ Open modal with slight delay
   };
+
+  // ✅ Show warning if total quantity is less than minimum ONLY when attempting to submit
+  // ✅ Removed the useEffect warning since we want users to freely input any quantity
+
   const formattedOrderItems: OrderItemType[] = orderItems.map(
     (item, index) => ({
       _id: `${productInfo._id}-${index}`, // Generating a unique ID
@@ -168,14 +170,19 @@ export default function ProductInfo({
         <HeartFavorite product={productInfo} />
       </motion.div>
 
-      {/* Category */}
+      {/* SKU & Category */}
       <motion.div
-        className="text-gray-600"
+        className="flex flex-col space-y-2 text-gray-600"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
-        <strong>Category:</strong> {productInfo.category.name}
+        <div>
+          <strong>SKU:</strong> {productInfo.sku || 'N/A'}
+        </div>
+        <div>
+          <strong>Category:</strong> {productInfo.category.name}
+        </div>
       </motion.div>
 
       {/* Price Updates Based on Quantity Range */}
@@ -188,6 +195,16 @@ export default function ProductInfo({
         ৳ {selectedPrice}{' '}
         <span className="text-sm text-gray-500">per unit</span>
       </motion.p>
+
+      {/* Minimum Order Notice */}
+      <motion.div
+        className="rounded-md bg-gray-100 p-3 text-gray-700"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.25 }}
+      >
+        <strong>Minimum Order:</strong> {minOrderQty} units
+      </motion.div>
 
       {/* ✅ Show Discount Info - With fixed height container to prevent layout shift */}
       <div className="h-8">
@@ -286,8 +303,12 @@ export default function ProductInfo({
                       onClick={() => updateQuantity(index, -1)}
                       className="rounded-full bg-gray-200 p-2 hover:bg-gray-300"
                       whileTap={{ scale: 0.9 }}
+                      disabled={item.quantity <= 0}
                     >
-                      <MinusCircle size={20} className="text-gray-700" />
+                      <MinusCircle
+                        size={20}
+                        className={`${item.quantity <= 0 ? 'text-gray-400' : 'text-gray-700'}`}
+                      />
                     </motion.button>
 
                     {/* Manual input field */}
@@ -297,12 +318,11 @@ export default function ProductInfo({
                       onChange={(e) =>
                         handleQuantityInput(index, e.target.value)
                       }
-                      onBlur={() => handleInputBlur(index)}
                       className="w-16 appearance-none rounded-md border border-gray-300 p-1 text-center text-lg 
              font-semibold [-moz-appearance:textfield] 
              [&::-webkit-inner-spin-button]:appearance-none 
              [&::-webkit-outer-spin-button]:appearance-none"
-                      min={minOrderQty}
+                      min={0}
                       initial={{ scale: 1 }}
                       animate={{ scale: 1 }}
                       whileFocus={{ scale: 1.05 }}
@@ -332,24 +352,44 @@ export default function ProductInfo({
         transition={{ delay: 0.8 }}
       >
         <motion.button
-          className="w-full rounded-lg bg-blaze-orange py-3 text-lg font-bold text-white transition hover:bg-blaze-orange-600 md:w-1/2"
+          className={`w-full rounded-lg py-3 text-lg font-bold text-white transition md:w-1/2 ${
+            totalQuantity < minOrderQty
+              ? 'cursor-not-allowed bg-gray-400'
+              : 'bg-blaze-orange hover:bg-blaze-orange-600'
+          }`}
           onClick={addToCart}
           disabled={totalQuantity < minOrderQty}
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
+          whileHover={totalQuantity >= minOrderQty ? { scale: 1.03 } : {}}
+          whileTap={totalQuantity >= minOrderQty ? { scale: 0.97 } : {}}
         >
           Add To Cart
         </motion.button>
         <motion.button
-          className="w-full rounded-lg bg-bondi-blue-600 py-3 text-lg font-bold text-white transition hover:bg-bondi-blue-700 md:w-1/2"
-          onClick={handleOrderNow} // ✅ Calls function to add & open modal
+          className={`w-full rounded-lg py-3 text-lg font-bold text-white transition md:w-1/2 ${
+            totalQuantity < minOrderQty
+              ? 'cursor-not-allowed bg-gray-400'
+              : 'bg-bondi-blue-600 hover:bg-bondi-blue-700'
+          }`}
+          onClick={handleOrderNow}
           disabled={totalQuantity < minOrderQty}
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
+          whileHover={totalQuantity >= minOrderQty ? { scale: 1.03 } : {}}
+          whileTap={totalQuantity >= minOrderQty ? { scale: 0.97 } : {}}
         >
           Order Now
         </motion.button>
       </motion.div>
+
+      {/* Minimum Order Quantity Warning - Visual indicator */}
+      {totalQuantity > 0 && totalQuantity < minOrderQty && (
+        <motion.div
+          className="mt-4 rounded-md bg-red-50 p-3 text-red-600"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          You must order at least {minOrderQty} units to place an order.
+        </motion.div>
+      )}
+
       {/* ✅ Order Modal */}
       {isModalOpen && (
         <OrderModal

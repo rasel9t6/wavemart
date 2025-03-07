@@ -1,5 +1,6 @@
 type ProductType = {
   _id: string;
+  sku: string;
   slug: string;
   title: string;
   description: string;
