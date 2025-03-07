@@ -17,7 +17,7 @@ export default function SidebarContent({ categories }: { categories: any[] }) {
         : [...prev, id],
     );
   };
-
+  console.log('sidebar', categories);
   return (
     <motion.nav
       initial={{ opacity: 0 }}

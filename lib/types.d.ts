@@ -3,7 +3,7 @@ type ProductType = {
   title: string;
   description: string;
   media: Array<string>;
-  category: string;
+  category: { name: string };
   collections: Array<string>;
   tags: Array<string>;
   price: {
@@ -74,5 +74,9 @@ export type OrderType = {
     cost: number;
     estimatedDelivery: string; // Example: '3-5 days'
   };
+  customer?: {
+    name: string;
+  };
+  status: 'pending' | 'processing' | 'shipped' | 'delivered';
   totalAmount: number; // Sum of all product prices + shipping cost
 };

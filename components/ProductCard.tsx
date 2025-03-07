@@ -33,7 +33,7 @@ export default function ProductCard({
         <p className="truncate text-lg font-semibold text-gray-800">
           {product.title}
         </p>
-        <p className="text-sm text-gray-500">{product.category}</p>
+        <p className="text-sm text-gray-500">{product.category.name}</p>
       </div>
 
       {/* 💰 Price & Wishlist */}

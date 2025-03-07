@@ -23,7 +23,7 @@ export default function ProductInfo({
   const [isModalOpen, setIsModalOpen] = useState(false);
   // ✅ Extract minimum order quantity
   const minOrderQty = productInfo.minimumOrderQuantity || 1;
-
+  console.log('product info', productInfo);
   // ✅ Initialize order items with color variants
   const [orderItems, setOrderItems] = useState<OrderItem[]>(
     productInfo.colors.map((color) => ({

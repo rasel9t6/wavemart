@@ -1,37 +1,43 @@
-import { getOrders } from '@/lib/actions';
+import { getAllOrders } from '@/lib/actions';
 import { OrderType, OrderItemType } from '@/lib/types';
-import { auth } from '@clerk/nextjs/server';
 import Image from 'next/image';
 
 export default async function OrdersPage() {
-  const { userId } = auth();
-  const orders = await getOrders(userId as string);
+  const orders = await getAllOrders(); // Fetch all orders
 
   return (
     <div className="px-10 py-5 max-sm:px-3">
-      <p className="my-10 text-heading3-bold">Your Orders</p>
-      {!orders ||
-        (orders.length === 0 && (
-          <p className="my-5 text-body-bold">You have no orders yet.</p>
-        ))}
+      <p className="my-10 text-heading3-bold">All Orders</p>
+
+      {(!orders || orders.length === 0) && (
+        <p className="my-5 text-body-bold">No orders have been placed yet.</p>
+      )}
 
       <div className="flex flex-col gap-10">
         {orders?.map((order: OrderType) => (
           <div
             key={order._id}
-            className="flex flex-col gap-8 p-4 hover:bg-custom-gray"
+            className="flex flex-col gap-8 rounded-lg border p-4 hover:bg-custom-gray"
           >
-            <div className="flex gap-20 max-md:flex-col max-md:gap-3">
+            {/* Order ID, Customer Name, and Total Amount */}
+            <div className="flex flex-wrap gap-6 max-md:flex-col">
               <p className="text-base-bold">Order ID: {order._id}</p>
               <p className="text-base-bold">
-                Total Amount: ${order.totalAmount}
+                Customer: {order.customer?.name || 'Unknown Customer'}
+              </p>
+              <p className="text-base-bold">
+                Total Amount: ৳{order.totalAmount}
+              </p>
+              <p className="text-base-bold text-gray-600">
+                Status: {order.status}
               </p>
             </div>
 
+            {/* Ordered Products */}
             <div className="flex flex-col gap-5">
               {order.products.map((orderItem: OrderItemType) => (
                 <div key={orderItem._id} className="flex gap-4">
-                  {orderItem.product && (
+                  {orderItem.product ? (
                     <>
                       <Image
                         src={orderItem.product.media?.[0] || '/placeholder.jpg'}
@@ -66,7 +72,7 @@ export default async function OrdersPage() {
                         <p className="text-small-medium">
                           Unit price:{' '}
                           <span className="text-small-bold">
-                            {orderItem.product.price.bdt}
+                            {orderItem.product?.price?.bdt || 'N/A'}
                           </span>
                         </p>
                         <p className="text-small-medium">
@@ -77,8 +83,7 @@ export default async function OrdersPage() {
                         </p>
                       </div>
                     </>
-                  )}
-                  {!orderItem.product && (
+                  ) : (
                     <p className="text-small-medium text-red-500">
                       Product information is unavailable.
                     </p>

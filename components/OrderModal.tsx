@@ -130,13 +130,17 @@ export default function OrderModal({
             placeholder="Phone Number"
             className="w-full rounded-md border p-2"
           />
-          <textarea
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            placeholder="Enter Shipping Address"
-            className="w-full rounded-md border p-2"
-          ></textarea>
+
+          {/* ✅ Show Shipping Address if "Door to Door" is selected */}
+          {formData.deliveryType === 'door-to-door' && (
+            <textarea
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              placeholder="Enter Shipping Address"
+              className="w-full rounded-md border p-2"
+            ></textarea>
+          )}
 
           {/* Shipping Method */}
           <div>
@@ -166,10 +170,11 @@ export default function OrderModal({
             </select>
           </div>
 
-          {/* ✅ Show Warehouse Location if Chosen */}
+          {/* ✅ Show Warehouse Location if "Pick Up from Warehouse" is selected */}
           {formData.deliveryType === 'warehouse' && (
             <p className="text-sm text-gray-600">
-              📍 Warehouse Location: **XYZ Industrial Zone, Dhaka**
+              📍 Warehouse Location: Road 01/B, House 08, Nikunja-2, Khilkhet,
+              Dhaka, Bangladesh
             </p>
           )}
         </div>
