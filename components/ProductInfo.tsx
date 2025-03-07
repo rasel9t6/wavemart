@@ -175,7 +175,7 @@ export default function ProductInfo({
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
-        <strong>Category:</strong> {productInfo.category}
+        <strong>Category:</strong> {productInfo.category.name}
       </motion.div>
 
       {/* Price Updates Based on Quantity Range */}

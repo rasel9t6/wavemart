@@ -11,10 +11,9 @@ export default function ProductCard({
   product,
   updateSignedInUser,
 }: ProductCardProps) {
-  console.log(product);
   return (
     <Link
-      href={`/products/${product._id}`}
+      href={`/products/${product.slug}`}
       className="group flex flex-col gap-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all duration-300 hover:shadow-lg"
     >
       {/* 🖼 Product Image */}
