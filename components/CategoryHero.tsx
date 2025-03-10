@@ -14,7 +14,7 @@ export default function CategoryHero({
   thumbnail,
   products,
 }: CategoryHeroProps) {
-  console.log(products)
+  console.log(products);
   return (
     <>
       {/* Hero Section */}
@@ -40,7 +40,7 @@ export default function CategoryHero({
       </div>
 
       {/* Collection Stats */}
-      <div className="mb-6 grid grid-cols-1 gap-4 sm:mb-12 sm:grid-cols-2 sm:gap-6 md:grid-cols-3">
+      <div className=" grid grid-cols-1 gap-4  sm:grid-cols-2 sm:gap-6 md:grid-cols-3">
         <div className="rounded-xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md sm:p-6">
           <p className="text-sm text-gray-500">Total Products</p>
           <p className="text-2xl font-bold text-gray-900 sm:text-3xl">

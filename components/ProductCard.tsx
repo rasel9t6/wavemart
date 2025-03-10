@@ -22,8 +22,7 @@ export default function ProductCard({
           src={product?.media[0] ?? '/not-found.gif'}
           alt={product.title}
           fill
-          objectFit="cover"
-          className="rounded-lg transition-transform duration-300 group-hover:scale-105"
+          className="rounded-lg object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
 

@@ -166,23 +166,37 @@ export const getAllOrders = async () => {
 // 🔹 Fetch Related Products
 export const getRelatedProducts = async (productId: string) => {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/products/${productId}/related`,
-      { cache: 'no-store' },
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+
+    console.log(
+      `Fetching related products from: ${apiUrl}/products/${productId}/related`,
     );
 
+    const response = await fetch(`${apiUrl}/products/${productId}/related`, {
+      cache: 'no-store',
+      next: { tags: [`product-${productId}`] },
+    });
+
     if (!response.ok) {
-      throw new Error('Failed to fetch related products');
+      const errorText = await response.text();
+      console.error(`API error (${response.status}):`, errorText);
+      throw new Error(`Failed to fetch related products: ${response.status}`);
     }
 
-    revalidatePath(`/products/${productId}/related`);
-    return await response.json();
+    const data = await response.json();
+
+    // Only call revalidatePath on the server
+    if (typeof window === 'undefined') {
+      revalidatePath(`/products/${productId}/related`);
+      revalidatePath(`/products/${productId}`);
+    }
+
+    return data;
   } catch (error) {
     console.error(`Error fetching related products for ${productId}:`, error);
     return [];
   }
 };
-
 // 🔹 Fetch Exchange Rate (for CNY to other currencies)
 export const getExchangeRate = async () => {
   try {

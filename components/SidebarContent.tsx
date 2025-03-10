@@ -4,19 +4,20 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function SidebarContent({ categories }: { categories: any[] }) {
   const pathname = usePathname();
-  const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
-  const toggleCategory = (id: string) => {
-    setExpandedCategories((prev) =>
-      prev.includes(id)
-        ? prev.filter((categoryId) => categoryId !== id)
-        : [...prev, id],
-    );
+  const handleMouseEnter = (id: string) => {
+    setHoveredCategory(id);
   };
+
+  const handleMouseLeave = () => {
+    setHoveredCategory(null);
+  };
+
   console.log('sidebar', categories);
   return (
     <motion.nav
@@ -25,15 +26,19 @@ export default function SidebarContent({ categories }: { categories: any[] }) {
       className="flex size-full flex-col gap-1 p-2"
     >
       {categories.map((category) => {
-        const isExpanded = expandedCategories.includes(category._id);
+        const isExpanded = hoveredCategory === category._id;
         const isActive = pathname.includes(`/categories/${category.slug}`);
 
         return (
-          <div key={category._id} className="flex flex-col">
+          <div
+            key={category._id}
+            className="flex flex-col"
+            onMouseEnter={() => handleMouseEnter(category._id)}
+            onMouseLeave={handleMouseLeave}
+          >
             <Link href={`/categories/${category.slug}`} className="w-full">
               <motion.button
                 whileTap={{ scale: 0.98 }}
-                onClick={() => toggleCategory(category._id)}
                 className={`flex w-full items-center gap-2 rounded-lg p-2 text-sm font-medium transition-colors duration-200 hover:bg-gray-100 ${
                   isActive ? 'bg-gray-50 text-bondi-blue' : 'text-gray-700'
                 }`}
@@ -77,12 +82,12 @@ export default function SidebarContent({ categories }: { categories: any[] }) {
                     height: 'auto',
                     transition: {
                       height: {
-                        duration: 0.3,
+                        duration: 0.2,
                         ease: 'easeOut',
                       },
                       opacity: {
-                        duration: 0.2,
-                        delay: 0.1,
+                        duration: 0.15,
+                        delay: 0.05,
                       },
                     },
                   }}
@@ -91,7 +96,7 @@ export default function SidebarContent({ categories }: { categories: any[] }) {
                     height: 0,
                     transition: {
                       height: {
-                        duration: 0.2,
+                        duration: 0.15,
                       },
                       opacity: {
                         duration: 0.1,
@@ -113,7 +118,7 @@ export default function SidebarContent({ categories }: { categories: any[] }) {
                             opacity: 1,
                             x: 0,
                             transition: {
-                              delay: index * 0.05,
+                              delay: index * 0.03, // Faster stagger for hover
                             },
                           }}
                           key={subcategory._id}
