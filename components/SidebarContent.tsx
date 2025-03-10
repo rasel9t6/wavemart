@@ -17,8 +17,6 @@ export default function SidebarContent({ categories }: { categories: any[] }) {
   const handleMouseLeave = () => {
     setHoveredCategory(null);
   };
-
-  console.log('sidebar', categories);
   return (
     <motion.nav
       initial={{ opacity: 0 }}
