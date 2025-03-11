@@ -1,3 +1,13 @@
+import { DefaultSession } from 'next-auth';
+
+declare module 'next-auth' {
+  interface Session {
+    user?: {
+      id: string;
+    } & DefaultSession['user'];
+  }
+}
+
 type ProductType = {
   _id: string;
   sku: string;
@@ -41,8 +51,18 @@ export type CategoryType = {
 };
 
 export type UserType = {
-  clerkId: string;
+  _id: string;
+  email: string;
+  name?: string;
+  image?: string;
   wishlist: Array<string>;
+  address?: {
+    street?: string;
+    city?: string;
+    state?: string;
+    postalCode?: string;
+    country?: string;
+  };
   createdAt: string;
   updatedAt: string;
 };

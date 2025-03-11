@@ -1,14 +1,14 @@
 'use client';
 
-import { useUser } from '@clerk/nextjs';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { FaHeart, FaRegHeart } from 'react-icons/fa6';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ProductType, UserType } from '@/lib/types';
 
 interface HeartFavoriteProps {
   product: ProductType;
-  updateSignedInUser?: any;
+  updateSignedInUser?: (user: UserType) => void;
 }
 
 export default function HeartFavorite({
@@ -16,47 +16,36 @@ export default function HeartFavorite({
   updateSignedInUser,
 }: HeartFavoriteProps) {
   const router = useRouter();
-  const { user } = useUser();
-  const [loading, setLoading] = useState(false);
+  const { data: session } = useSession();
   const [isLiked, setIsLiked] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const getUser = useCallback(async () => {
+  const getUser = async () => {
     try {
-      setLoading(true);
       const res = await fetch('/api/users');
-      if (!res.ok) {
-        throw new Error('Failed to fetch user data');
-      }
-      const data: UserType = await res.json();
-
-      if (data?.wishlist && Array.isArray(data.wishlist)) {
-        setIsLiked(data.wishlist.includes(product._id));
-      }
+      const user = await res.json();
+      setIsLiked(user.wishlist.includes(product._id));
+      setLoading(false);
     } catch (err) {
-      console.error('[users_GET]', err);
-    } finally {
+      console.log('[users_GET]', err);
       setLoading(false);
     }
-  }, [product._id]);
+  };
 
   useEffect(() => {
-    if (user) {
+    if (session) {
       getUser();
+    } else {
+      setLoading(false);
     }
-  }, [user, getUser]);
+  }, [session]);
 
-  const handleLike = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
-    e.preventDefault();
-
-    if (!user) {
-      router.push('/sign-in');
-      return;
+  const toggleWishlist = async () => {
+    if (!session) {
+      return router.push('/auth/signin');
     }
 
     try {
-      setLoading(true);
       const res = await fetch('/api/users/wishlist', {
         method: 'POST',
         headers: {
@@ -66,31 +55,31 @@ export default function HeartFavorite({
       });
 
       if (!res.ok) {
-        throw new Error('Failed to update wishlist');
+        throw new Error('Failed to toggle wishlist');
       }
 
-      const updatedUser: UserType = await res.json();
-      setIsLiked(updatedUser.wishlist.includes(product._id));
+      const updatedUser = await res.json();
+      setIsLiked(!isLiked);
 
-      // Call `updateSignedInUser` only if it's provided
-      updateSignedInUser?.(updatedUser);
+      if (updateSignedInUser) {
+        updateSignedInUser(updatedUser);
+      }
     } catch (err) {
-      console.error('[wishlist_POST]', err);
-    } finally {
-      setLoading(false);
+      console.log('[wishlist_POST]', err);
     }
   };
 
+  if (loading) return null;
+
   return (
-    <button onClick={handleLike} disabled={loading}>
+    <button
+      onClick={toggleWishlist}
+      className="absolute right-2 top-2 z-10 rounded-full bg-white p-2 transition-colors duration-300 hover:bg-gray-100"
+    >
       {isLiked ? (
-        <FaHeart
-          fill="#00ABB3"
-          size={20}
-          className={loading ? 'animate-pulse' : ''}
-        />
+        <FaHeart className="text-red-500" />
       ) : (
-        <FaRegHeart fill="#00ABB3" size={20} />
+        <FaRegHeart className="text-gray-500" />
       )}
     </button>
   );

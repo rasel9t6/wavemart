@@ -1,20 +1,19 @@
 import User from '@/lib/models/User';
 import { connectToDB } from '@/lib/mongoDB';
-
-import { auth } from '@clerk/nextjs/server';
+import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const POST = async (req: NextRequest) => {
   try {
-    const { userId } = auth();
+    const session = await getServerSession();
 
-    if (!userId) {
+    if (!session?.user?.email) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
     await connectToDB();
 
-    const user = await User.findOne({ clerkId: userId });
+    const user = await User.findOne({ email: session.user.email });
 
     if (!user) {
       return new NextResponse('User not found', { status: 404 });
@@ -29,10 +28,10 @@ export const POST = async (req: NextRequest) => {
     const isLiked = user.wishlist.includes(productId);
 
     if (isLiked) {
-      // Dislike
+      // Remove from wishlist
       user.wishlist = user.wishlist.filter((id: string) => id !== productId);
     } else {
-      // Like
+      // Add to wishlist
       user.wishlist.push(productId);
     }
 
