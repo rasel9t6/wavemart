@@ -1,8 +1,8 @@
 import NextAuth from 'next-auth/next';
-
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { NextAuthOptions } from 'next-auth';
 
 declare module 'next-auth' {
   // eslint-disable-next-line no-unused-vars
@@ -20,7 +20,8 @@ import clientPromise, { connectToDB } from '@/lib/mongoDB';
 import User from '@/lib/models/User';
 import bcrypt from 'bcryptjs';
 
-export const authOptions = {
+// Define auth options but don't export it from the route file
+const authOptions: NextAuthOptions = {
   adapter: MongoDBAdapter(clientPromise),
   providers: [
     GoogleProvider({
@@ -90,8 +91,11 @@ export const authOptions = {
     signOut: '/auth/signout',
   },
   debug: process.env.NODE_ENV === 'development',
-} satisfies import('next-auth').NextAuthOptions;
+};
 
+// Create the handler
 const handler = NextAuth(authOptions);
 
-export { handler };
+// Export the GET and POST methods that Next.js expects in route handlers
+export const GET = handler.GET;
+export const POST = handler.POST;
