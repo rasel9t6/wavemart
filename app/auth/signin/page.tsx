@@ -34,7 +34,7 @@ export default function SignIn() {
       <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
         <div className="mb-6 flex flex-col items-center">
           <h1 className="mb-2 text-3xl font-bold text-gray-900">
-            Welcome to Wavemart
+            Welcome to BD Shipmart
           </h1>
           <p className="text-center text-gray-500">
             Sign in to continue shopping

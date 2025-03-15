@@ -7,7 +7,7 @@ export default async function SearchPage({
   params: { query: string };
 }) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/search/${params.query}`,
+    `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/search/${params.query}`,
   );
   const searchedProducts = await res.json();
   const decodedQuery = decodeURIComponent(params.query);

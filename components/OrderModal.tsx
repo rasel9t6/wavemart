@@ -106,7 +106,7 @@ export default function OrderModal({
 
       // Create order object based on schema
       const orderData = {
-        userId: session.user.id  , // Get userId from the session
+        userId: session.user.id, // Get userId from the session
         customerInfo: formData.customerInfo,
         products: orderItems.map((item) => ({
           product: item._id,
@@ -131,7 +131,7 @@ export default function OrderModal({
 
       // Send the order to the API
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/orders`,
+        `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/orders`,
         {
           method: 'POST',
           headers: new Headers({

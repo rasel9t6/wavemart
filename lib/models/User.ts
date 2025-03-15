@@ -46,6 +46,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     default: generateUserId,
+    index: true,
   },
   email: { type: String, required: true, unique: true },
   name: { type: String },
@@ -66,7 +67,6 @@ const userSchema = new mongoose.Schema({
 });
 
 // Create a compound index for userId to ensure uniqueness
-userSchema.index({ userId: 1 }, { unique: true });
 
 userSchema.pre('save', async function (this: IUser, next) {
   if (!this.isModified('password') || !this.password) {

@@ -3,10 +3,13 @@ import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import User from '@/lib/models/User';
 
+// Config for admin API
+const NEXT_PUBLIC_ADMIN_API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL;
+const ADMIN_API_KEY = process.env.ADMIN_API_KEY; // Secure API key for admin access
+
 export const GET = async () => {
   try {
     const session = await getServerSession();
-
     if (!session?.user?.email) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
@@ -22,18 +25,9 @@ export const GET = async () => {
       });
 
     if (!user) {
-      // Create new user with session data
-      const newUser = await User.create({
-        email: session.user.email,
-        name: session.user.name,
-        image: session.user.image,
-        wishlist: [],
-        orders: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-      await newUser.save();
-      return NextResponse.json(newUser, { status: 201 });
+      // User exists in NextAuth but not in our extended User model
+      // This should be rare since NextAuth signIn callback should handle this
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     return NextResponse.json(user, { status: 200 });
@@ -46,7 +40,6 @@ export const GET = async () => {
 export const POST = async (req: NextRequest) => {
   try {
     const session = await getServerSession();
-
     if (!session?.user?.email) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
@@ -103,10 +96,52 @@ export const POST = async (req: NextRequest) => {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
+    // Also update the corresponding customer record in admin system
+    if (updatedUser) {
+      try {
+        // Create customer update payload
+        const customerUpdates = {
+          name: updates.name,
+          phone: updates.phone,
+          address: updates.address,
+        };
+
+        // Only include fields that were actually updated
+        const filteredUpdates = Object.fromEntries(
+          // eslint-disable-next-line no-unused-vars
+          Object.entries(customerUpdates).filter(([_, v]) => v !== undefined),
+        );
+
+        // Skip the API call if no relevant fields were updated
+        if (Object.keys(filteredUpdates).length > 0) {
+          const response = await fetch(
+            `${NEXT_PUBLIC_ADMIN_API_URL}/customers/${updatedUser.userId}`,
+            {
+              method: 'PATCH',
+              headers: {
+                Authorization: `Bearer ${ADMIN_API_KEY}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(filteredUpdates),
+            },
+          );
+
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(
+              `Admin API returned ${response.status}: ${JSON.stringify(errorData)}`,
+            );
+          }
+        }
+      } catch (apiError: any) {
+        // Log error but don't fail the user update
+        console.error('[admin_customer_update]', apiError.message);
+      }
+    }
+
     return NextResponse.json(updatedUser, { status: 200 });
   } catch (error) {
     console.error('[users_POST]', error);
-
     // Handle specific MongoDB validation errors
     if (error instanceof Error && error.name === 'ValidationError') {
       return NextResponse.json(
@@ -114,7 +149,6 @@ export const POST = async (req: NextRequest) => {
         { status: 400 },
       );
     }
-
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 },

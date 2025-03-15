@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 export const getCategories = async () => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/categories`,
+      `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/categories`,
       {
         cache: 'no-store',
         headers: new Headers({
@@ -33,7 +33,7 @@ export const getCategories = async () => {
 export const getCategoryDetails = async (categoryId: string) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/categories/${categoryId}`,
+      `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/categories/${categoryId}`,
       {
         cache: 'no-store',
         headers: new Headers({
@@ -62,7 +62,7 @@ export async function getSubcategoryDetails(
 ) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/categories/${categorySlug}/${subcategorySlug}`,
+      `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/categories/${categorySlug}/${subcategorySlug}`,
       {
         cache: 'no-store',
         headers: new Headers({
@@ -87,7 +87,7 @@ export async function getSubcategoryDetails(
 export const getProducts = async () => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/products`,
+      `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/products`,
       {
         cache: 'no-store',
         headers: new Headers({
@@ -113,7 +113,7 @@ export const getProducts = async () => {
 export const getProductDetails = async (productId: string) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/products/${productId}`,
+      `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/products/${productId}`,
       {
         cache: 'no-store',
         headers: new Headers({
@@ -138,7 +138,7 @@ export const getProductDetails = async (productId: string) => {
 export const getSearchedProducts = async (query: string) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/search/${query}`,
+      `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/search/${query}`,
       {
         cache: 'no-store',
         headers: new Headers({
@@ -164,7 +164,7 @@ export const getSearchedProducts = async (query: string) => {
 export const getOrders = async (customerId: string) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/orders/customers/${customerId}`,
+      `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/orders/customers/${customerId}`,
       {
         cache: 'no-store',
         headers: new Headers({
@@ -189,13 +189,16 @@ export const getOrders = async (customerId: string) => {
 // 🔹 Fetch All Orders (Admin Project)
 export const getAllOrders = async () => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
-      cache: 'no-store',
-      headers: new Headers({
-        'x-api-key': process.env.ADMIN_API_KEY || '',
-        Accept: 'application/json',
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/orders`,
+      {
+        cache: 'no-store',
+        headers: new Headers({
+          'x-api-key': process.env.ADMIN_API_KEY || '',
+          Accept: 'application/json',
+        }),
+      },
+    );
 
     if (!response.ok) {
       throw new Error('Failed to fetch all orders');
@@ -211,10 +214,10 @@ export const getAllOrders = async () => {
 // 🔹 Fetch Related Products
 export const getRelatedProducts = async (productId: string) => {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+    const apiUrl = process.env.NEXT_PUBLIC_ADMIN_API_URL || '';
 
     if (!apiUrl) {
-      throw new Error('NEXT_PUBLIC_API_URL is not found');
+      throw new Error('NEXT_PUBLIC_ADMIN_API_URL is not found');
     }
     console.log(
       `Fetching related products from: ${apiUrl}/products/${productId}/related`,

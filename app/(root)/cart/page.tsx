@@ -18,6 +18,7 @@ import Link from 'next/link';
 export default function CartPage() {
   const router = useRouter();
   const { data: session } = useSession();
+  console.log(session);
   const cart = useCart();
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
@@ -186,14 +187,17 @@ export default function CartPage() {
   // Handle checkout directly to payment gateway
   const handleDirectCheckout = async () => {
     if (!session?.user) {
-      return router.push('/auth/sign-in');
+      return router.push('/auth/signin');
     }
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cartItems: cart.cartItems, customer }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/checkout`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cartItems: cart.cartItems, customer }),
+        },
+      );
       const data = await res.json();
       window.location.href = data.url;
     } catch (err) {
@@ -204,7 +208,7 @@ export default function CartPage() {
   // Handle checkout with custom order form
   const handleCustomCheckout = () => {
     if (!session?.user) {
-      return router.push('/sign-in');
+      return router.push('/auth/signin');
     }
     setIsOrderModalOpen(true);
   };

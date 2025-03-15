@@ -45,54 +45,70 @@ export default function SignUp() {
     return true;
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError('');
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setError('');
 
-    if (!validateForm()) return;
+  if (!validateForm()) return;
 
-    setIsLoading(true);
+  setIsLoading(true);
 
-    try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+  try {
+    // First register the user
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      }),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Registration failed');
-      }
-
-      setSuccessMessage(
-        'Account created successfully! Redirecting to sign in...',
-      );
-
-      // Redirect to sign in page after successful registration
-      setTimeout(() => {
-        router.push('/auth/signin');
-      }, 2000);
-    } catch (error: any) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
+    if (!response.ok) {
+      throw new Error(data.error || 'Registration failed');
     }
-  };
+
+    setSuccessMessage('Account created successfully! Signing in...');
+
+    // Then sign them in
+    const signInResult = await signIn('credentials', {
+      redirect: false,
+      email: formData.email,
+      password: formData.password,
+    });
+
+    if (signInResult?.error) {
+      throw new Error(
+        'Registration successful but sign-in failed. Please try signing in manually.',
+      );
+    }
+
+    // Redirect to home page after successful registration and sign-in
+    router.push('/');
+  } catch (error: any) {
+    setError(error.message);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white">
       <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
         <div className="mb-6 flex flex-col items-center">
+          <Image
+            src="/bd-ship-mart-logo.svg"
+            alt="Bd shipmart logo"
+            height={80}
+            width={80}
+          />
           <h1 className="mb-2 text-3xl font-bold text-gray-900">
-            Join Wavemart
+            Join BD Shipmart
           </h1>
           <p className="text-center text-gray-500">
             Create your account to get started

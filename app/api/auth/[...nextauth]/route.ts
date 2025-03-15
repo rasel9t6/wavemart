@@ -1,18 +1,16 @@
 import NextAuth from 'next-auth/next';
+import type { DefaultSession } from 'next-auth';
+
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { NextAuthOptions } from 'next-auth';
 
 declare module 'next-auth' {
   // eslint-disable-next-line no-unused-vars
-  interface Session {
+  interface Session extends DefaultSession {
     user: {
       id: string;
-      name?: string | null;
-      email?: string | null;
-      image?: string | null;
-    };
+    } & DefaultSession['user'];
   }
 }
 
@@ -20,8 +18,7 @@ import clientPromise, { connectToDB } from '@/lib/mongoDB';
 import User from '@/lib/models/User';
 import bcrypt from 'bcryptjs';
 
-// Define auth options but don't export it from the route file
-const authOptions: NextAuthOptions = {
+export const authOptions = {
   adapter: MongoDBAdapter(clientPromise),
   providers: [
     GoogleProvider({
@@ -91,11 +88,8 @@ const authOptions: NextAuthOptions = {
     signOut: '/auth/signout',
   },
   debug: process.env.NODE_ENV === 'development',
-};
+} satisfies import('next-auth').NextAuthOptions;
 
-// Create the handler
 const handler = NextAuth(authOptions);
 
-// Export the GET and POST methods that Next.js expects in route handlers
-export const GET = handler.GET;
-export const POST = handler.POST;
+export { handler as GET, handler as POST };
