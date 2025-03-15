@@ -1,31 +1,62 @@
+import { DefaultSession } from 'next-auth';
+
+declare module 'next-auth' {
+  interface Session {
+    user?: {
+      id: string;
+    } & DefaultSession['user'];
+  }
+}
+
 type ProductType = {
   _id: string;
   sku: string;
   slug: string;
   title: string;
   description: string;
-  media: Array<string>;
-  category: { name: string };
-  collections: Array<string>;
-  tags: Array<string>;
+  media: string[];
+  category: {
+    name: string;
+    _id?: string; // Adding this as it's referenced in the schema
+  };
+  collections: Array<any>; // Maintaining from your type, though not in schema
+  tags: string[];
   price: {
     bdt: number;
+    cny: number;
+    usd: number;
   };
-  sizes: Array<string>;
-  colors: Array<string>;
+  expense: {
+    bdt: number;
+    cny: number;
+    usd: number;
+  };
+  sizes: string[];
+  colors: string[];
   createdAt: string;
   updatedAt: string;
-
-  // ✅ Add missing properties to match API response
-  minimumOrderQuantity?: number; // Optional property (if it sometimes doesn't exist)
-  quantityPricing?: {
+  // Added properties from schema
+  minimumOrderQuantity: number;
+  inputCurrency: 'CNY' | 'USD';
+  quantityPricing: {
     ranges: Array<{
       minQuantity: number;
-      maxQuantity?: number; // Some ranges may not have a max limit
+      maxQuantity?: number;
       price: {
         bdt: number;
+        cny: number;
+        usd: number;
       };
     }>;
+  };
+  currencyRates: {
+    usdToBdt: number;
+    cnyToBdt: number;
+  };
+  categoryDetails?: {
+    name: string;
+    _id: string;
+    // Add other category fields as needed
   };
 };
 
@@ -41,8 +72,18 @@ export type CategoryType = {
 };
 
 export type UserType = {
-  clerkId: string;
+  _id: string;
+  email: string;
+  name?: string;
+  image?: string;
   wishlist: Array<string>;
+  address?: {
+    street?: string;
+    city?: string;
+    state?: string;
+    postalCode?: string;
+    country?: string;
+  };
   createdAt: string;
   updatedAt: string;
 };
@@ -53,14 +94,14 @@ export type OrderItemType = {
   color: string;
   size: string;
   quantity: number;
-  price: number; // Added price to track unit price at order time
-  totalPrice: number; // Helps calculate order total per product
+  price: number; // Unit price at order time
+  totalPrice: number; // Calculated price per product (quantity * price)
 };
 
 export type OrderType = {
   _id: string;
   customerClerkId: string;
-  products: OrderItemType[]; // Array<OrderItemType> is fine, but this is cleaner
+  products: OrderItemType[]; // Array of order items
   shippingAddress: {
     name: string;
     phone: string;

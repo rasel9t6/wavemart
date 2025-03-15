@@ -8,16 +8,23 @@ export const getCategories = async () => {
       `${process.env.NEXT_PUBLIC_API_URL}/categories`,
       {
         cache: 'no-store',
+        headers: new Headers({
+          'x-api-key': process.env.ADMIN_API_KEY || '',
+          Accept: 'application/json',
+        }),
       },
     );
-
+    console.log('Response status:', response);
     if (!response.ok) {
-      throw new Error('Failed to fetch categories');
+      const errorText = await response.text();
+      console.error('API Error:', errorText);
+      throw new Error(`Failed to fetch categories: ${response.status}`);
     }
 
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching categories:', error);
+    const data = await response.json();
+    return data;
+  } catch (error: any) {
+    console.error('Error fetching categories:', error.message);
     return [];
   }
 };
@@ -27,7 +34,13 @@ export const getCategoryDetails = async (categoryId: string) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/categories/${categoryId}`,
-      { cache: 'no-store' },
+      {
+        cache: 'no-store',
+        headers: new Headers({
+          'x-api-key': process.env.ADMIN_API_KEY || '',
+          Accept: 'application/json',
+        }),
+      },
     );
 
     if (!response.ok) {
@@ -50,7 +63,13 @@ export async function getSubcategoryDetails(
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/categories/${categorySlug}/${subcategorySlug}`,
-      { cache: 'no-store' },
+      {
+        cache: 'no-store',
+        headers: new Headers({
+          'x-api-key': process.env.ADMIN_API_KEY || '',
+          Accept: 'application/json',
+        }),
+      },
     );
 
     if (!response.ok) {
@@ -71,6 +90,10 @@ export const getProducts = async () => {
       `${process.env.NEXT_PUBLIC_API_URL}/products`,
       {
         cache: 'no-store',
+        headers: new Headers({
+          'x-api-key': process.env.ADMIN_API_KEY || '',
+          Accept: 'application/json',
+        }),
       },
     );
 
@@ -91,7 +114,13 @@ export const getProductDetails = async (productId: string) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/products/${productId}`,
-      { cache: 'no-store' },
+      {
+        cache: 'no-store',
+        headers: new Headers({
+          'x-api-key': process.env.ADMIN_API_KEY || '',
+          Accept: 'application/json',
+        }),
+      },
     );
 
     if (!response.ok) {
@@ -110,7 +139,13 @@ export const getSearchedProducts = async (query: string) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/search/${query}`,
-      { cache: 'no-store' },
+      {
+        cache: 'no-store',
+        headers: new Headers({
+          'x-api-key': process.env.ADMIN_API_KEY || '',
+          Accept: 'application/json',
+        }),
+      },
     );
 
     if (!response.ok) {
@@ -130,7 +165,13 @@ export const getOrders = async (customerId: string) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/orders/customers/${customerId}`,
-      { cache: 'no-store' },
+      {
+        cache: 'no-store',
+        headers: new Headers({
+          'x-api-key': process.env.ADMIN_API_KEY || '',
+          Accept: 'application/json',
+        }),
+      },
     );
 
     if (!response.ok) {
@@ -150,6 +191,10 @@ export const getAllOrders = async () => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
       cache: 'no-store',
+      headers: new Headers({
+        'x-api-key': process.env.ADMIN_API_KEY || '',
+        Accept: 'application/json',
+      }),
     });
 
     if (!response.ok) {
@@ -168,12 +213,19 @@ export const getRelatedProducts = async (productId: string) => {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
+    if (!apiUrl) {
+      throw new Error('NEXT_PUBLIC_API_URL is not found');
+    }
     console.log(
       `Fetching related products from: ${apiUrl}/products/${productId}/related`,
     );
 
     const response = await fetch(`${apiUrl}/products/${productId}/related`, {
       cache: 'no-store',
+      headers: new Headers({
+        'x-api-key': process.env.ADMIN_API_KEY || '',
+        Accept: 'application/json',
+      }),
       next: { tags: [`product-${productId}`] },
     });
 
@@ -202,7 +254,12 @@ export const getExchangeRate = async () => {
   try {
     const response = await fetch(
       `https://EXCHANGE_RATE_API_URL/EXCHANGE_RATE_API_KEY/latest/CNY`,
-      { cache: 'no-store' },
+      {
+        cache: 'no-store',
+        headers: new Headers({
+          Accept: 'application/json',
+        }),
+      },
     );
 
     if (!response.ok) {
