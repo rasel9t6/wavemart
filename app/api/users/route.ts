@@ -12,21 +12,33 @@ export const GET = async () => {
     }
 
     await connectToDB();
-    const user = await User.findOne({ email: session.user.email });
+
+    // Find user and populate orders
+    const user = await User.findOne({ email: session.user.email })
+      .select('+userId') // Explicitly select userId
+      .populate({
+        path: 'orders',
+        options: { sort: { createdAt: -1 } },
+      });
 
     if (!user) {
+      // Create new user with session data
       const newUser = await User.create({
         email: session.user.email,
         name: session.user.name,
         image: session.user.image,
+        wishlist: [],
+        orders: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
       await newUser.save();
-      return NextResponse.json(newUser, { status: 200 });
+      return NextResponse.json(newUser, { status: 201 });
     }
 
     return NextResponse.json(user, { status: 200 });
   } catch (error) {
-    console.log('[user_GET]', error);
+    console.error('[users_GET]', error);
     return new NextResponse('Internal Server Error', { status: 500 });
   }
 };
@@ -40,77 +52,72 @@ export const POST = async (req: NextRequest) => {
     }
 
     await connectToDB();
-    const { name, address } = await req.json();
 
-    if (!name || !address) {
+    const updateData = await req.json();
+    const allowedFields = ['name', 'phone', 'image', 'address'];
+
+    // Validate update data
+    const updates: any = {};
+    Object.keys(updateData).forEach((key) => {
+      if (allowedFields.includes(key)) {
+        if (key === 'address') {
+          // Validate address fields
+          const addressFields = [
+            'street',
+            'city',
+            'state',
+            'postalCode',
+            'country',
+          ];
+          updates.address = {};
+          addressFields.forEach((field) => {
+            if (updateData.address?.[field]) {
+              updates.address[field] = updateData.address[field];
+            }
+          });
+        } else {
+          updates[key] = updateData[key];
+        }
+      }
+    });
+
+    // Add updatedAt timestamp
+    updates.updatedAt = new Date();
+
+    // Find and update user
+    const updatedUser = await User.findOneAndUpdate(
+      { email: session.user.email },
+      { $set: updates },
+      {
+        new: true, // Return updated document
+        runValidators: true, // Run model validations
+      },
+    )
+      .select('+userId') // Explicitly select userId
+      .populate({
+        path: 'orders',
+        options: { sort: { createdAt: -1 } },
+      });
+
+    if (!updatedUser) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    return NextResponse.json(updatedUser, { status: 200 });
+  } catch (error) {
+    console.error('[users_POST]', error);
+
+    // Handle specific MongoDB validation errors
+    if (error instanceof Error && error.name === 'ValidationError') {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Invalid data provided', details: error.message },
         { status: 400 },
       );
     }
 
-    const user = await User.findOne({ email: session.user.email });
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-
-    user.name = name;
-    user.address = address;
-    await user.save();
-
-    return NextResponse.json(user, { status: 200 });
-  } catch (error) {
-    console.error('[users_POST]', error);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 },
     );
   }
 };
-
-// export const GET = async (req: NextRequest) => {
-//   try {
-//     await connectToDB();
-//     const users = await User.find().sort({ createdAt: -1 });
-
-//     return NextResponse.json(users, { status: 200 });
-//   } catch (error) {
-//     console.error('[users_GET]', error);
-//     return NextResponse.json(
-//       { error: 'Internal Server Error' },
-//       { status: 500 },
-//     );
-//   }
-// };
-
-// // Create a new user (when a user signs up)
-// export const POST = async (req: NextRequest) => {
-//   try {
-//     await connectToDB();
-//     const { clerkId, name, email, phone, address } = await req.json();
-
-//     if (!clerkId || !name || !email || !phone || !address) {
-//       return NextResponse.json(
-//         { error: 'Missing required fields' },
-//         { status: 400 },
-//       );
-//     }
-
-//     const existingUser = await User.findOne({ clerkId });
-//     if (existingUser) {
-//       return NextResponse.json(
-//         { error: 'User already exists' },
-//         { status: 400 },
-//       );
-//     }
-
-//     const newUser = await User.create({ clerkId, name, email, phone, address });
-//     return NextResponse.json(newUser, { status: 201 });
-//   } catch (error) {
-//     console.error('[users_POST]', error);
-//     return NextResponse.json(
-//       { error: 'Internal Server Error' },
-//       { status: 500 },
-//     );
-//   }
-// };

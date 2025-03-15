@@ -5,23 +5,19 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest) {
   try {
     const { name, email, password } = await req.json();
-
     if (!name || !email || !password) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 },
       );
     }
-
     if (password.length < 6) {
       return NextResponse.json(
         { error: 'Password must be at least 6 characters long' },
         { status: 400 },
       );
     }
-
     await connectToDB();
-
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -30,9 +26,8 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       );
     }
-
     // Create new user - password will be hashed by the pre-save middleware
-    const user = await User.create({
+    await User.create({
       name,
       email,
       password,

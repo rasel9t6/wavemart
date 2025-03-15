@@ -146,18 +146,15 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 flex w-full items-center justify-between bg-bondi-blue-500 px-6 py-3">
+    <header className="fixed top-0 z-50 flex w-full items-center justify-between bg-bondi-blue-500 px-6 py-3">
       <Link href="/" className="flex items-center gap-2">
         <Image
-          src="/logo.png"
-          width={40}
-          height={40}
+          src="/bd-ship-mart-logo.svg"
+          width={75}
+          height={75}
           alt="Logo"
-          className="rounded-full"
+          className=""
         />
-        <span className="text-heading4-medium text-white max-sm:hidden">
-          Wavemart
-        </span>
       </Link>
 
       <SearchBar query={query} setQuery={setQuery} onSearch={handleSearch} />
