@@ -20,7 +20,7 @@ const CategorySlider: React.FC<CategorySliderProps> = ({
   const [itemsPerView, setItemsPerView] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const itemWidth = 180;
-  console.log('Category Slider', items);
+ 
   useEffect(() => {
     const updateItemsPerView = () => {
       if (containerRef.current) {

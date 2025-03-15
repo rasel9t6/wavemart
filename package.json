@@ -14,12 +14,15 @@
     "singleQuote": true
   },
   "dependencies": {
-    "@clerk/nextjs": "^5.7.5",
+    "@auth/mongodb-adapter": "^3.8.0",
     "@stripe/stripe-js": "^4.0.0",
+    "bcryptjs": "^3.0.2",
     "lucide-react": "^0.395.0",
+    "mongodb": "^6.14.2",
     "mongoose": "^8.4.3",
     "motion": "^12.0.6",
     "next": "14.2.3",
+    "next-auth": "^4.24.11",
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",

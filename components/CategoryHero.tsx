@@ -14,7 +14,7 @@ export default function CategoryHero({
   thumbnail,
   products,
 }: CategoryHeroProps) {
-  console.log(products);
+
   return (
     <>
       {/* Hero Section */}

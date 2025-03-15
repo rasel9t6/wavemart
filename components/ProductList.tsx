@@ -4,7 +4,7 @@ import { ProductType } from '@/lib/types';
 
 export default async function ProductList() {
   const products = await getProducts();
-  console.log(products);
+
 
   if (!products || products.length === 0) {
     return (

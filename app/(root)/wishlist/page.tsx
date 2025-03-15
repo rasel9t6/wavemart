@@ -2,12 +2,12 @@
 import ProductCard from '@/components/ProductCard';
 import { getProductDetails } from '@/lib/actions';
 import { ProductType, UserType } from '@/lib/types';
-import { useUser } from '@clerk/nextjs';
+import { useSession } from 'next-auth/react';
 import { Loader } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
 
 export default function WishListPage() {
-  const { user } = useUser();
+  const { data: session } = useSession();
 
   const [loading, setLoading] = useState(true);
   const [signedInUser, setSignedInUser] = useState<UserType | null>(null);
@@ -25,10 +25,10 @@ export default function WishListPage() {
   };
 
   useEffect(() => {
-    if (user) {
+    if (session?.user) {
       getUser();
     }
-  }, [user]);
+  }, [session]);
 
   const getWishlistProducts = useCallback(async () => {
     setLoading(true);
