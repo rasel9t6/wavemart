@@ -1,11 +1,21 @@
 import NextAuth from 'next-auth/next';
 
-
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { DefaultSession } from 'next-auth';
 
-
+declare module 'next-auth' {
+  // eslint-disable-next-line no-unused-vars
+  interface Session {
+    user: {
+      id: string; // Add 'id' here
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    } & DefaultSession['user']; // Merge with the default user properties
+  }
+}
 
 import clientPromise, { connectToDB } from '@/lib/mongoDB';
 import User from '@/lib/models/User';

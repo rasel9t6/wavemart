@@ -106,7 +106,7 @@ export default function OrderModal({
 
       // Create order object based on schema
       const orderData = {
-        userId: session.user.id, // Get userId from the session
+        userId: session.user.id  , // Get userId from the session
         customerInfo: formData.customerInfo,
         products: orderItems.map((item) => ({
           product: item._id,
