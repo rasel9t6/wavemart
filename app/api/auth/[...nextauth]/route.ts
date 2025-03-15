@@ -1,17 +1,11 @@
 import NextAuth from 'next-auth/next';
-import type { DefaultSession } from 'next-auth';
+
 
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-declare module 'next-auth' {
-  interface Session extends DefaultSession {
-    user: {
-      id: string;
-    } & DefaultSession['user'];
-  }
-}
+
 
 import clientPromise, { connectToDB } from '@/lib/mongoDB';
 import User from '@/lib/models/User';
@@ -77,7 +71,7 @@ export const authOptions = {
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id;
+        session.user.id = token.id as string;
       }
       return session;
     },

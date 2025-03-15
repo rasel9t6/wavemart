@@ -10,7 +10,9 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleCredentialSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCredentialSignIn = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -81,7 +83,7 @@ export default function SignIn() {
               <input
                 id="remember-me"
                 type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="size-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
               <label
                 htmlFor="remember-me"
@@ -134,7 +136,10 @@ export default function SignIn() {
 
         <p className="mt-6 text-center text-sm text-gray-500">
           Don&apos;t have an account?{' '}
-          <Link href="/auth/signup" className="font-medium text-blue-600 hover:text-blue-500">
+          <Link
+            href="/auth/signup"
+            className="font-medium text-blue-600 hover:text-blue-500"
+          >
             Sign up
           </Link>
         </p>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { UserType } from '@/lib/types';
 import { Loader, Search } from 'lucide-react';
 import Image from 'next/image';
@@ -169,7 +169,7 @@ export default function ProfilePage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Profile Picture */}
           <div className="flex items-center gap-4">
-            <div className="relative h-24 w-24 overflow-hidden rounded-full">
+            <div className="relative size-24 overflow-hidden rounded-full">
               <Image
                 src={previewUrl || user?.image || '/default-avatar.png'}
                 alt="Profile"

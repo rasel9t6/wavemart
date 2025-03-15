@@ -3,11 +3,12 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { FaHeart, FaRegHeart } from 'react-icons/fa6';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ProductType, UserType } from '@/lib/types';
 
 interface HeartFavoriteProps {
   product: ProductType;
+  // eslint-disable-next-line no-unused-vars
   updateSignedInUser?: (user: UserType) => void;
 }
 
@@ -20,7 +21,7 @@ export default function HeartFavorite({
   const [isLiked, setIsLiked] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const getUser = async () => {
+  const getUser = useCallback(async () => {
     try {
       const res = await fetch('/api/users');
       const user = await res.json();
@@ -30,7 +31,7 @@ export default function HeartFavorite({
       console.log('[users_GET]', err);
       setLoading(false);
     }
-  };
+  }, [product._id]);
 
   useEffect(() => {
     if (session) {
@@ -38,7 +39,7 @@ export default function HeartFavorite({
     } else {
       setLoading(false);
     }
-  }, [session]);
+  }, [session, getUser]);
 
   const toggleWishlist = async () => {
     if (!session) {
