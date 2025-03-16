@@ -11,7 +11,7 @@ import {
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import OrderModal from '@/components/OrderModal';
+import OrderModal from '@/components/order/OrderModal';
 import { OrderItemType, ProductType } from '@/lib/types';
 import Link from 'next/link';
 

@@ -5,7 +5,7 @@ import User from '@/lib/models/User';
 
 // Config for admin API
 const NEXT_PUBLIC_ADMIN_API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL;
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY; // Secure API key for admin access
+const ADMIN_API_KEY = process.env.ADMIN_API_KEY;
 
 export const GET = async () => {
   try {
@@ -16,18 +16,37 @@ export const GET = async () => {
 
     await connectToDB();
 
-    // Find user and populate orders
-    const user = await User.findOne({ email: session.user.email })
-      .select('+userId') // Explicitly select userId
-      .populate({
-        path: 'orders',
-        options: { sort: { createdAt: -1 } },
-      });
+    // Find user without orders
+    const user = await User.findOne({ email: session.user.email }).select(
+      '+userId',
+    );
 
     if (!user) {
-      // User exists in NextAuth but not in our extended User model
-      // This should be rare since NextAuth signIn callback should handle this
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    // If user has userId, fetch orders from admin API
+    if (user.userId) {
+      try {
+        const response = await fetch(
+          `${NEXT_PUBLIC_ADMIN_API_URL}/customers/${user.userId}/orders`,
+          {
+            headers: {
+              Authorization: `Bearer ${ADMIN_API_KEY}`,
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        if (response.ok) {
+          const ordersData = await response.json();
+          // Attach orders to user response
+          user._doc.orders = ordersData;
+        }
+      } catch (apiError) {
+        console.error('[fetch_orders]', apiError);
+        // Continue without orders data
+      }
     }
 
     return NextResponse.json(user, { status: 200 });
@@ -82,22 +101,17 @@ export const POST = async (req: NextRequest) => {
       { email: session.user.email },
       { $set: updates },
       {
-        new: true, // Return updated document
-        runValidators: true, // Run model validations
+        new: true,
+        runValidators: true,
       },
-    )
-      .select('+userId') // Explicitly select userId
-      .populate({
-        path: 'orders',
-        options: { sort: { createdAt: -1 } },
-      });
-
+    ).select('+userId');
+    console.log(updatedUser);
     if (!updatedUser) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Also update the corresponding customer record in admin system
-    if (updatedUser) {
+    // Also update the customer record in admin system
+    if (updatedUser && updatedUser.userId) {
       try {
         // Create customer update payload
         const customerUpdates = {
@@ -115,7 +129,7 @@ export const POST = async (req: NextRequest) => {
         // Skip the API call if no relevant fields were updated
         if (Object.keys(filteredUpdates).length > 0) {
           const response = await fetch(
-            `${NEXT_PUBLIC_ADMIN_API_URL}/customers/${updatedUser.userId}`,
+            `${NEXT_PUBLIC_ADMIN_API_URL}/customers/${updatedUser.userId}/orders`,
             {
               method: 'PATCH',
               headers: {
@@ -133,9 +147,26 @@ export const POST = async (req: NextRequest) => {
             );
           }
         }
+
+        // After updating customer, fetch their orders
+        const ordersResponse = await fetch(
+          `${NEXT_PUBLIC_ADMIN_API_URL}/customers/${updatedUser.userId}/orders`,
+          {
+            headers: {
+              Authorization: `Bearer ${ADMIN_API_KEY}`,
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        if (ordersResponse.ok) {
+          const ordersData = await ordersResponse.json();
+          // Attach orders to user response
+          updatedUser._doc.orders = ordersData;
+        }
       } catch (apiError: any) {
         // Log error but don't fail the user update
-        console.error('[admin_customer_update]', apiError.message);
+        console.error('[admin_api_error]', apiError.message);
       }
     }
 

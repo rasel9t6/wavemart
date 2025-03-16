@@ -65,6 +65,7 @@ export type CategoryType = {
 };
 
 export type UserType = {
+  userId: string;
   _id: string;
   email: string;
   name?: string;
@@ -93,7 +94,7 @@ export type OrderItemType = {
 
 export type OrderType = {
   _id: string;
-  customerClerkId: string;
+  userId: string;
   products: OrderItemType[]; // Array of order items
   shippingAddress: {
     name: string;

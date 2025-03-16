@@ -222,7 +222,7 @@ export default function ProfilePage() {
               <label className="block text-sm font-medium">User ID</label>
               <input
                 type="text"
-                value={user?._id}
+                value={user?.userId}
                 disabled
                 className="mt-1 w-full rounded-lg border bg-gray-100 p-2"
               />

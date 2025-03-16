@@ -6,7 +6,7 @@ import HeartFavorite from './HeartFavorite';
 import { OrderItemType, ProductType } from '@/lib/types';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import OrderModal from './OrderModal';
+import OrderModal from './order/OrderModal';
 import toast from 'react-hot-toast'; // Import toast
 
 type OrderItem = {
