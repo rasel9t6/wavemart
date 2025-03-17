@@ -1,5 +1,5 @@
-import NextAuth from 'next-auth/next';
-import type { DefaultSession } from 'next-auth';
+
+import NextAuth, { type NextAuthOptions, type DefaultSession } from 'next-auth';
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -25,7 +25,7 @@ import User from '@/lib/models/User';
 import bcrypt from 'bcryptjs';
 import { createCustomerInAdminSystem } from '@/lib/admin-customer';
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   adapter: MongoDBAdapter(clientPromise),
   providers: [
     GoogleProvider({
