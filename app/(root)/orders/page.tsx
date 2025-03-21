@@ -1,9 +1,15 @@
-import { getAllOrders } from '@/lib/actions';
 import { OrderType, OrderItemType } from '@/lib/types';
 import Image from 'next/image';
 
 export default async function OrdersPage() {
-  const orders = await getAllOrders(); // Fetch all orders
+  const res = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_API_URL}/orders`, {
+    headers: {
+      Authorization: `Bearer ${process.env.ADMIN_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const orders = await res.json();
 
   return (
     <div className="px-10 py-5 max-sm:px-3">
