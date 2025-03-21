@@ -46,7 +46,6 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     default: generateUserId,
-    index: true,
   },
   email: { type: String, required: true, unique: true },
   name: { type: String },

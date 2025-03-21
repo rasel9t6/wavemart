@@ -23,6 +23,8 @@ declare module 'next-auth' {
         country?: string;
       } | null;
       userId?: string | null;
+      orders?: string[] | null;
+      wishlist?: string[] | null;
     } & DefaultSession['user'];
   }
 }
@@ -58,10 +60,14 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Incorrect password');
         }
         return {
-          id: user._id.toString(),
+          id: user.userId,
           email: user.email,
           name: user.name,
           image: user.image,
+          phone: user.phone,
+          address: user.address,
+          orders: user.orders,
+          wishlist: user.wishlist,
         };
       },
     }),

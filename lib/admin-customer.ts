@@ -31,15 +31,26 @@ export async function createCustomerInAdminSystem(userData: any) {
 
     // Don't create if customer already exists
     if (customerExists) {
-      return true;
+      throw new Error('Customer already exists');
     }
 
     // Create customer in admin system with a placeholder phone number
     const customerData = {
-      userId: userData.id,
+      customerId: userData.customerId || userData.id, // Ensure correct ID
       name: userData.name || 'New Customer',
       email: userData.email,
-      phone: userData.phone || '0000000000', // Placeholder for required field
+      phone: userData.phone || '0000000000', // Ensure a valid phone
+      address: {
+        street: userData.address?.street || '',
+        city: userData.address?.city || '',
+        state: userData.address?.state || '',
+        postalCode: userData.address?.postalCode || '', // Ensure postalCode is included
+        country: userData.address?.country || '',
+      },
+      orders: Array.isArray(userData.orders)
+        ? userData.orders.map((order: any) => order._id || order) // Ensure valid ObjectId
+        : [],
+
       status: 'active',
       customerType: 'regular',
     };

@@ -10,6 +10,7 @@ import DeliveryOptions from './DeliveryOptions';
 import OrderSummary from './OrderSummary';
 import PaymentMethodSelector from './PaymentMethodSelector';
 import ShippingAddressForm from './ShippingAddressForm';
+import { createOrder } from '@/lib/actions';
 
 // Define proper types for address fields
 interface AddressType {
@@ -193,21 +194,9 @@ export default function OrderModal({
       };
 
       // Send the order to the API
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/orders`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': process.env.NEXT_PUBLIC_ADMIN_API_KEY || '',
-          },
-          body: JSON.stringify(orderData),
-        },
-      );
+      const result = await createOrder(orderData);
 
-      const result = await response.json();
-
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error(result.error || 'Failed to place order');
       }
 
@@ -342,7 +331,9 @@ export default function OrderModal({
         {/* Payment Method */}
         <PaymentMethodSelector
           paymentMethod={formData.paymentMethod}
-          onChange={(value: any) => handleFormDataChange('paymentMethod', value)}
+          onChange={(value: any) =>
+            handleFormDataChange('paymentMethod', value)
+          }
         />
 
         {/* Order Summary */}

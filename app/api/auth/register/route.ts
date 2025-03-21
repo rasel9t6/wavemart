@@ -38,6 +38,14 @@ export async function POST(req: NextRequest) {
       name,
       email,
       password,
+      phone: '',
+      address: {
+        street: '',
+        city: '',
+        state: '',
+        postalCode: '',
+        country: '',
+      },
       wishlist: [],
       orders: [],
       createdAt: new Date(),
@@ -50,6 +58,9 @@ export async function POST(req: NextRequest) {
         id: newUser.userId,
         name: newUser.name,
         email: newUser.email,
+        phone: newUser.phone,
+        address: newUser.address,
+        orders: newUser.orders,
       });
     } catch (apiError) {
       // Log error but don't fail the user registration

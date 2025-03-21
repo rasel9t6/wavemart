@@ -1,5 +1,8 @@
 'use server';
 import { revalidatePath } from 'next/cache';
+import User from './models/User';
+import { connectToDB } from './mongoDB';
+import OrderReference from './models/Order';
 
 // 🔹 Fetch All Categories
 export const getCategories = async () => {
@@ -14,7 +17,6 @@ export const getCategories = async () => {
         }),
       },
     );
-    console.log('Response status:', response);
     if (!response.ok) {
       const errorText = await response.text();
       console.error('API Error:', errorText);
@@ -160,57 +162,6 @@ export const getSearchedProducts = async (query: string) => {
   }
 };
 
-// 🔹 Fetch Orders for a Customer (Store Project)
-export const getOrders = async (customerId: string) => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/orders/customers/${customerId}`,
-      {
-        cache: 'no-store',
-        headers: new Headers({
-          'x-api-key': process.env.ADMIN_API_KEY || '',
-          Accept: 'application/json',
-        }),
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch customer orders');
-    }
-
-    revalidatePath(`/orders/customers/${customerId}`);
-    return await response.json();
-  } catch (error) {
-    console.error(`Error fetching orders for customer ${customerId}:`, error);
-    return [];
-  }
-};
-
-// 🔹 Fetch All Orders (Admin Project)
-export const getAllOrders = async () => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/orders`,
-      {
-        cache: 'no-store',
-        headers: new Headers({
-          'x-api-key': process.env.ADMIN_API_KEY || '',
-          Accept: 'application/json',
-        }),
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch all orders');
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching all orders:', error);
-    return [];
-  }
-};
-
 // 🔹 Fetch Related Products
 export const getRelatedProducts = async (productId: string) => {
   try {
@@ -252,6 +203,90 @@ export const getRelatedProducts = async (productId: string) => {
     return [];
   }
 };
+
+export const createOrder = async (orderData: any) => {
+  try {
+    if (!process.env.ADMIN_API_KEY) {
+      throw new Error('ADMIN_API_KEY is missing.');
+    }
+
+    // Step 1: Call the external API to create the order
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/orders`,
+      {
+        method: 'POST',
+        cache: 'no-store',
+        headers: {
+          Authorization: `Bearer ${process.env.ADMIN_API_KEY}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      },
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Order API Error:', errorText);
+      throw new Error(`Failed to create order: ${response.status}`);
+    }
+
+    // Step 2: Parse the response
+    const result = await response.json();
+    console.log('New Order Created:', result);
+
+    // Step 3: Check if the order was created successfully
+    const newOrder = result.order;
+    if (!newOrder || !newOrder._id) {
+      throw new Error('Order creation failed. No _id returned.');
+    }
+
+    // Step 4: Connect to the database
+    await connectToDB();
+
+    // Step 5: Create a local reference document for the order
+    const orderReference = new OrderReference({
+      orderId: newOrder._id,
+      // You can add more fields here if needed
+      // For example:
+      // status: newOrder.status,
+      // totalAmount: newOrder.totalAmount,
+      // createdAt: newOrder.createdAt
+    });
+
+    // Save the order reference document
+    const savedOrderRef = await orderReference.save();
+    console.log('Order reference created:', savedOrderRef._id);
+
+    // Step 6: Find the user by userId
+    const user = await User.findOne({ userId: orderData.userId });
+    if (!user) {
+      console.error(`No user found with userId: ${orderData.userId}`);
+      throw new Error(`No user found with userId: ${orderData.userId}`);
+    }
+
+    // Step 7: Add the new order reference ID to the user's orders using $push operator
+    const updatedUser = await User.findOneAndUpdate(
+      { userId: orderData.userId },
+      { $push: { orders: savedOrderRef._id } },
+      { new: true },
+    );
+
+    // Log the updated user document
+    console.log('Updated user orders count:', updatedUser.orders.length);
+
+    // Return the new order as a success response
+    return {
+      success: true,
+      order: newOrder,
+      orderReference: savedOrderRef,
+    };
+  } catch (error: any) {
+    console.error('Error creating order:', error.message);
+    return { success: false, error: error.message };
+  }
+};
+
 // 🔹 Fetch Exchange Rate (for CNY to other currencies)
 export const getExchangeRate = async () => {
   try {
