@@ -11,10 +11,11 @@ export const getCategories = async () => {
       `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/categories`,
       {
         cache: 'no-store',
-        headers: new Headers({
-          'x-api-key': process.env.ADMIN_API_KEY || '',
+        headers: {
+          Authorization: `Bearer ${process.env.ADMIN_API_KEY}`,
+          'Content-Type': 'application/json',
           Accept: 'application/json',
-        }),
+        },
       },
     );
     if (!response.ok) {
@@ -38,10 +39,11 @@ export const getCategoryDetails = async (categoryId: string) => {
       `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/categories/${categoryId}`,
       {
         cache: 'no-store',
-        headers: new Headers({
-          'x-api-key': process.env.ADMIN_API_KEY || '',
+        headers: {
+          Authorization: `Bearer ${process.env.ADMIN_API_KEY}`,
+          'Content-Type': 'application/json',
           Accept: 'application/json',
-        }),
+        },
       },
     );
 
@@ -67,10 +69,11 @@ export async function getSubcategoryDetails(
       `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/categories/${categorySlug}/${subcategorySlug}`,
       {
         cache: 'no-store',
-        headers: new Headers({
-          'x-api-key': process.env.ADMIN_API_KEY || '',
+        headers: {
+          Authorization: `Bearer ${process.env.ADMIN_API_KEY}`,
+          'Content-Type': 'application/json',
           Accept: 'application/json',
-        }),
+        },
       },
     );
 
@@ -92,10 +95,11 @@ export const getProducts = async () => {
       `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/products`,
       {
         cache: 'no-store',
-        headers: new Headers({
-          'x-api-key': process.env.ADMIN_API_KEY || '',
+        headers: {
+          Authorization: `Bearer ${process.env.ADMIN_API_KEY}`,
+          'Content-Type': 'application/json',
           Accept: 'application/json',
-        }),
+        },
       },
     );
 
@@ -104,7 +108,7 @@ export const getProducts = async () => {
     }
 
     const data = await response.json();
-    return data.products || []; // Ensures we return an array to avoid crashes
+    return data.products || [];
   } catch (error) {
     console.error('Error fetching products:', error);
     return [];
@@ -118,10 +122,11 @@ export const getProductDetails = async (productId: string) => {
       `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/products/${productId}`,
       {
         cache: 'no-store',
-        headers: new Headers({
-          'x-api-key': process.env.ADMIN_API_KEY || '',
+        headers: {
+          Authorization: `Bearer ${process.env.ADMIN_API_KEY}`,
+          'Content-Type': 'application/json',
           Accept: 'application/json',
-        }),
+        },
       },
     );
 
@@ -143,10 +148,11 @@ export const getSearchedProducts = async (query: string) => {
       `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/search/${query}`,
       {
         cache: 'no-store',
-        headers: new Headers({
-          'x-api-key': process.env.ADMIN_API_KEY || '',
+        headers: {
+          Authorization: `Bearer ${process.env.ADMIN_API_KEY}`,
+          'Content-Type': 'application/json',
           Accept: 'application/json',
-        }),
+        },
       },
     );
 
@@ -176,10 +182,11 @@ export const getRelatedProducts = async (productId: string) => {
 
     const response = await fetch(`${apiUrl}/products/${productId}/related`, {
       cache: 'no-store',
-      headers: new Headers({
-        'x-api-key': process.env.ADMIN_API_KEY || '',
+      headers: {
+        Authorization: `Bearer ${process.env.ADMIN_API_KEY}`,
+        'Content-Type': 'application/json',
         Accept: 'application/json',
-      }),
+      },
       next: { tags: [`product-${productId}`] },
     });
 
@@ -191,7 +198,6 @@ export const getRelatedProducts = async (productId: string) => {
 
     const data = await response.json();
 
-    // Only call revalidatePath on the server
     if (typeof window === 'undefined') {
       revalidatePath(`/products/${productId}/related`);
       revalidatePath(`/products/${productId}`);
@@ -210,7 +216,6 @@ export const createOrder = async (orderData: any) => {
       throw new Error('ADMIN_API_KEY is missing.');
     }
 
-    // Step 1: Call the external API to create the order
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/orders`,
       {
@@ -231,51 +236,37 @@ export const createOrder = async (orderData: any) => {
       throw new Error(`Failed to create order: ${response.status}`);
     }
 
-    // Step 2: Parse the response
     const result = await response.json();
     console.log('New Order Created:', result);
 
-    // Step 3: Check if the order was created successfully
     const newOrder = result.order;
     if (!newOrder || !newOrder._id) {
       throw new Error('Order creation failed. No _id returned.');
     }
 
-    // Step 4: Connect to the database
     await connectToDB();
 
-    // Step 5: Create a local reference document for the order
     const orderReference = new OrderReference({
       orderId: newOrder._id,
-      // You can add more fields here if needed
-      // For example:
-      // status: newOrder.status,
-      // totalAmount: newOrder.totalAmount,
-      // createdAt: newOrder.createdAt
     });
 
-    // Save the order reference document
     const savedOrderRef = await orderReference.save();
     console.log('Order reference created:', savedOrderRef._id);
 
-    // Step 6: Find the user by userId
     const user = await User.findOne({ userId: orderData.userId });
     if (!user) {
       console.error(`No user found with userId: ${orderData.userId}`);
       throw new Error(`No user found with userId: ${orderData.userId}`);
     }
 
-    // Step 7: Add the new order reference ID to the user's orders using $push operator
     const updatedUser = await User.findOneAndUpdate(
       { userId: orderData.userId },
       { $push: { orders: savedOrderRef._id } },
       { new: true },
     );
 
-    // Log the updated user document
     console.log('Updated user orders count:', updatedUser.orders.length);
 
-    // Return the new order as a success response
     return {
       success: true,
       order: newOrder,
@@ -294,9 +285,11 @@ export const getExchangeRate = async () => {
       `https://EXCHANGE_RATE_API_URL/EXCHANGE_RATE_API_KEY/latest/CNY`,
       {
         cache: 'no-store',
-        headers: new Headers({
+        headers: {
+          Authorization: `Bearer ${process.env.ADMIN_API_KEY}`,
+          'Content-Type': 'application/json',
           Accept: 'application/json',
-        }),
+        },
       },
     );
 
